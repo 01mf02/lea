@@ -4,6 +4,13 @@ lea
 This repository hosts the files for the Léa compiler.
 
 
+Members:
+* Much: coordinator
+* Philip: syntactician
+* Michael: semantician
+* Laetitia: developper
+
+
 Setup instructions
 ------------------
 
