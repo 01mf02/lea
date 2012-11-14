@@ -427,7 +427,11 @@ Type
 \end_layout
 
 \begin_layout Itemize
-Value
+Constant
+\end_layout
+
+\begin_layout Itemize
+Function
 \end_layout
 
 \begin_layout Standard
@@ -613,11 +617,11 @@ Constant
 \end_layout
 
 \begin_layout Standard
-The Constant class saves 
+The Constant class saves
 \emph on
-constant
+ 
 \emph default
- values.
+constant values.
  It is the superclass of:
 \end_layout
 
@@ -697,7 +701,7 @@ Constants table
 
 \begin_layout Standard
 The constants table saves tuples (const_name, const_value).
- It may be implemented as Map<String, Value>.
+ It may be implemented as Map<String, Constant>.
  For reasons of simplicity, I propose that we do not allow constant definitions
  like
 \begin_inset listings
