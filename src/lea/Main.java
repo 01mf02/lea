@@ -12,6 +12,9 @@ public class Main {
 	public static void main(String[] args) {
 		try {
 
+			// TODO: set up type and function table here
+			// add functions like writeln() and read() to function table
+
 			System.out.println("Léa compiler initialized.");
 
 			FileReader file;

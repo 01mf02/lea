@@ -399,16 +399,15 @@ The syntax part is concerned with Cup/JFlex.
 \end_layout
 
 \begin_layout Itemize
-add type declarations to the type table
+add constant definitions to the constant table
 \end_layout
 
 \begin_layout Itemize
-add function declarations/definitions and constant definitions to the root
- environment
+add type definitions to the type table
 \end_layout
 
 \begin_layout Itemize
-construct new environments in case of nesting
+add function definitions to the function table
 \end_layout
 
 \begin_layout Standard
@@ -432,133 +431,7 @@ Value
 \end_layout
 
 \begin_layout Standard
-Furthermore, it needs access to the type table.
-\end_layout
-
-\begin_layout Subsection
-Grammar
-\end_layout
-
-\begin_layout Standard
-\begin_inset listings
-inline false
-status open
-
-\begin_layout Plain Layout
-
-top_level = def | func_def | top_level top_level
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-def = literal = def_right;
-\end_layout
-
-\begin_layout Plain Layout
-
-def_right = type | const
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-type = int | string | bool | char | struct { decls } | list of type | literal
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-func_def = function literal(input_params) : output_param { instr_block }
-\end_layout
-
-\begin_layout Plain Layout
-
-input_params = decl | input_params, decls
-\end_layout
-
-\begin_layout Plain Layout
-
-output_param = type | literal
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-instr_block = instr; | instr_block instr;
-\end_layout
-
-\begin_layout Plain Layout
-
-instr = ret_instr | func_call_instr | decl | ass_instr | for_instr | ...
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-ret_instr = return expression
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-func_call_instr = literal(exprs)
-\end_layout
-
-\begin_layout Plain Layout
-
-exprs = expr | exprs, expr
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-decl = literal : type
-\end_layout
-
-\begin_layout Plain Layout
-
-decls = decl | decls, decl
-\end_layout
-
-\begin_layout Plain Layout
-
-\end_layout
-
-\begin_layout Plain Layout
-
-ass_instr = assignable := expression
-\end_layout
-
-\begin_layout Plain Layout
-
-assignable = literal | assignable[expr] | assignable.literal
-\end_layout
-
-\end_inset
-
-
+Furthermore, it needs access to the type and constant tables.
 \end_layout
 
 \begin_layout Section
@@ -568,11 +441,6 @@ Semantics
 \begin_layout Standard
 This part is concerned with the checking of the abstract syntax tree (AST)
  and the generation of the intermediate code.
- To enable program execution at an early point in development (before the
- generation of target code), each AST object needs to be able to evaluate
- on a given environment.
- This way, we can simulate program execution in the compiler in an easy
- fashion to check if our programs work correctly.
 \end_layout
 
 \begin_layout Subsection
@@ -598,20 +466,27 @@ Assignment.java
 \end_layout
 
 \begin_layout Itemize
-Atom.java: stands for all elementary objects, such as variables, constants,
- enums.
-\end_layout
-
-\begin_layout Itemize
 FunctionCall.java
 \end_layout
 
 \begin_layout Itemize
-Return.java: return instruction.
+List.java: unary syntax tree which represents a list
 \end_layout
 
 \begin_layout Itemize
-Writeln.java: implements the writeln() function.
+Return.java
+\end_layout
+
+\begin_layout Itemize
+Succ.java
+\end_layout
+
+\begin_layout Itemize
+Tuple.java
+\end_layout
+
+\begin_layout Itemize
+Variable.java
 \end_layout
 
 \begin_layout Itemize
@@ -622,12 +497,40 @@ Writeln.java: implements the writeln() function.
 \end_layout
 
 \begin_layout Standard
-The execution function of each of these classes may return an Object instance
- (in case of expressions) or null (in case of instructions).
+We might also use interfaces to differentiate different types of syntax
+ tree elements:
+\end_layout
+
+\begin_layout Itemize
+Expression.java: might provide function getType()
+\end_layout
+
+\begin_layout Itemize
+Instruction.java
 \end_layout
 
 \begin_layout Standard
-We should also provide a function to create a graph from an AST.
+Also, to implement drawing, we might have base classes like:
+\end_layout
+
+\begin_layout Itemize
+BinarySyntaxTree
+\end_layout
+
+\begin_layout Itemize
+UnarySyntaxTree
+\end_layout
+
+\begin_layout Standard
+Note that declarations of new variables are not present as instructions
+ in the SyntaxTree, as the information about variables is already contained
+ in the environments belonging to each AST.
+\end_layout
+
+\begin_layout Standard
+We should also provide functions to create a graph from an AST.
+ At the end of the parsing process, we may output the graphs for all functions
+ to separate files.
 \end_layout
 
 \begin_layout Subsection
@@ -635,27 +538,9 @@ Environment
 \end_layout
 
 \begin_layout Standard
-An environment stores tuples (object_name, object_type, object_value).
- Internally, this might be implemented as a Map<String, TypeValue>, where
- TypeValue is an auxiliary data type storing a type (Type) and a value (Object).
- Note that functions are also stored in the environment --- they have a
- special type FunctionType, and their object_value is an AST (or null, if
- the function has only been declared, but not defined).
- The JFlex part puts constants into the environment as well, but only in
- the root environment --- objects in the root environment therefore cannot
- be modified.
- (During semantic verification, this can be checked by looking at the value
- of objects which are about to be modified.
- Because only constants have a non-null value during verification, this
- is a safe way to check if we are dealing with constants or not.
- That means, if we encounter an assignment of a data object which is non-null,
- we trigger an error.
- The same way, we can detect if we are about to define a function several
- times in the source code.)
-\end_layout
-
-\begin_layout Standard
-Each AST has a reference to an environment, by which the AST may access
+An environment stores tuples (var_name, var_type).
+ Internally, this might be implemented as a Map<String, Type>.
+ Each AST has a reference to an environment, by which the AST may access
  information about objects in its environment.
 \end_layout
 
@@ -665,10 +550,6 @@ Type
 
 \begin_layout Standard
 The Type class is the superclass of several derived classes, such as:
-\end_layout
-
-\begin_layout Itemize
-FunctionType
 \end_layout
 
 \begin_layout Itemize
@@ -696,69 +577,68 @@ ListType
 
 \begin_layout Standard
 Each of these classes has to be able to check equality with another type.
- Furthermore, for the source code execution, each class also has to be able
- to construct a default value.
- This is important for example in the case of a StructType:
 \end_layout
 
 \begin_layout Standard
+Because objects may have member variables or functions (think 
 \begin_inset listings
-inline false
+inline true
 status open
 
 \begin_layout Plain Layout
 
-foo: struct { first: int, second: int }
+foo.toString()
 \end_layout
+
+\end_inset
+
+ or 
+\begin_inset listings
+inline true
+status open
 
 \begin_layout Plain Layout
 
-foo.first := 2;
+structVar.structMember
 \end_layout
 
 \end_inset
 
-In this example, the variable 
-\begin_inset Quotes eld
-\end_inset
-
-foo
-\begin_inset Quotes erd
-\end_inset
-
- has to be initialised in order to be able to modify it later.
- This is achieved by constructing a default value for the struct type at
- the declaration of 
-\begin_inset Quotes eld
-\end_inset
-
-foo
-\begin_inset Quotes erd
-\end_inset
-
-.
+), the type class needs functions to search for member variables respectively
+ functions.
 \end_layout
 
 \begin_layout Subsection
-Value
+Constant
 \end_layout
 
 \begin_layout Standard
-For more complex datatypes, such as tuples or lists, we need special data
- structures to store their values, such as:
+The Constant class saves 
+\emph on
+constant
+\emph default
+ values.
+ It is the superclass of:
 \end_layout
 
 \begin_layout Itemize
-FunctionValue: does not exist as own type, use SyntaxTree class directly.
+ListConstant
 \end_layout
 
 \begin_layout Itemize
-StructValue: saves tuples of (data_name, data_type, data_value).
- May be implemented as Map<String, TypeValue>.
+TupleConstant
 \end_layout
 
 \begin_layout Itemize
-IntValue: does not exist as own type, use Integer class directly.
+IntConstant
+\end_layout
+
+\begin_layout Itemize
+FloatConstant
+\end_layout
+
+\begin_layout Itemize
+StringConstant
 \end_layout
 
 \begin_layout Itemize
@@ -769,9 +649,70 @@ IntValue: does not exist as own type, use Integer class directly.
 \end_layout
 
 \begin_layout Standard
-However, Value as an own class doesn't exist, because the only function
- it could fulfill would be to provide an instance of Object, which we can
- achieve by using Object directly.
+Each of these classes has to provide a function like getType().
+\end_layout
+
+\begin_layout Standard
+Note that ListConstant and TupleConstant will only be used for constant
+ definitions; if we construct a list/tuple inside a function, we use the
+ List/Tuple class instead, which allows more complex, non-constant expressions
+ inside list/tuple definitions, e.g.:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+foo_list := [1, 1+1, mult(1,2)]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Function
+\end_layout
+
+\begin_layout Standard
+The function class saves information about a function, which is:
+\end_layout
+
+\begin_layout Itemize
+input arguments: list of tuples (var_name, var_type)
+\end_layout
+
+\begin_layout Itemize
+output type
+\end_layout
+
+\begin_layout Itemize
+syntax tree of function
+\end_layout
+
+\begin_layout Subsection
+Constants table
+\end_layout
+
+\begin_layout Standard
+The constants table saves tuples (const_name, const_value).
+ It may be implemented as Map<String, Value>.
+ For reasons of simplicity, I propose that we do not allow constant definitions
+ like
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+foo = 1+1;
+\end_layout
+
+\end_inset
+
+because this might again require a syntax tree for foo, which we would have
+ to check for non-constant expressions.
 \end_layout
 
 \begin_layout Subsection
@@ -821,6 +762,15 @@ color = enum (RED, GREEN, BLUE)
 For this, we have to store tuples (type_name, type) in a table, which is
  the type table.
  This may be realised as Map<String, Type>.
+\end_layout
+
+\begin_layout Subsection
+Function table
+\end_layout
+
+\begin_layout Standard
+The function table keeps track of functions defined in a Léa source file.
+ The function table may be realised as Map<String, Function>.
 \end_layout
 
 \end_body

@@ -4,11 +4,18 @@ lea
 This repository hosts the files for the Léa compiler.
 
 
-Members:
+Members
+-------
 * Much: coordinator
 * Philip: syntactician
 * Michael: semantician
 * Laetitia: developper
+
+
+Documentation
+-------------
+
+See directory "doc".
 
 
 Setup instructions
@@ -19,6 +26,7 @@ Setup instructions
 3. git clone git@github.com:01mf02/lea.git
 4. git config --global user.name "Your Name"
 5. git config --global user.email you@example.com
+
 
 Git tricks
 ----------
