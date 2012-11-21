@@ -7,7 +7,7 @@ import java.io.*;
 %class TpLexer
 %line
 %column
-%cupsym TpSymbol
+%cupsym LeaSymbol
 %cup
 
 %{
@@ -28,54 +28,71 @@ Float		= [0-9]*"."[0-9]+
 String		= \"[^\"]*\"
 
 %%
-
+lea sy,bol
 /* -------------------------------------------------
 	Separateurs Operateurs
    ------------------------------------------------- */
 
-"("	{/*System.out.print(yytext());*/  return symbol(TpSymbol.LPAR); }
-")"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.RPAR); }
-"{"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.LBRACE); }
-"}"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.RBRACE); }
-"["	{/*System.out.print(yytext());*/  return symbol(TpSymbol.LBRACKET); }
-"]"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.RBRACKET); }
-"&&"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.AND); }
-"||"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.OR); }
-"<"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.LT); }
-">"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.GT); }
-"<="	{/*System.out.print(yytext());*/  return symbol(TpSymbol.LE); }
-">="	{/*System.out.print(yytext());*/  return symbol(TpSymbol.GE); }
-"!="	{/*System.out.print(yytext());*/  return symbol(TpSymbol.DIFF); }
-"=="	{/*System.out.print(yytext());*/  return symbol(TpSymbol.EQ); }
-"+"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.PLUS); }
-"-"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.MINUS); }
-"*"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.MULT); }
-"/"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.DIV); }
-";"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.SEMIC); }
-":"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.COLON); }
-"="	{/*System.out.print(yytext());*/  return symbol(TpSymbol.AFF); }
-"if"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.IF); }
-"then"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.THEN); }
-"else"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.ELSE); }
-"while"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.WHILE); }
-"do"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.DO); }
-"var"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.VAR); }
-"int"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.INT); }
-"float"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.FLOAT); }
-"char"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.CHAR); }
-"string"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.STRING); }
-"array"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.ARRAY); }
-"of"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.OF); }
-"pointer"	{/*System.out.print(yytext());*/  return symbol(TpSymbol.POINTER); }
+
+"("		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.LPAR); }
+")"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.RPAR); }
+"{"		{System.out.print(yytext());/**/  return symbol(LeaSymbol.LBRACE); }
+"}"		{System.out.print(yytext());/**/  return symbol(LeaSymbol.RBRACE); }
+"["		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.LBRACKET); }
+"]"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.RBRACKET); }
+"&&"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.AND); }
+"||"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.OR); }
+"<"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.LT); }
+">"		{System.out.print(yytext());/**/  return symbol(LeaSymbol.GT); }
+"<="	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.LE); }
+">="	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.GE); }
+"!="	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.DIFF); }
+"="		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.EQ); }
+"+"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.PLUS); }
+"-"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.MINUS); }
+"*"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.MULT); }
+"/"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.DIV); }
+"%"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.MODULO); }
+","		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.COMMA); }
+";"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.SEMIC); }
+":"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.COLON); }
+":="	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.AFF); }
+"."		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.SLOT); }
+".."	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.TO); }
+
+
+/* ----------------------- Types elementaires ------------------------------*/
+"int"		{System.out.print(yytext());/**/  return symbol(LeaSymbol.INT); }
+"float"  	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.FLOAT); }
+"char"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.CHAR); }
+"string"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.STRING); }
+"bool"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.BOOL); }
+
+/* ----------------------- Autres types ------------------------------*/
+"struct"  	{System.out.print(yytext());  return symbol(LeaSymbol.STRUCT); }
+"list"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.LIST); }
+"of"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.OF); }
+
+/* ----------------------- Instructions ------------------------------*/
+"if"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.IF); }
+"else"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.ELSE); }
+"case"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.CASE); }
+"while"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.WHILE); }
+"repeat"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.REPEAT); }
+
+/* ----------------------- Boolean ------------------------------*/
+"True"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.TRUE); }
+"False"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.FALSE); }
+
 
 /* -------------------------------------------------
 	Variables, Entiers
    ------------------------------------------------- */
 
-{Identifier}	{/*System.out.print(yytext());*/  return symbol(TpSymbol.IDENTIFIER, yytext()); }
-{Integer}	{/*System.out.print(yytext());*/  return symbol(TpSymbol.INTEGER, yytext()); }
-{Float}		{/*System.out.print(yytext());*/  return symbol(TpSymbol.FLOATING, yytext()); }
-{String}	{/*System.out.print(yytext());*/  return symbol(TpSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }
+{Identifier}	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.IDENTIFIER, yytext()); }
+{Integer}	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.INTEGER, yytext()); }
+{Float}		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.FLOATING, yytext()); }
+{String}	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }
 
 /* -------------------------------------------------
 	Commentaires - Caracteres non pris en compte
