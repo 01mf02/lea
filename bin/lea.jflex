@@ -26,9 +26,10 @@ WhiteSpace	= {LineTerminator} | [ \t\f]
 Integer		= [0-9]+
 Float		= [0-9]*"."[0-9]+
 String		= \"[^\"]*\"
+Char		= \'[.]\'
 
 %%
-lea sy,bol
+
 /* -------------------------------------------------
 	Separateurs Operateurs
    ------------------------------------------------- */
@@ -80,9 +81,10 @@ lea sy,bol
 "while"		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.WHILE); }
 "repeat"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.REPEAT); }
 
-/* ----------------------- Boolean ------------------------------*/
+/* ----------------------- Constantes ------------------------------*/
 "True"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.TRUE); }
 "False"	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.FALSE); }
+//"null"  {/*System.out.print(yytext());*/  return symbol(LeaSymbol.FALSE); }
 
 
 /* -------------------------------------------------
@@ -93,6 +95,7 @@ lea sy,bol
 {Integer}	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.INTEGER, yytext()); }
 {Float}		{/*System.out.print(yytext());*/  return symbol(LeaSymbol.FLOATING, yytext()); }
 {String}	{/*System.out.print(yytext());*/  return symbol(LeaSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }
+{Char}			{/*System.out.print(yytext());*/  return symbol(LeaSymbol.CHAR, yytext()); }
 
 /* -------------------------------------------------
 	Commentaires - Caracteres non pris en compte

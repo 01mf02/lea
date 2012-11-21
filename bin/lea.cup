@@ -6,7 +6,7 @@ import java.lang.*;
 import org.tp.*;
 
 terminal IF, THEN, ELSE, WHILE, DO,
-    VAR, ARRAY, POINTER, OF, 
+    OF, 
     LPAR, RPAR, LBRACE, RBRACE, LBRACKET, RBRACKET,
     SEMIC, COLON,
     AFF, AND, OR, LT, GT, LE, GE, EQ, DIFF, PLUS, MINUS, MINUS_U, MULT, DIV,
