@@ -1,0 +1,3 @@
+Léa compiler initialized.
+Lexing finished.
+Parsing finished.

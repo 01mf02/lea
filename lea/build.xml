@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================
+     Léa compiler
+     ================================= -->
+<project name="lea" default="default">
+  <property name="JFlexLib" location="lib" />
+  <property name="CUPLib" location="lib" />
+  <property name="parser.dir" location="src" />
+  <property name="lexer.dir" location="src" />
+  <property name="bin.dir" location="bin" />
+  <property name="lib.dir" location="lib" />
+  <property name="src.dir" location="src" />
+  
+  <description>
+    Léa compiler
+  </description>
+  
+  <!-- ================================= 
+       target: default
+	   Compiles the project and executes it afterwards.
+       ================================= -->
+  <target name="default" depends="lea" description="Compilation and execution">
+    
+    <java 
+	classname="lea.Main"
+	classpath=".:${bin.dir}:${lib.dir}/java-cup-11a-runtime.jar"
+	output="data/output.txt">
+      <arg value="data/input.txt"/>
+    </java>
+    
+  </target>
+  
+  <!-- ================================= 
+       target: lea
+	   Compiles the Java files.
+       ================================= -->
+  <target name="lea" depends="parser, lexer" description="Java compilation">
+
+    <mkdir dir="${bin.dir}" />
+    <javac 
+	srcdir="${src.dir}"
+	destdir="${bin.dir}" 
+	classpath="${lib.dir}/java-cup-11a-runtime.jar" 
+	debug="on" />
+    
+  </target>
+  
+  <!-- =================================
+       target: lexer
+	   Creates the lexer files.
+       ================================= -->
+  <target name="lexer" description="Lexer compilation">
+    
+    <taskdef name="jflex" classname="JFlex.anttask.JFlexTask">
+      <classpath location="${JFlexLib}/JFlex.jar" />
+    </taskdef>
+    
+    <jflex 
+	file="${lexer.dir}/lea.jflex" 
+	destdir="${src.dir}" />
+  </target>
+  
+  <!-- =================================
+       target: parser
+	   Creates the parser files.
+       ================================= -->
+  <target name="parser" description="Parser compilation">
+    
+    <taskdef name="cup" classname="java_cup.anttask.CUPTask">
+      <classpath location="${CUPLib}/java-cup-11a.jar" />
+    </taskdef>
+    
+    <cup 
+	srcfile="${parser.dir}/lea.cup"
+	destdir="${src.dir}"
+	parser="LeaParser"
+	symbols="LeaSymbol"
+	dump_grammar="true"
+	dump_tables="false"
+	dump_states="false"
+	expect="0"
+	debug="false"
+/>
+  </target>
+  
+</project>
