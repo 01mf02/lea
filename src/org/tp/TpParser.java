@@ -9,6 +9,9 @@ package org.tp;
 import java_cup.runtime.*;
 import java.io.*;
 import java.lang.*;
+
+import lea.types.EnumType;
+
 import org.tp.*;
 
 /** CUP v0.11a beta 20060608 generated parser.

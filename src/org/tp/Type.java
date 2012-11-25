@@ -1,5 +1,7 @@
 package org.tp;
 
+import lea.types.EnumType;
+
 /* tree implementing a type*/
 
 public class Type {

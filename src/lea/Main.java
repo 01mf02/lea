@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
 
+import org.tp.AbSynt;
+
+import java_cup.runtime.Symbol;
+
 public class Main {
 
 	/**
@@ -15,24 +19,43 @@ public class Main {
 			// TODO: set up type and function table here
 			// add functions like writeln() and read() to function table
 
-			System.out.println("Léa compiler initialized.");
+			System.out.println("Lea compiler initialized.");
 
 			FileReader file;
-			try {
+			try 
+			{
 				file = new FileReader(args[0]);
-			} catch (FileNotFoundException e) {
+			    LeaLexer myLex = new LeaLexer(file);
+			    LeaParser myP = new LeaParser(myLex);
+			    
+			    Symbol result=null;
+			    try 
+			    {
+					result=myP.parse();
+					try 
+					{
+					    AbSynt root=(AbSynt)result.value;
+					    System.out.println(root.toString());
+					    //root.toDot("detruire");
+					}	
+					catch (Exception e) 
+					{
+					    System.out.println("result error");
+					}
+			    }
+			    catch (Exception e) 
+			    {
+					System.out.println("parse error...");
+					e.printStackTrace();
+			    }    
+			} 
+			catch (FileNotFoundException e) 
+			{
 				System.err.println("File not found!");
 			}
-
-			// TODO: lexing here
-
-			System.out.println("Lexing finished.");
-
-			// TODO: parsing here
-
-			System.out.println("Parsing finished.");
-
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
 	}
