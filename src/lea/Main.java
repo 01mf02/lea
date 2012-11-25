@@ -10,6 +10,9 @@ import java_cup.runtime.Symbol;
 
 public class Main {
 
+    public static Env firstEnv=null;
+    public static Env currentEnv=null;
+    
 	/**
 	 * @param args
 	 */
