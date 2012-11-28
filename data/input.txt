@@ -1,5 +1,1 @@
-function main(argn: int, argv: list of string): int 
-{
-	// D ́efinition des variables
-	table : list of fiche ; 
-}
+MAX = 400;
