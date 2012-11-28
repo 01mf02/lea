@@ -32,6 +32,6 @@ Git tricks
 ----------
 
 * To update: git pull
-* To commit: git commit -a
+* To commit: git commit -a or git commit -m "message"
 * To see changes: git diff
 * To push changes to server: git push

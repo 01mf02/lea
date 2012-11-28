@@ -71,7 +71,7 @@
     </taskdef>
     
     <cup 
-	srcfile="${parser.dir}/lea/lea.cup"
+	srcfile="${parser.dir}/lea.cup"
 	destdir="${src.dir}"
 	parser="LeaParser"
 	symbols="LeaSymbol"
