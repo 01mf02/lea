@@ -17,21 +17,7 @@ public class ComplexType extends Type
 	{
 		if(t1 instanceof ComplexType)
 		{
-	    	boolean equals = true;
-	    	
-	    	//Comparaison a gauche
-	    	if(t1.left != null && this.left != null)
-	    		equals = t1.left.equals(this.left);
-	    	else if(!(t1.left == null && t1.left == null))
-	    		equals = false;
-	    	
-	    	//Comparaison a droite
-	    	if(t1.right != null && this.right != null)
-	    		equals = t1.right.equals(this.right);
-	    	else if(!(t1.right == null && t1.right == null))
-	    		equals = false;
-	    		
-	    	return equals;		    
+			return aux_equals(t1, this);    
 		}
 		
 		return false;

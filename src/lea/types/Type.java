@@ -24,7 +24,29 @@ public abstract class Type {
     
     public abstract boolean equals(Type t1);
     public abstract boolean equals(Constant c1);
-        
+
+	protected boolean aux_equals(Type t1, Type t2)
+	{
+		boolean equals = true;
+    	
+    	//Comparaison a gauche
+    	if(t1.left != null && t2.left != null)
+    		equals = aux_equals(t1.left, t2.left);
+    	else if(!(t1.left == null && t1.left == null))
+    		equals = false;
+    	
+    	//Comparaison a droite
+    	if(t1.right != null && t2.right != null && equals)
+    		equals = aux_equals(t1.right, t2.right);
+    	else if(!(t1.right == null && t1.right == null))
+    		equals = false;
+    	
+    	if(t1.left == null && t1.right == null && equals)
+    		equals = t1.equals(t2);
+    		
+    	return equals;		
+	}
+	
     public Type getLeft() 
     {
     	return left;

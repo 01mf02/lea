@@ -5,8 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import lea.Environment;
-import lea.EnvException;
-import lea.Main;
 import lea.constants.*;
 import lea.types.*;
 

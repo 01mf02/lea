@@ -3,14 +3,17 @@ package lea.constants;
 import java.lang.reflect.Array;
 
 import lea.types.EnumType;
+import lea.types.ListType;
 
 public class ListConstant implements Constant 
 {
 	Array _value = null;
+	ListType listType;
 	
-	public ListConstant(Array value)
+	public ListConstant(Array value, ListType t)
 	{
 		_value = value;
+		listType = t;
 	}
     
     public EnumType getType()
@@ -26,5 +29,10 @@ public class ListConstant implements Constant
     public String toString()
     {
     	return _value.toString();
+    }
+    
+    public ListType getListType()
+    {
+    	return listType;
     }
 }
