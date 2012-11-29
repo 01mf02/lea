@@ -1,3 +1,7 @@
 Lea compiler initialized.
-MAX=400;ID 
-Decl 
+MAX=12;functionID 
+fooMAXFunc 
+=12;functionID 
+fooMAXFunc 
+=12;functionID 
+fooFunc 

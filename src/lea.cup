@@ -28,33 +28,38 @@ parser code  {:
     FUNCTION,LIST, TRUE, FALSE,
     COMMA, STRUCT,SLOT,MODULO,TO,REPEAT,BOOL,CASE;*/
     
-terminal EQ, SEMIC;
+terminal EQ, SEMIC,FUNCTION, LPAR,RPAR ,COLON, LBRACE, RBRACE;
 
 terminal String IDENTIFIER, INTEGER;
 
-non terminal axiom,constDecl,notee;
+non terminal axiom,constDecl,funct;
 
 start with axiom;
 
 axiom ::= 
-		constDecl:c
-		{:
-			System.out.println("Decl ");
-			
-		:}
+		funct
+		|constDecl axiom
+		|funct axiom
+		|constDecl
+		
 		;
 		
 constDecl ::= 
 		IDENTIFIER:id EQ INTEGER:i SEMIC
 		{:
 		  	System.out.println("ID ");
+		  	/*Main.constTable.put("MAX",new IntConstant(1));
+		  	System.out.println(Main.constTable.toString());*/
 		:}
 		;
-		/*|
-		notee
-		{::}
-		;
+	
 		
+funct ::= 
+		FUNCTION IDENTIFIER:id LPAR RPAR COLON LBRACE RBRACE
+		{:
+		  	System.out.println("Func ");
+		:};
+	/*	
 notee ::=
    IF THEN ELSE WHILE DO OF  LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET SEMIC COLON AFF AND OR LT GT LE GE EQ DIFF PLUS MINUS MINUS_U MULT DIV
     INT FLOAT STRING CHAR FUNCTION LIST TRUE FALSE COMMA STRUCT SLOT MODULO TO REPEAT BOOL CASE

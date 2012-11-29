@@ -1,1 +1,6 @@
-MAX=400;
+MAX=12;
+function foo() : {}
+MAX=12;
+function foo() : {}
+MAX=12;
+function foo() : {}

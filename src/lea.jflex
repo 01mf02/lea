@@ -35,11 +35,11 @@ Char		= \'[.]\'*/
    ------------------------------------------------- */
 
 
-/*"("		{  return symbol(LeaSymbol.LPAR); }
+"("		{  return symbol(LeaSymbol.LPAR); }
 ")"		{  return symbol(LeaSymbol.RPAR); }
 "{"		{  return symbol(LeaSymbol.LBRACE); }
 "}"		{  return symbol(LeaSymbol.RBRACE); }
-"["		{  return symbol(LeaSymbol.LBRACKET); }
+/*"["		{  return symbol(LeaSymbol.LBRACKET); }
 "]"		{  return symbol(LeaSymbol.RBRACKET); }
 "&&"	{  return symbol(LeaSymbol.AND); }
 "||"	{  return symbol(LeaSymbol.OR); }
@@ -56,8 +56,8 @@ Char		= \'[.]\'*/
 "%"		{  return symbol(LeaSymbol.MODULO); }
 ","		{  return symbol(LeaSymbol.COMMA); }*/
 ";"		{System.out.print(yytext());   return symbol(LeaSymbol.SEMIC); }
-/*":"		{  return symbol(LeaSymbol.COLON); }
-":="	{  return symbol(LeaSymbol.AFF); }
+":"		{  return symbol(LeaSymbol.COLON); }
+/*":="	{  return symbol(LeaSymbol.AFF); }
 "."		{  return symbol(LeaSymbol.SLOT); }
 ".."	{  return symbol(LeaSymbol.TO); }*/
 
@@ -86,6 +86,9 @@ Char		= \'[.]\'*/
 "False"	{  return symbol(LeaSymbol.FALSE); }
 //"null"  {  return symbol(LeaSymbol.FALSE); }*/
 
+/* ----------------------- Mots réservé ------------------------------*/
+"function"	{System.out.print(yytext());/**/  return symbol(LeaSymbol.FUNCTION); }
+//"return" 	{System.out.print(yytext());/**/  return symbol(LeaSymbol.RETURN); }
 
 /* -------------------------------------------------
 	Variables, Entiers
