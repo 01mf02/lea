@@ -2,8 +2,6 @@ package lea;
 
 import java_cup.runtime.*;
 import java.io.*;
-import org.tp.*;
-
 
 %%
 %class LeaLexer
@@ -26,9 +24,9 @@ Identifier	= [a-zA-Z][a-zA-Z0-9_]*
 LineTerminator	= \r|\n|\r\n
 WhiteSpace	= {LineTerminator} | [ \t\f]
 Integer		= [0-9]+
-Float		= [0-9]*"."[0-9]+
+/*Float		= [0-9]*"."[0-9]+
 String		= \"[^\"]*\"
-Char		= \'[.]\'
+Char		= \'[.]\'*/
 
 %%
 
@@ -37,7 +35,7 @@ Char		= \'[.]\'
    ------------------------------------------------- */
 
 
-"("		{  return symbol(LeaSymbol.LPAR); }
+/*"("		{  return symbol(LeaSymbol.LPAR); }
 ")"		{  return symbol(LeaSymbol.RPAR); }
 "{"		{  return symbol(LeaSymbol.LBRACE); }
 "}"		{  return symbol(LeaSymbol.RBRACE); }
@@ -49,55 +47,55 @@ Char		= \'[.]\'
 ">"		{  return symbol(LeaSymbol.GT); }
 "<="	{  return symbol(LeaSymbol.LE); }
 ">="	{  return symbol(LeaSymbol.GE); }
-"!="	{  return symbol(LeaSymbol.DIFF); }
-"="		{  return symbol(LeaSymbol.EQ); }
-"+"		{  return symbol(LeaSymbol.PLUS); }
+"!="	{  return symbol(LeaSymbol.DIFF); }*/
+"="		{ System.out.print(yytext());  return symbol(LeaSymbol.EQ); }
+/*"+"		{  return symbol(LeaSymbol.PLUS); }
 "-"		{  return symbol(LeaSymbol.MINUS); }
 "*"		{  return symbol(LeaSymbol.MULT); }
 "/"		{  return symbol(LeaSymbol.DIV); }
 "%"		{  return symbol(LeaSymbol.MODULO); }
-","		{  return symbol(LeaSymbol.COMMA); }
-";"		{  return symbol(LeaSymbol.SEMIC); }
-":"		{  return symbol(LeaSymbol.COLON); }
+","		{  return symbol(LeaSymbol.COMMA); }*/
+";"		{System.out.print(yytext());   return symbol(LeaSymbol.SEMIC); }
+/*":"		{  return symbol(LeaSymbol.COLON); }
 ":="	{  return symbol(LeaSymbol.AFF); }
 "."		{  return symbol(LeaSymbol.SLOT); }
-".."	{  return symbol(LeaSymbol.TO); }
+".."	{  return symbol(LeaSymbol.TO); }*/
 
 
 /* ----------------------- Types elementaires ------------------------------*/
-"int"		{  return symbol(LeaSymbol.INT); }
+/*"int"		{  return symbol(LeaSymbol.INT); }
 "float"  	{  return symbol(LeaSymbol.FLOAT); }
 "char"		{  return symbol(LeaSymbol.CHAR); }
 "string"	{  return symbol(LeaSymbol.STRING); }
-"bool"		{  return symbol(LeaSymbol.BOOL); }
+"bool"		{  return symbol(LeaSymbol.BOOL); }*/
 
 /* ----------------------- Autres types ------------------------------*/
-"struct"  	{  return symbol(LeaSymbol.STRUCT); }
+/*"struct"  	{  return symbol(LeaSymbol.STRUCT); }
 "list"		{  return symbol(LeaSymbol.LIST); }
-"of"		{  return symbol(LeaSymbol.OF); }
+"of"		{  return symbol(LeaSymbol.OF); }*/
 
 /* ----------------------- Instructions ------------------------------*/
-"if"		{  return symbol(LeaSymbol.IF); }
+/*"if"		{  return symbol(LeaSymbol.IF); }
 "else"		{  return symbol(LeaSymbol.ELSE); }
 "case"		{  return symbol(LeaSymbol.CASE); }
 "while"		{  return symbol(LeaSymbol.WHILE); }
-"repeat"	{  return symbol(LeaSymbol.REPEAT); }
+"repeat"	{  return symbol(LeaSymbol.REPEAT); }*/
 
 /* ----------------------- Constantes ------------------------------*/
-"True"	{  return symbol(LeaSymbol.TRUE); }
+/*"True"	{  return symbol(LeaSymbol.TRUE); }
 "False"	{  return symbol(LeaSymbol.FALSE); }
-//"null"  {  return symbol(LeaSymbol.FALSE); }
+//"null"  {  return symbol(LeaSymbol.FALSE); }*/
 
 
 /* -------------------------------------------------
 	Variables, Entiers
    ------------------------------------------------- */
 
-{Identifier}	{  return symbol(LeaSymbol.IDENTIFIER, yytext()); }
-{Integer}	{  return symbol(LeaSymbol.INTEGER, yytext()); }
-{Float}		{  return symbol(LeaSymbol.FLOATING, yytext()); }
+{Identifier}	{System.out.print(yytext());   return symbol(LeaSymbol.IDENTIFIER, yytext()); }
+{Integer}	{System.out.print(yytext());   return symbol(LeaSymbol.INTEGER, yytext()); }
+/*{Float}		{  return symbol(LeaSymbol.FLOATING, yytext()); }
 {String}	{  return symbol(LeaSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }
-{Char}			{  return symbol(LeaSymbol.CHAR, yytext()); }
+{Char}			{  return symbol(LeaSymbol.CHAR, yytext()); }*/
 
 /* -------------------------------------------------
 	Commentaires - Caracteres non pris en compte

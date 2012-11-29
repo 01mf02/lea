@@ -5,7 +5,6 @@ import java.io.*;
 import java.lang.*;
 import lea.types.*;
 import lea.constants.*;
-import org.tp.*;
 
 parser code  {: 
  public void report_fatal_error(String message, Object info) 
@@ -20,11 +19,20 @@ parser code  {:
   }
 :};
 
+/*terminal IF, THEN, ELSE, WHILE, DO,
+    OF, 
+    LPAR, RPAR, LBRACE, RBRACE, LBRACKET, RBRACKET,
+    SEMIC, COLON,
+    AFF, AND, OR, LT, GT, LE, GE, EQ, DIFF, PLUS, MINUS, MINUS_U, MULT, DIV,
+    INT, FLOAT, STRING, CHAR,
+    FUNCTION,LIST, TRUE, FALSE,
+    COMMA, STRUCT,SLOT,MODULO,TO,REPEAT,BOOL,CASE;*/
+    
 terminal EQ, SEMIC;
 
 terminal String IDENTIFIER, INTEGER;
 
-non terminal axiom,constDecl;
+non terminal axiom,constDecl,notee;
 
 start with axiom;
 
@@ -32,6 +40,7 @@ axiom ::=
 		constDecl:c
 		{:
 			System.out.println("Decl ");
+			
 		:}
 		;
 		
@@ -41,5 +50,16 @@ constDecl ::=
 		  	System.out.println("ID ");
 		:}
 		;
+		/*|
+		notee
+		{::}
+		;
 		
-		
+notee ::=
+   IF THEN ELSE WHILE DO OF  LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET SEMIC COLON AFF AND OR LT GT LE GE EQ DIFF PLUS MINUS MINUS_U MULT DIV
+    INT FLOAT STRING CHAR FUNCTION LIST TRUE FALSE COMMA STRUCT SLOT MODULO TO REPEAT BOOL CASE
+    {::};*/
+    
+    
+    
+    
