@@ -4,14 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
 
-import org.tp.AbSynt;
-
 import java_cup.runtime.Symbol;
 
-public class Main {
-
-    public static Env firstEnv=null;
-    public static Env currentEnv=null;
+public class Main 
+{
+    public static FunctionTable fctTable = new FunctionTable();
+    public static ConstantTable constTable = new ConstantTable();
+    public static TypeTable typeTable = new TypeTable();
     
 	/**
 	 * @param args
@@ -37,8 +36,8 @@ public class Main {
 					result=myP.parse();
 					try 
 					{
-					    AbSynt root=(AbSynt)result.value;
-					    System.out.println(root.toString());
+					    //AbSynt root=(AbSynt)result.value;
+					    //System.out.println(root.toString());
 					    //root.toDot("detruire");
 					}	
 					catch (Exception e) 

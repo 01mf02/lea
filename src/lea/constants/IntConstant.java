@@ -20,4 +20,9 @@ public class IntConstant implements Constant
     {
     	return _value;
     }
+    
+    public String toString()
+    {
+    	return Integer.toString(_value);
+    }
 }

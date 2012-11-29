@@ -22,4 +22,9 @@ public class TupleConstant implements Constant
     {
     	return _value;
     }
+    
+    public String toString()
+    {
+    	return _value.toString();
+    }
 }

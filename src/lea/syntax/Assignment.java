@@ -1,8 +1,8 @@
 package lea.syntax;
 
-public class Assignment extends AbSynt 
+public class Assignment extends SyntaxTree 
 {
-	public Assignment(AbSynt a1, AbSynt a2)
+	public Assignment(SyntaxTree a1, SyntaxTree a2)
 	{
 		super(a1, a2);
 	}

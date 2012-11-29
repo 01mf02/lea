@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import lea.Env;
+import lea.Environment;
 import lea.EnvException;
 import lea.Main;
 import lea.constants.*;
@@ -13,50 +13,49 @@ import lea.types.*;
 // Abstract Syntax Tree
 // decorated with attributs 
 
-public class AbSynt 
+public class SyntaxTree 
 {
-    private int id;   // used in toDot
-    private AbSynt left;
-    private AbSynt right;
-    private Env env;	    // current environnement
+    private SyntaxTree left;
+    private SyntaxTree right;
+    private Environment env;	    // current environnement
     private Type type;
     
-    protected AbSynt()
+    protected SyntaxTree()
     {
     	this.left = null;
     	this.right = null;
     }
     
-    public AbSynt(AbSynt left, AbSynt right, Type t) {
+    public SyntaxTree(SyntaxTree left, SyntaxTree right, Type t) 
+    {
     	this.left=left;
     	this.right=right;
-    	this.id=Env.num;
-    	this.env=Main.currentEnv;
+    	this.env= new Environment();
     	this.type=t;
     	//System.out.print(toString()+"\n"); 
     }
     
-    public AbSynt(AbSynt left, AbSynt right) 
+    public SyntaxTree(SyntaxTree left, SyntaxTree right) 
     {
     	this(left, right, null);
     }
     
-    public AbSynt getLeft() 
+    public SyntaxTree getLeft() 
     {
     	return left;
     }
     
-    public void setLeft(AbSynt left) 
+    public void setLeft(SyntaxTree left) 
     {
     	this.left = left;
     }
     
-    public AbSynt getRight() 
+    public SyntaxTree getRight() 
     {
     	return right;
     }
     
-    public void setRight(AbSynt right) 
+    public void setRight(SyntaxTree right) 
     {
     	this.right = right;
     }
@@ -66,33 +65,35 @@ public class AbSynt
     	return type;
     }
     
-    public Env getEnv() throws EnvException 
+    public void setEnvironment(Environment e)
     {
-        if (env == null)
-        	throw new EnvException("current environnement is null");
-        else
-            return env;
+    	env = e;
+    }
+    
+    public Environment getEnvironment()
+    {
+    	return env;
+    }
+    
+    public String toString() 
+    {
+		String result = new String();
+		if ((left != null) || (right != null)){
+		    result +="(";
+		    if (left != null)
+		    	result += left.toString();
+		    if (right != null){
+	                result+=",";
+	                if (right instanceof Succ)
+	                    result+="\n\n\t";
+		    	result += right.toString();
+	            }
+		    result+=")";
+		}
+		return result;
     }
     
     /*
-    public String toString() 
-    {
-	String result = new String();
-	if ((left != null) || (right != null)){
-	    result +="(";
-	    if (left != null)
-	    	result += left.toString();
-	    if (right != null){
-                result+=",";
-                if (right.tag==EnumTag.SUCC || right.tag==EnumTag.THENELSE)
-                    result+="\n\n\t";
-	    	result += right.toString();
-            }
-	    result+=")";
-	}
-	return result;
-    }
-    
     public void toDot(StringBuffer str) {
 	str.append(this.id+" [label=\""+tag.toString());
 	switch (tag){

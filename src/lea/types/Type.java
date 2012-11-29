@@ -1,8 +1,10 @@
 package lea.types;
 
+import lea.constants.Constant;
+
 /* tree implementing a type*/
 
-public class Type {
+public abstract class Type {
     
     protected Type left;
     protected Type right;
@@ -20,29 +22,9 @@ public class Type {
 		this.right=right;
     }
     
-    public static boolean typeAreEquals(Type t1, Type t2)
-    {
-    	boolean equals = true;
-    	
-    	//Comparaison a gauche
-    	if(t1.left != null && t2.left != null)
-    		equals = typeAreEquals(t1.left, t2.left);
-    	else if(!(t1.left == null && t1.left == null))
-    		equals = false;
-    	
-    	//Comparaison a droite
-    	if(t1.right != null && t2.right != null)
-    		equals = typeAreEquals(t1.right, t2.right);
-    	else if(!(t1.right == null && t1.right == null))
-    		equals = false;
-    		
-    	//Si on arrive aux noeuds
-    	if(t1.left == null && t1.right == null && equals)
-    		equals = (t1.getType() == t2.getType());
-    		
-    	return equals;
-    }
-    
+    public abstract boolean equals(Type t1);
+    public abstract boolean equals(Constant c1);
+        
     public Type getLeft() 
     {
     	return left;

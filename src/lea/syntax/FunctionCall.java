@@ -1,8 +1,8 @@
 package lea.syntax;
 
-public class FunctionCall extends AbSynt 
+public class FunctionCall extends SyntaxTree 
 {
-	public FunctionCall(AbSynt a1, AbSynt a2)
+	public FunctionCall(SyntaxTree a1, SyntaxTree a2)
 	{
 		super(a1, a2);
 	}

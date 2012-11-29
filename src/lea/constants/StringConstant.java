@@ -20,4 +20,9 @@ public class StringConstant implements Constant
     {
     	return _value;
     }
+    
+    public String toString()
+    {
+    	return getValue();
+    }
 }

@@ -1,8 +1,8 @@
 package lea.syntax;
 
-public class Return extends AbSynt 
+public class Return extends SyntaxTree 
 {
-	public Return(AbSynt a1)
+	public Return(SyntaxTree a1)
 	{
 		super(a1, null);
 	}

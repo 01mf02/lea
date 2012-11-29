@@ -19,4 +19,12 @@ public class BoolConstant implements Constant
     {
     	return _value;
     }
+    
+    public String toString()
+    {
+    	if(_value)
+    		return "TRUE";
+    	else
+    		return "FALSE";
+    }
 }

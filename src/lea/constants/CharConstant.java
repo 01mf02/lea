@@ -20,4 +20,9 @@ public class CharConstant implements Constant
     {
     	return _value;
     }
+    
+    public String toString()
+    {
+    	return Character.toString(_value);
+    }
 }

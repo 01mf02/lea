@@ -1,8 +1,8 @@
 package lea.syntax;
 
-public class Tuple extends AbSynt 
+public class Tuple extends SyntaxTree 
 {
-	public Tuple(AbSynt a1, AbSynt a2)
+	public Tuple(SyntaxTree a1, SyntaxTree a2)
 	{
 		super(a1, a2);
 	}
