@@ -24,15 +24,15 @@ parser code  {:
     LPAR, RPAR, LBRACE, RBRACE, LBRACKET, RBRACKET,
     SEMIC, COLON,
     AFF, AND, OR, LT, GT, LE, GE, EQ, DIFF, PLUS, MINUS, MINUS_U, MULT, DIV,
-    INT, FLOAT, STRING, CHAR,
+    INT, FLOAT, STRING, CHAR, BOOL,
     FUNCTION,LIST, TRUE, FALSE,
     COMMA, STRUCT,SLOT,MODULO,TO,REPEAT,BOOL,CASE;*/
     
-terminal EQ, SEMIC,FUNCTION, LPAR,RPAR ,COLON, LBRACE, RBRACE;
+terminal EQ, SEMIC,FUNCTION, LPAR,RPAR ,COLON, LBRACE, RBRACE,INT, FLOAT, STRING, CHAR, BOOL,COMMA;
 
 terminal String IDENTIFIER, INTEGER;
 
-non terminal axiom,constDecl,funct;
+non terminal axiom,constDecl,funct,block,decls,decl,type,functDecls, functDecl;
 
 start with axiom;
 
@@ -40,9 +40,17 @@ axiom ::=
 		funct
 		|constDecl axiom
 		|funct axiom
-		|constDecl
-		
+		|constDecl	
 		;
+		
+type ::=
+	INT {:  :}
+	| FLOAT {:  :}
+	| CHAR   {: :}
+	| STRING  {: :}
+	| BOOL {::}
+	;
+		
 		
 constDecl ::= 
 		IDENTIFIER:id EQ INTEGER:i SEMIC
@@ -53,12 +61,32 @@ constDecl ::=
 		:}
 		;
 	
-		
 funct ::= 
-		FUNCTION IDENTIFIER:id LPAR RPAR COLON LBRACE RBRACE
+		FUNCTION IDENTIFIER:id LPAR functDecls RPAR COLON block:b
 		{:
 		  	System.out.println("Func ");
 		:};
+		
+block ::=
+	LBRACE decls RBRACE {:
+	    System.out.println("BLOCK ");
+	    :}
+	;
+
+decls ::=
+	decls decl
+	| decl
+	;
+
+decl ::=  IDENTIFIER:id COLON type:t SEMIC ;
+
+functDecls ::=
+	functDecls COMMA functDecl
+	| functDecl
+	;
+
+functDecl ::=  IDENTIFIER:id COLON type:t ;
+		
 	/*	
 notee ::=
    IF THEN ELSE WHILE DO OF  LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET SEMIC COLON AFF AND OR LT GT LE GE EQ DIFF PLUS MINUS MINUS_U MULT DIV

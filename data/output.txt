@@ -1,7 +1,4 @@
 Lea compiler initialized.
 MAX=12;functionID 
-fooMAXFunc 
-=12;functionID 
-fooMAXFunc 
-=12;functionID 
-fooFunc 
+fooargarg2fel;BLOCK 
+Func 

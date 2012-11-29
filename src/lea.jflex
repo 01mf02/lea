@@ -53,8 +53,8 @@ Char		= \'[.]\'*/
 "-"		{  return symbol(LeaSymbol.MINUS); }
 "*"		{  return symbol(LeaSymbol.MULT); }
 "/"		{  return symbol(LeaSymbol.DIV); }
-"%"		{  return symbol(LeaSymbol.MODULO); }
-","		{  return symbol(LeaSymbol.COMMA); }*/
+"%"		{  return symbol(LeaSymbol.MODULO); }*/
+","		{  return symbol(LeaSymbol.COMMA); }
 ";"		{System.out.print(yytext());   return symbol(LeaSymbol.SEMIC); }
 ":"		{  return symbol(LeaSymbol.COLON); }
 /*":="	{  return symbol(LeaSymbol.AFF); }
@@ -63,11 +63,11 @@ Char		= \'[.]\'*/
 
 
 /* ----------------------- Types elementaires ------------------------------*/
-/*"int"		{  return symbol(LeaSymbol.INT); }
+"int"		{  return symbol(LeaSymbol.INT); }
 "float"  	{  return symbol(LeaSymbol.FLOAT); }
 "char"		{  return symbol(LeaSymbol.CHAR); }
 "string"	{  return symbol(LeaSymbol.STRING); }
-"bool"		{  return symbol(LeaSymbol.BOOL); }*/
+"bool"		{  return symbol(LeaSymbol.BOOL); }
 
 /* ----------------------- Autres types ------------------------------*/
 /*"struct"  	{  return symbol(LeaSymbol.STRUCT); }
