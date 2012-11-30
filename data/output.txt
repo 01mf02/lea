@@ -1,4 +1,23 @@
 Lea compiler initialized.
-MAX=12;functionID 
-fooargarg2fel;BLOCK 
-Func 
+MAX
+=
+12
+;
+function
+
+CONST : MAX 12
+
+
+foo
+arg
+arg2
+fel
+BLOCK 
+;
+ENV : fel lea.types.IntType@250d593e
+
+
+
+FCT : foo ([arg:lea.types.IntType@7977b9b, arg2:lea.types.StringType@6a340101]) : lea.types.StringType@7c2e1f1f {  } 
+
+

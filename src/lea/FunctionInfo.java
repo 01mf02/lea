@@ -1,25 +1,34 @@
 package lea;
 
 import java.util.*;
+
 import lea.types.*;
 import lea.syntax.*;
 
 public class FunctionInfo 
 {
-	private Map<String, Type> args;
+	private LinkedList<ArgumentInfo> args;
 	private Type outputType;
 	private SyntaxTree sTree;
 	
 	public FunctionInfo()
 	{
-		args = new TreeMap<String, Type>();
-		outputType = null;
-		sTree = null;
+		this(new LinkedList<ArgumentInfo>(), null, null);
+	}
+	
+	public FunctionInfo(LinkedList<ArgumentInfo> lArgs, Type outputT, SyntaxTree s)
+	{
+		args = lArgs;
+		outputType = outputT;
+		sTree = s;
 	}
 	
 	public String toString()
 	{
-		String str = "(" + args.toString() + ") : " + outputType.toString();
+		String str = "(" + args.toString() + ")";
+		if(outputType != null)
+			str += " : "  + outputType.toString();
+		
 		str += " { " + sTree.toString() + " } ";
 		
 		return str;
@@ -27,7 +36,7 @@ public class FunctionInfo
 	
 	public void pushArg(String name, Type t)
 	{
-		args.put(name, t);
+		args.add(new ArgumentInfo(name, t));
 	}
 	
 	public void setOutputType(Type t)
@@ -40,7 +49,7 @@ public class FunctionInfo
 		sTree = s;
 	}
 	
-	public Map<String, Type> getArgs()
+	public LinkedList<ArgumentInfo> getArgs()
 	{
 		return args;
 	}

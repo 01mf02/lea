@@ -3,8 +3,10 @@ package lea;
 import java_cup.runtime.*;
 import java.io.*;
 import java.lang.*;
+import java.util.*;
 import lea.types.*;
 import lea.constants.*;
+import lea.syntax.*;
 
 parser code  {: 
  public void report_fatal_error(String message, Object info) 
@@ -32,7 +34,11 @@ terminal EQ, SEMIC,FUNCTION, LPAR,RPAR ,COLON, LBRACE, RBRACE,INT, FLOAT, STRING
 
 terminal String IDENTIFIER, INTEGER;
 
-non terminal axiom,constDecl,funct,block,decls,decl,type,functDecls, functDecl;
+non terminal axiom,constDecl,funct,decls,decl;
+non terminal Type type;
+non terminal LinkedList<ArgumentInfo> functDecls;
+non terminal ArgumentInfo functDecl;
+non terminal SyntaxTree block;
 
 start with axiom;
 
@@ -44,33 +50,40 @@ axiom ::=
 		;
 		
 type ::=
-	INT {:  :}
-	| FLOAT {:  :}
-	| CHAR   {: :}
-	| STRING  {: :}
-	| BOOL {::}
+	INT {: RESULT = new IntType();  :}
+	| FLOAT {: RESULT = new FloatType();  :}
+	| CHAR   {: RESULT = new CharType(); :}
+	| STRING  {: RESULT = new StringType(); :}
+	| BOOL {: RESULT = new BoolType(); :}
 	;
 		
 		
 constDecl ::= 
 		IDENTIFIER:id EQ INTEGER:i SEMIC
 		{:
-		  	System.out.println("ID ");
-		  	/*Main.constTable.put("MAX",new IntConstant(1));
-		  	System.out.println(Main.constTable.toString());*/
+		  	Main.constTable.put(id, new IntConstant(i));
+		  	System.out.println("\nCONST : " + Main.constTable.toString() + "\n");
 		:}
 		;
 	
 funct ::= 
-		FUNCTION IDENTIFIER:id LPAR functDecls RPAR COLON block:b
+		FUNCTION IDENTIFIER:id LPAR functDecls:f RPAR COLON type:t block:b
 		{:
-		  	System.out.println("Func ");
+			FunctionInfo fctInfo = new FunctionInfo(f, t, b);
+			Main.fctTable.put(id, fctInfo);
+			
+			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:};
 		
 block ::=
-	LBRACE decls RBRACE {:
+	LBRACE 
+	{:
 	    System.out.println("BLOCK ");
-	    :}
+	    SyntaxTree sTree = new SyntaxTree(null, null);
+	    
+	    Main.currentNode = sTree;
+	    RESULT = sTree;
+	:} decls RBRACE 
 	;
 
 decls ::=
@@ -78,14 +91,32 @@ decls ::=
 	| decl
 	;
 
-decl ::=  IDENTIFIER:id COLON type:t SEMIC ;
+decl ::=  IDENTIFIER:id COLON type:t SEMIC
+{:
+	if(Main.currentNode != null)
+	{
+		Main.currentNode.getEnvironment().put(id, t);
+		System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+	}
+	else
+		System.out.println("DÉCLARATION VARIABLE GLOBALE INTERDITE!! FAUT GÉRER CA ICI!");
+:} ;
 
 functDecls ::=
-	functDecls COMMA functDecl
-	| functDecl
+	functDecls:l COMMA functDecl:f
+	{:
+		l.add(f);
+		RESULT = l;
+	:}
+	| functDecl:f 
+	{: 
+		LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
+		l.add(f);
+		RESULT = l;  
+	:}
 	;
 
-functDecl ::=  IDENTIFIER:id COLON type:t ;
+functDecl ::=  IDENTIFIER:id COLON type:t {: RESULT = new ArgumentInfo(id, t); :} ;
 		
 	/*	
 notee ::=

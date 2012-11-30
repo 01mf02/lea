@@ -6,9 +6,9 @@ public class IntConstant implements Constant
 {
 	int _value = 0;
 	
-	public IntConstant(int value)
+	public IntConstant(String value)
 	{
-		_value = value;
+		_value = Integer.parseInt(value);
 	}
     
     public EnumType getType()

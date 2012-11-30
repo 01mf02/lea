@@ -11,6 +11,18 @@ public class Environment implements Map<String, Type>
 	{
 		arrMap = new TreeMap<String, Type>();
 	}
+
+	public String toString()
+	{
+		String str = "";
+		
+		for (Map.Entry<String, Type> entry : arrMap.entrySet())
+		{
+		    str += entry.getKey() + " " + entry.getValue().toString() + "\n";
+		}
+		
+		return str;
+	}
 	
 	@Override
 	public void clear() 

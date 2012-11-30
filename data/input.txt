@@ -1,4 +1,4 @@
 MAX=12;
-function foo(arg:int,arg2:string) : {
+function foo(arg:int,arg2:string) : string {
 	fel:int;
 }

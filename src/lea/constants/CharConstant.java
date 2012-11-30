@@ -6,9 +6,9 @@ public class CharConstant implements Constant
 {
 	char _value = ' ';
 	
-	public CharConstant(char value)
+	public CharConstant(String value)
 	{
-		_value = value;
+		_value = value.charAt(0);
 	}
     
     public EnumType getType()

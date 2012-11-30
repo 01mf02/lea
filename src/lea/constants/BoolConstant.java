@@ -5,9 +5,9 @@ public class BoolConstant implements Constant
 {
 	boolean _value = false;
 	
-	public BoolConstant(boolean value)
+	public BoolConstant(String value)
 	{
-		_value = value;
+		_value = Boolean.parseBoolean(value);
 	}
     
     public EnumType getType()

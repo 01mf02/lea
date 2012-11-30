@@ -8,9 +8,9 @@ public class FloatConstant implements Constant
 {
 	float _value = 0;
 	
-	public FloatConstant(float value)
+	public FloatConstant(String value)
 	{
-		_value = value;
+		_value = Float.parseFloat(value);
 	}
     
     public EnumType getType()

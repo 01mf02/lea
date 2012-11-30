@@ -3,6 +3,7 @@ package lea;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
+import lea.syntax.*;
 
 import java_cup.runtime.Symbol;
 
@@ -11,6 +12,7 @@ public class Main
     public static FunctionTable fctTable = new FunctionTable();
     public static ConstantTable constTable = new ConstantTable();
     public static TypeTable typeTable = new TypeTable();
+    public static SyntaxTree currentNode = null;	//Le noeud courant dans lequel on est rendu
     
 	/**
 	 * @param args

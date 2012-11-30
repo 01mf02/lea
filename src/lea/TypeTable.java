@@ -1,6 +1,7 @@
 package lea;
 import java.util.*;
 
+import lea.constants.Constant;
 import lea.types.*;
 
 public class TypeTable implements Map<String, Type>
@@ -10,6 +11,18 @@ public class TypeTable implements Map<String, Type>
 	public TypeTable()
 	{
 		arrMap = new TreeMap<String, Type>();
+	}
+
+	public String toString()
+	{
+		String str = "";
+		
+		for (Map.Entry<String, Type> entry : arrMap.entrySet())
+		{
+		    str += entry.getKey() + " " + entry.getValue().toString() + "\n";
+		}
+		
+		return str;
 	}
 	
 	@Override
