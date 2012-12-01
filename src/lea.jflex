@@ -24,9 +24,9 @@ Identifier	= [a-zA-Z][a-zA-Z0-9_]*
 LineTerminator	= \r|\n|\r\n
 WhiteSpace	= {LineTerminator} | [ \t\f]
 Integer		= [0-9]+
-/*Float		= [0-9]*"."[0-9]+
+Float		= [0-9]*"."[0-9]+
 String		= \"[^\"]*\"
-Char		= \'[.]\'*/
+Char		= \'[.]\'
 
 %%
 
@@ -40,26 +40,26 @@ Char		= \'[.]\'*/
 "{"		{  return symbol(LeaSymbol.LBRACE); }
 "}"		{  return symbol(LeaSymbol.RBRACE); }
 /*"["		{  return symbol(LeaSymbol.LBRACKET); }
-"]"		{  return symbol(LeaSymbol.RBRACKET); }
+"]"		{  return symbol(LeaSymbol.RBRACKET); }*/
 "&&"	{  return symbol(LeaSymbol.AND); }
 "||"	{  return symbol(LeaSymbol.OR); }
 "<"		{  return symbol(LeaSymbol.LT); }
 ">"		{  return symbol(LeaSymbol.GT); }
 "<="	{  return symbol(LeaSymbol.LE); }
 ">="	{  return symbol(LeaSymbol.GE); }
-"!="	{  return symbol(LeaSymbol.DIFF); }*/
-"="		{ System.out.print(yytext());  return symbol(LeaSymbol.EQ); }
-/*"+"		{  return symbol(LeaSymbol.PLUS); }
+"!="	{  return symbol(LeaSymbol.DIFF); }
+"="		{   return symbol(LeaSymbol.EQ); }
+"+"		{  return symbol(LeaSymbol.PLUS); }
 "-"		{  return symbol(LeaSymbol.MINUS); }
 "*"		{  return symbol(LeaSymbol.MULT); }
 "/"		{  return symbol(LeaSymbol.DIV); }
-"%"		{  return symbol(LeaSymbol.MODULO); }*/
+"%"		{  return symbol(LeaSymbol.MODULO); }
 ","		{  return symbol(LeaSymbol.COMMA); }
-";"		{System.out.print(yytext());   return symbol(LeaSymbol.SEMIC); }
+";"		{   return symbol(LeaSymbol.SEMIC); }
 ":"		{  return symbol(LeaSymbol.COLON); }
-/*":="	{  return symbol(LeaSymbol.AFF); }
+":="	{  return symbol(LeaSymbol.AFF); }
 "."		{  return symbol(LeaSymbol.SLOT); }
-".."	{  return symbol(LeaSymbol.TO); }*/
+".."	{  return symbol(LeaSymbol.TO); }
 
 
 /* ----------------------- Types elementaires ------------------------------*/
@@ -75,30 +75,30 @@ Char		= \'[.]\'*/
 "of"		{  return symbol(LeaSymbol.OF); }*/
 
 /* ----------------------- Instructions ------------------------------*/
-/*"if"		{  return symbol(LeaSymbol.IF); }
+"if"		{  return symbol(LeaSymbol.IF); }
 "else"		{  return symbol(LeaSymbol.ELSE); }
 "case"		{  return symbol(LeaSymbol.CASE); }
 "while"		{  return symbol(LeaSymbol.WHILE); }
-"repeat"	{  return symbol(LeaSymbol.REPEAT); }*/
+"repeat"	{  return symbol(LeaSymbol.REPEAT); }
 
 /* ----------------------- Constantes ------------------------------*/
-/*"True"	{  return symbol(LeaSymbol.TRUE); }
-"False"	{  return symbol(LeaSymbol.FALSE); }
-//"null"  {  return symbol(LeaSymbol.FALSE); }*/
+"True"	{  return symbol(LeaSymbol.TRUEEXP); }
+"False"	{  return symbol(LeaSymbol.FALSEEXP); }
+//"null"  {  return symbol(LeaSymbol.FALSE); }
 
 /* ----------------------- Mots réservé ------------------------------*/
-"function"	{System.out.print(yytext());/**/  return symbol(LeaSymbol.FUNCTION); }
-//"return" 	{System.out.print(yytext());/**/  return symbol(LeaSymbol.RETURN); }
+"function"	{/**/  return symbol(LeaSymbol.FUNCTION); }
+"return" 	{/**/  return symbol(LeaSymbol.RETURN); }
 
 /* -------------------------------------------------
 	Variables, Entiers
    ------------------------------------------------- */
 
-{Identifier}	{System.out.print(yytext());   return symbol(LeaSymbol.IDENTIFIER, yytext()); }
-{Integer}	{System.out.print(yytext());   return symbol(LeaSymbol.INTEGER, yytext()); }
-/*{Float}		{  return symbol(LeaSymbol.FLOATING, yytext()); }
+{Identifier}	{   return symbol(LeaSymbol.IDENTIFIER, yytext()); }
+{Integer}	{   return symbol(LeaSymbol.INTEGER, yytext()); }
+{Float}		{  return symbol(LeaSymbol.FLOATEXP, yytext()); }
 {String}	{  return symbol(LeaSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }
-{Char}			{  return symbol(LeaSymbol.CHAR, yytext()); }*/
+{Char}			{  return symbol(LeaSymbol.CHAREXP, yytext()); }
 
 /* -------------------------------------------------
 	Commentaires - Caracteres non pris en compte

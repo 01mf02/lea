@@ -1,4 +1,10 @@
 MAX=12;
 function foo(arg:int,arg2:string) : string {
 	fel:int;
+	tata:char;
+	
+	if(fel < 5)
+	{
+		mic:int := 10;	
+	}
 }

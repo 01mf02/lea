@@ -21,24 +21,44 @@ parser code  {:
   }
 :};
 
-/*terminal IF, THEN, ELSE, WHILE, DO,
+/*terminal DO,
     OF, 
     LPAR, RPAR, LBRACE, RBRACE, LBRACKET, RBRACKET,
     SEMIC, COLON,
-    AFF, AND, OR, LT, GT, LE, GE, EQ, DIFF, PLUS, MINUS, MINUS_U, MULT, DIV,
+    
     INT, FLOAT, STRING, CHAR, BOOL,
     FUNCTION,LIST, TRUE, FALSE,
     COMMA, STRUCT,SLOT,MODULO,TO,REPEAT,BOOL,CASE;*/
     
-terminal EQ, SEMIC,FUNCTION, LPAR,RPAR ,COLON, LBRACE, RBRACE,INT, FLOAT, STRING, CHAR, BOOL,COMMA;
+terminal SEMIC, FUNCTION, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT, STRING, CHAR, BOOL,COMMA;
+terminal IF, ELSE, CASE;
+terminal WHILE, REPEAT;
+terminal AFF, SLOT, TO;
+terminal RETURN;
+terminal AND, OR, LT, GT, LE, GE, EQ, DIFF;
+terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
 
-terminal String IDENTIFIER, INTEGER;
+terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALSEEXP;
 
-non terminal axiom,constDecl,funct,decls,decl;
+non terminal axiom,constDecl,funct,decls;
+non terminal Instruction decl;
 non terminal Type type;
 non terminal LinkedList<ArgumentInfo> functDecls;
 non terminal ArgumentInfo functDecl;
 non terminal SyntaxTree block;
+non terminal Instruction instrs, instr;
+non terminal Expression expr;
+non terminal String BOOLEXP;
+non terminal VariableLeaf variable;
+
+precedence left COMMA;
+precedence right ELSE;
+precedence left AND;
+precedence left OR;
+precedence left LT, GT, LE, GE, EQ, DIFF;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV;
+precedence left MINUS_U;
 
 start with axiom;
 
@@ -65,7 +85,47 @@ constDecl ::=
 		  	System.out.println("\nCONST : " + Main.constTable.toString() + "\n");
 		:}
 		;
-	
+		
+block ::=
+	LBRACE
+	{:
+	    System.out.println("BLOCK");
+	    SyntaxTree sTree = new SyntaxTree(null, null);
+	    
+	    Main.currentNode = sTree;
+	:}  instrs:i RBRACE {: RESULT = i; :}
+	;
+
+
+decl ::=  IDENTIFIER:id COLON type:t SEMIC
+	{:
+		if(Main.currentNode != null)
+		{
+			Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
+			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+		}
+		else
+			System.out.println("DイLARATION VARIABLE GLOBALE INTERDITE!! FAUT GコER CA ICI!");
+			
+		RESULT = new Assignment(new VariableLeaf(id, t), null);
+	:}
+| IDENTIFIER:id COLON type:t AFF expr:e SEMIC
+	{:
+		if(Main.currentNode != null)
+		{
+			Main.currentNode.getEnvironment().put(id, new VariableInfo(t, true));
+			
+			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+			RESULT = new Assignment(new VariableLeaf(id, t), e); 
+		}
+		else
+			System.out.println("DイLARATION VARIABLE GLOBALE INTERDITE!! FAUT GコER CA ICI!");
+	:} ;
+
+BOOLEXP ::=
+	TRUEEXP:t {:RESULT = t; :}
+	|FALSEEXP:t {:RESULT = t; :};
+
 funct ::= 
 		FUNCTION IDENTIFIER:id LPAR functDecls:f RPAR COLON type:t block:b
 		{:
@@ -75,33 +135,6 @@ funct ::=
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:};
 		
-block ::=
-	LBRACE 
-	{:
-	    System.out.println("BLOCK ");
-	    SyntaxTree sTree = new SyntaxTree(null, null);
-	    
-	    Main.currentNode = sTree;
-	    RESULT = sTree;
-	:} decls RBRACE 
-	;
-
-decls ::=
-	decls decl
-	| decl
-	;
-
-decl ::=  IDENTIFIER:id COLON type:t SEMIC
-{:
-	if(Main.currentNode != null)
-	{
-		Main.currentNode.getEnvironment().put(id, t);
-		System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
-	}
-	else
-		System.out.println("DイLARATION VARIABLE GLOBALE INTERDITE!! FAUT GコER CA ICI!");
-:} ;
-
 functDecls ::=
 	functDecls:l COMMA functDecl:f
 	{:
@@ -118,6 +151,70 @@ functDecls ::=
 
 functDecl ::=  IDENTIFIER:id COLON type:t {: RESULT = new ArgumentInfo(id, t); :} ;
 		
+instr ::= 
+	IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
+	| WHILE LPAR expr:e RPAR block:i {: RESULT = new Loop(e, i); :}
+	| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
+	| variable:v AFF expr:e SEMIC 
+	{: 
+		//TODO MHB : TYPE CHECKING HERE 
+		RESULT = new Assignment(v, e); 
+	:}
+	| decl:d {: RESULT = d;	:}
+	;
+
+instrs ::= 
+	instrs:i1 instr:i2   {: RESULT = new Succ(i1, i2); :}
+	| instr:i  {: RESULT = i; :}
+	;
+
+expr ::=
+	expr:e1 AND expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 OR expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 LT expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 GT expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 LE expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 GE expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 EQ expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 DIFF expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 PLUS expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 MINUS expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|MINUS expr:e {: RESULT = new Expression(e, null); :} %prec MINUS_U 
+	|expr:e1 MULT expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|expr:e1 DIV expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	|LPAR expr:e RPAR {: RESULT = e; :}
+	|RETURN expr:e {: RESULT = new ReturnNode(e); :}
+	|INTEGER:it {: 
+		RESULT = new ConstantLeaf(new IntConstant(it), new IntType()); 
+		:}
+	|FLOATEXP:d {: 
+		RESULT = new ConstantLeaf(new FloatConstant(d), new FloatType()); 
+		:}
+	|STRINGEXP:st {: 
+		RESULT = new ConstantLeaf(new StringConstant(st), new StringType());  
+		:}
+	|variable:v {: RESULT = v; :}
+	|BOOLEXP:b {: 
+		RESULT = new ConstantLeaf(new BoolConstant(b), new BoolType()); 
+		:}
+	| expr:e1 COMMA expr:e2 {: RESULT = new ListNode(new Succ(e1, e2)); :}
+	;
+	
+	
+variable ::=
+    	IDENTIFIER:id 
+    	{:    		
+    		//TODO MHB : RAISE ERROR IF t == null
+    		
+    		Type t = Main.currentNode.getEnvironment().get(id).getType();
+    		RESULT = new VariableLeaf(id, t);
+    	:}
+    	| IDENTIFIER:id SLOT
+    	{:
+    		
+    	:} variable:v1 {::}
+	;
+	
 	/*	
 notee ::=
    IF THEN ELSE WHILE DO OF  LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET SEMIC COLON AFF AND OR LT GT LE GE EQ DIFF PLUS MINUS MINUS_U MULT DIV

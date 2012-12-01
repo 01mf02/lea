@@ -1,22 +1,20 @@
 package lea;
 import java.util.*;
 
-import lea.types.*;
-
-public class Environment implements Map<String, Type>
+public class Environment implements Map<String, VariableInfo>
 {
-	Map<String, Type> arrMap;
+	Map<String, VariableInfo> arrMap;
 	
 	public Environment()
 	{
-		arrMap = new TreeMap<String, Type>();
+		arrMap = new TreeMap<String, VariableInfo>();
 	}
 
 	public String toString()
 	{
 		String str = "";
 		
-		for (Map.Entry<String, Type> entry : arrMap.entrySet())
+		for (Map.Entry<String, VariableInfo> entry : arrMap.entrySet())
 		{
 		    str += entry.getKey() + " " + entry.getValue().toString() + "\n";
 		}
@@ -43,13 +41,13 @@ public class Environment implements Map<String, Type>
 	}
 
 	@Override
-	public Set<java.util.Map.Entry<String, Type>> entrySet() 
+	public Set<java.util.Map.Entry<String, VariableInfo>> entrySet() 
 	{
 		return arrMap.entrySet();
 	}
 
 	@Override
-	public Type get(Object key) 
+	public VariableInfo get(Object key) 
 	{
 		return arrMap.get(key);
 	}
@@ -67,19 +65,19 @@ public class Environment implements Map<String, Type>
 	}
 
 	@Override
-	public Type put(String key, Type value) 
+	public VariableInfo put(String key, VariableInfo value) 
 	{
 		return arrMap.put(key, value);
 	}
 
 	@Override
-	public void putAll(Map<? extends String, ? extends Type> m) 
+	public void putAll(Map<? extends String, ? extends VariableInfo> m) 
 	{
 		arrMap.putAll(m);
 	}
 
 	@Override
-	public Type remove(Object key) 
+	public VariableInfo remove(Object key) 
 	{
 		return arrMap.remove(key);
 	}
@@ -91,7 +89,7 @@ public class Environment implements Map<String, Type>
 	}
 
 	@Override
-	public Collection<Type> values() 
+	public Collection<VariableInfo> values() 
 	{
 		return arrMap.values();
 	}

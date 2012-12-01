@@ -1,23 +1,19 @@
 Lea compiler initialized.
-MAX
-=
-12
-;
-function
 
 CONST : MAX 12
 
 
-foo
-arg
-arg2
-fel
-BLOCK 
-;
-ENV : fel lea.types.IntType@250d593e
+BLOCK
+ENV : fel lea.types.IntType@4026e9f9
+
+ENV : fel lea.types.IntType@4026e9f9
+tata lea.types.CharType@57a7ddcf
+
+BLOCK
+ENV : mic lea.types.IntType@786c730
 
 
 
-FCT : foo ([arg:lea.types.IntType@7977b9b, arg2:lea.types.StringType@6a340101]) : lea.types.StringType@7c2e1f1f {  } 
+FCT : foo ([arg:lea.types.IntType@f06fc94, arg2:lea.types.StringType@13b06041]) : lea.types.StringType@207f5580 { (((Variable(fel:lea.types.IntType@4026e9f9)),(Variable(tata:lea.types.CharType@57a7ddcf))),((Variable(fel:lea.types.IntType@4026e9f9),CONST(5:lea.types.IntType@7c6572b)),(Variable(mic:lea.types.IntType@786c730),CONST(10:lea.types.IntType@6e84cc09)))) } 
 
 
