@@ -30,7 +30,7 @@ parser code  {:
     FUNCTION,LIST, TRUE, FALSE,
     COMMA, STRUCT,SLOT,MODULO,TO,REPEAT,BOOL,CASE;*/
     
-terminal SEMIC, FUNCTION, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT, STRING, CHAR, BOOL,COMMA;
+terminal SEMIC, FUNCTION, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
 terminal IF, ELSE, CASE;
 terminal WHILE, REPEAT;
 terminal AFF, SLOT, TO;
@@ -50,6 +50,7 @@ non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal String BOOLEXP;
 non terminal VariableLeaf variable;
+non terminal structDecl;
 
 precedence left COMMA;
 precedence right ELSE;
@@ -67,6 +68,8 @@ axiom ::=
 		|constDecl axiom
 		|funct axiom
 		|constDecl	
+		| structDecl axiom
+		| structDecl
 		;
 		
 type ::=
@@ -75,6 +78,7 @@ type ::=
 	| CHAR   {: RESULT = new CharType(); :}
 	| STRING  {: RESULT = new StringType(); :}
 	| BOOL {: RESULT = new BoolType(); :}
+	| LIST OF type:t {::}
 	;
 		
 		
@@ -105,7 +109,7 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
 		}
 		else
-			System.out.println("DƒCLARATION VARIABLE GLOBALE INTERDITE!! FAUT GƒRER CA ICI!");
+			System.out.println("Dï¿½CLARATION VARIABLE GLOBALE INTERDITE!! FAUT Gï¿½RER CA ICI!");
 			
 		RESULT = new Assignment(new VariableLeaf(id, t), null);
 	:}
@@ -119,8 +123,11 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			RESULT = new Assignment(new VariableLeaf(id, t), e); 
 		}
 		else
-			System.out.println("DƒCLARATION VARIABLE GLOBALE INTERDITE!! FAUT GƒRER CA ICI!");
+			System.out.println("Dï¿½CLARATION VARIABLE GLOBALE INTERDITE!! FAUT Gï¿½RER CA ICI!");
 	:} ;
+
+structDecl ::= IDENTIFIER:id EQ STRUCT {::};
+
 
 BOOLEXP ::=
 	TRUEEXP:t {:RESULT = t; :}
@@ -215,12 +222,19 @@ variable ::=
     	:} variable:v1 {::}
 	;
 	
-	/*	
-notee ::=
-   IF THEN ELSE WHILE DO OF  LPAR RPAR LBRACE RBRACE LBRACKET RBRACKET SEMIC COLON AFF AND OR LT GT LE GE EQ DIFF PLUS MINUS MINUS_U MULT DIV
-    INT FLOAT STRING CHAR FUNCTION LIST TRUE FALSE COMMA STRUCT SLOT MODULO TO REPEAT BOOL CASE
-    {::};*/
     
-    
-    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+   
     

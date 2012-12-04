@@ -70,9 +70,9 @@ Char		= \'[.]\'
 "bool"		{  return symbol(LeaSymbol.BOOL); }
 
 /* ----------------------- Autres types ------------------------------*/
-/*"struct"  	{  return symbol(LeaSymbol.STRUCT); }
+"struct"  	{  return symbol(LeaSymbol.STRUCT); }
 "list"		{  return symbol(LeaSymbol.LIST); }
-"of"		{  return symbol(LeaSymbol.OF); }*/
+"of"		{  return symbol(LeaSymbol.OF); }
 
 /* ----------------------- Instructions ------------------------------*/
 "if"		{  return symbol(LeaSymbol.IF); }
