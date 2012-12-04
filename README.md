@@ -35,6 +35,4 @@ Git tricks
 * To commit: git commit -a or git commit -m "message"
 * To see changes: git diff
 * To push changes to server: git push
-
 * To reset : git reset --hard HEAD
-		git pull

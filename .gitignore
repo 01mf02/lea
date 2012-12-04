@@ -1,6 +1,6 @@
-*.class
-bin/lea.cup
-bin/lea.jflex
-bin/lea/LeaParser.class
-bin/lea/LeaSymbol.class
 *.java~
+bin/
+data/output.txt
+src/lea/LeaLexer.java
+src/lea/LeaParser.java
+src/lea/LeaSymbol.java
