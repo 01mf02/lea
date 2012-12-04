@@ -80,6 +80,7 @@ Char		= \'[.]\'
 "case"		{  return symbol(LeaSymbol.CASE); }
 "while"		{  return symbol(LeaSymbol.WHILE); }
 "repeat"	{  return symbol(LeaSymbol.REPEAT); }
+"for"		{  return symbol(LeaSymbol.FOR); }
 
 /* ----------------------- Constantes ------------------------------*/
 "True"	{  return symbol(LeaSymbol.TRUEEXP); }
@@ -87,8 +88,10 @@ Char		= \'[.]\'
 //"null"  {  return symbol(LeaSymbol.FALSE); }
 
 /* ----------------------- Mots réservé ------------------------------*/
-"function"	{/**/  return symbol(LeaSymbol.FUNCTION); }
-"return" 	{/**/  return symbol(LeaSymbol.RETURN); }
+"function"	{  return symbol(LeaSymbol.FUNCTION); }
+"procedure"	{  return symbol(LeaSymbol.PROCEDURE); }
+"return" 	{  return symbol(LeaSymbol.RETURN); }
+"in"  		{  return symbol(LeaSymbol.IN); }
 
 /* -------------------------------------------------
 	Variables, Entiers

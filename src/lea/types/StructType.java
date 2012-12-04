@@ -4,11 +4,17 @@ import lea.constants.*;
 
 public class StructType extends Type 
 {
-	public StructType(Type t)
+	public StructType()
+	{
+		this.left = null;
+	}
+	
+	/*public StructType(Type t)
 	{
 		this.left = t;
-	}
-
+	}*/
+	
+	
 	@Override
 	public boolean equals(Type t1) 
 	{

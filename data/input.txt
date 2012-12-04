@@ -1,11 +1,18 @@
 MAX=12;
+
+fiche = struct {
+	nom:int;
+	age:string;
+}
+
 function foo(arg:int,arg2:string) : string {
-	fel:list of int;
+	fel:fiche;
+	fel.nom := 0;
 	
 	
 	tata:char;
 	
-	if(fel < 5)
+	if(1 < 5)
 	{
 		mic:int := 10;	
 	}

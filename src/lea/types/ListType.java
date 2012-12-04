@@ -4,8 +4,9 @@ import lea.constants.*;
 
 public class ListType extends Type 
 {	
-	public ListType(int length)
+	public ListType(Type t)
 	{
+		this.left = t;
 		type = EnumType.ARRAY;
 	}
 

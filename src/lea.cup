@@ -20,13 +20,10 @@ parser code  {:
   	System.out.println("Ligne : " + symb.left + " Colonne : " + symb.right + "   : " + message);
   }
 :};
-
-/*terminal DO,
-    ,;*/
     
-terminal SEMIC, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
-terminal IF, ELSE, CASE;
-terminal WHILE, REPEAT;
+terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
+terminal IF, ELSE, CASE,IN;
+terminal WHILE, REPEAT,FOR;
 terminal AFF, SLOT, TO;
 terminal RETURN;
 terminal AND, OR, LT, GT, LE, GE, EQ, DIFF;
@@ -72,6 +69,16 @@ type ::=
 	| STRING  {: RESULT = new StringType(); :}
 	| BOOL {: RESULT = new BoolType(); :}
 	| LIST OF type:t {: RESULT = new ListType(t); :}
+	| IDENTIFIER:t 
+	{:
+		//if t i struct
+		//RESULT = new StructType();
+		RESULT = new StringType();
+	:}
+	/*| LIST OF IDENTIFIER:t 
+	{: //TODO : vérifier pour les identifier struct
+	RESULT =  RESULT = new ListType(t); 
+	:}*/
 	;
 		
 		
@@ -134,12 +141,16 @@ structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
 		RESULT = new Assignment(new VariableLeaf(id, t), null);
 	:};
 
-struct ::= IDENTIFIER:id EQ STRUCT LBRACE structDecls RBRACE 
-	{:
-		
-		/*Main.constTable.put(id,);
-		RESULT = new */ 
-	:};
+struct ::= IDENTIFIER:id EQ STRUCT 
+	 {:
+		System.out.println("STRUCT");
+	    SyntaxTree sTree = new SyntaxTree(null, null);
+	    
+	    Main.currentNode = sTree;
+	    //Ou mettre le fich?
+	    Main.typeTable.put(id,new StructType());
+	:}LBRACE structDecls RBRACE 
+	;
 
 
 BOOLEXP ::=
@@ -173,14 +184,16 @@ functDecl ::=  IDENTIFIER:id COLON type:t {: RESULT = new ArgumentInfo(id, t); :
 		
 instr ::= 
 	IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
-	| WHILE LPAR expr:e RPAR block:i {: RESULT = new Loop(e, i); :}
 	| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
 	| REPEAT TO CASE
+	| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
 	| variable:v AFF expr:e SEMIC 
 	{: 
 		//TODO MHB : TYPE CHECKING HERE 
 		RESULT = new Assignment(v, e); 
 	:}
+	| REPEAT block:b WHILE LPAR expr:e RPAR 
+	{: RESULT = new Loop(e, b); :}
 	| decl:d {: RESULT = d;	:}
 	;
 
@@ -236,16 +249,21 @@ variable ::=
     	:}
     	| IDENTIFIER:id SLOT
     	{:
+    		Type t = Main.currentNode.getEnvironment().get(id).getType();
+    		RESULT = new VariableLeaf(id, t);
+    	:} variable:v1 {:
     		
-    	:} variable:v1 {::}
-    	| IDENTIFIER:id LBRACKET IDENTIFIER:id RBRACKET
+    		/*Type t = Main.currentNode.getEnvironment().get(v1).getType();
+    		RESULT = new VariableLeaf(v1, t);*/
+    	:}
+    	/*| IDENTIFIER:id LBRACKET IDENTIFIER:id RBRACKET
     	{:
     		
     	:}
     	| IDENTIFIER:id LBRACKET INTEGER RBRACKET
     	{:
     		
-    	:}
+    	:}*/
 	;
 	
     
