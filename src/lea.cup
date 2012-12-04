@@ -169,19 +169,20 @@ instrs ::=
 	;
 
 expr ::=
-	expr:e1 AND expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 OR expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 LT expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 GT expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 LE expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 GE expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 EQ expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 DIFF expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 PLUS expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 MINUS expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|MINUS expr:e {: RESULT = new Expression(e, null); :} %prec MINUS_U 
-	|expr:e1 MULT expr:e2 {: RESULT = new Expression(e1, e2); :} 
-	|expr:e1 DIV expr:e2 {: RESULT = new Expression(e1, e2); :} 
+	expr:e1 AND expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.AND); :} 
+	|expr:e1 OR expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.OR); :} 
+	|expr:e1 LT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.LT); :} 
+	|expr:e1 GT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.GT); :} 
+	|expr:e1 LE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.LE); :} 
+	|expr:e1 GE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.GE); :} 
+	|expr:e1 EQ expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.EQ); :} 
+	|expr:e1 DIFF expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.DIFF); :} 
+	|expr:e1 PLUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.PLUS); :} 
+	|expr:e1 MINUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.MINUS); :} 
+	|MINUS expr:e {: RESULT = new NumberExp(e1, null, EnumTagType.MINUS_U); :} %prec MINUS_U 
+	|expr:e1 MULT expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.MULT); :} 
+	|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.DIV); :} 
+	|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.MOD); :} 
 	|LPAR expr:e RPAR {: RESULT = e; :}
 	|RETURN expr:e {: RESULT = new ReturnNode(e); :}
 	|INTEGER:it {: 
