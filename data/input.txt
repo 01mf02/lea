@@ -1,6 +1,8 @@
 MAX=12;
 function foo(arg:int,arg2:string) : string {
-	fel:int;
+	fel:list of int;
+	
+	
 	tata:char;
 	
 	if(fel < 5)

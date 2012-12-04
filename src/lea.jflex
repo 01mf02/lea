@@ -39,8 +39,8 @@ Char		= \'[.]\'
 ")"		{  return symbol(LeaSymbol.RPAR); }
 "{"		{  return symbol(LeaSymbol.LBRACE); }
 "}"		{  return symbol(LeaSymbol.RBRACE); }
-/*"["		{  return symbol(LeaSymbol.LBRACKET); }
-"]"		{  return symbol(LeaSymbol.RBRACKET); }*/
+"["		{  return symbol(LeaSymbol.LBRACKET); }
+"]"		{  return symbol(LeaSymbol.RBRACKET); }
 "&&"	{  return symbol(LeaSymbol.AND); }
 "||"	{  return symbol(LeaSymbol.OR); }
 "<"		{  return symbol(LeaSymbol.LT); }

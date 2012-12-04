@@ -22,15 +22,9 @@ parser code  {:
 :};
 
 /*terminal DO,
-    OF, 
-    LPAR, RPAR, LBRACE, RBRACE, LBRACKET, RBRACKET,
-    SEMIC, COLON,
+    ,;*/
     
-    INT, FLOAT, STRING, CHAR, BOOL,
-    FUNCTION,LIST, TRUE, FALSE,
-    COMMA, STRUCT,SLOT,MODULO,TO,REPEAT,BOOL,CASE;*/
-    
-terminal SEMIC, FUNCTION, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
+terminal SEMIC, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
 terminal IF, ELSE, CASE;
 terminal WHILE, REPEAT;
 terminal AFF, SLOT, TO;
@@ -40,7 +34,7 @@ terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
 
 terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALSEEXP;
 
-non terminal axiom,constDecl,funct,decls;
+non terminal axiom,constDecl,funct,struct,structDecls, structDecl;
 non terminal Instruction decl;
 non terminal Type type;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -50,7 +44,6 @@ non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal String BOOLEXP;
 non terminal VariableLeaf variable;
-non terminal structDecl;
 
 precedence left COMMA;
 precedence right ELSE;
@@ -58,7 +51,7 @@ precedence left AND;
 precedence left OR;
 precedence left LT, GT, LE, GE, EQ, DIFF;
 precedence left PLUS, MINUS;
-precedence left MULT, DIV;
+precedence left MULT, DIV, MODULO;
 precedence left MINUS_U;
 
 start with axiom;
@@ -68,8 +61,8 @@ axiom ::=
 		|constDecl axiom
 		|funct axiom
 		|constDecl	
-		| structDecl axiom
-		| structDecl
+		| struct axiom
+		| struct
 		;
 		
 type ::=
@@ -78,7 +71,7 @@ type ::=
 	| CHAR   {: RESULT = new CharType(); :}
 	| STRING  {: RESULT = new StringType(); :}
 	| BOOL {: RESULT = new BoolType(); :}
-	| LIST OF type:t {::}
+	| LIST OF type:t {: RESULT = new ListType(t); :}
 	;
 		
 		
@@ -126,7 +119,27 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
 	:} ;
 
-structDecl ::= IDENTIFIER:id EQ STRUCT {::};
+structDecls ::= structDecls structDecl | structDecl;
+
+structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
+	{:
+		if(Main.currentNode != null)
+		{
+			Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
+			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+		}
+		else
+			System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
+			
+		RESULT = new Assignment(new VariableLeaf(id, t), null);
+	:};
+
+struct ::= IDENTIFIER:id EQ STRUCT LBRACE structDecls RBRACE 
+	{:
+		
+		/*Main.constTable.put(id,);
+		RESULT = new */ 
+	:};
 
 
 BOOLEXP ::=
@@ -162,6 +175,7 @@ instr ::=
 	IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
 	| WHILE LPAR expr:e RPAR block:i {: RESULT = new Loop(e, i); :}
 	| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
+	| REPEAT TO CASE
 	| variable:v AFF expr:e SEMIC 
 	{: 
 		//TODO MHB : TYPE CHECKING HERE 
@@ -176,20 +190,20 @@ instrs ::=
 	;
 
 expr ::=
-	expr:e1 AND expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.AND); :} 
-	|expr:e1 OR expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.OR); :} 
-	|expr:e1 LT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.LT); :} 
-	|expr:e1 GT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.GT); :} 
-	|expr:e1 LE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.LE); :} 
-	|expr:e1 GE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.GE); :} 
-	|expr:e1 EQ expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagType.EQ); :} 
-	|expr:e1 DIFF expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.DIFF); :} 
-	|expr:e1 PLUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.PLUS); :} 
-	|expr:e1 MINUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.MINUS); :} 
-	|MINUS expr:e {: RESULT = new NumberExp(e1, null, EnumTagType.MINUS_U); :} %prec MINUS_U 
-	|expr:e1 MULT expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.MULT); :} 
-	|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.DIV); :} 
-	|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagType.MOD); :} 
+	expr:e1 AND expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.AND); :} 
+	|expr:e1 OR expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.OR); :} 
+	|expr:e1 LT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LT); :} 
+	|expr:e1 GT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GT); :} 
+	|expr:e1 LE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LE); :} 
+	|expr:e1 GE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GE); :} 
+	|expr:e1 EQ expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); :} 
+	|expr:e1 DIFF expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIFF); :} 
+	|expr:e1 PLUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); :} 
+	|expr:e1 MINUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); :} 
+	|MINUS expr:e {: RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); :} %prec MINUS_U 
+	|expr:e1 MULT expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); :} 
+	|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); :} 
+	|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); :} 
 	|LPAR expr:e RPAR {: RESULT = e; :}
 	|RETURN expr:e {: RESULT = new ReturnNode(e); :}
 	|INTEGER:it {: 
@@ -200,6 +214,9 @@ expr ::=
 		:}
 	|STRINGEXP:st {: 
 		RESULT = new ConstantLeaf(new StringConstant(st), new StringType());  
+		:}
+	|CHAREXP:c {: 
+		RESULT = new ConstantLeaf(new CharConstant(c), new CharType());  
 		:}
 	|variable:v {: RESULT = v; :}
 	|BOOLEXP:b {: 
@@ -221,6 +238,14 @@ variable ::=
     	{:
     		
     	:} variable:v1 {::}
+    	| IDENTIFIER:id LBRACKET IDENTIFIER:id RBRACKET
+    	{:
+    		
+    	:}
+    	| IDENTIFIER:id LBRACKET INTEGER RBRACKET
+    	{:
+    		
+    	:}
 	;
 	
     
