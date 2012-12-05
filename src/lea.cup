@@ -11,13 +11,14 @@ import lea.syntax.*;
 parser code  {: 
  public void report_fatal_error(String message, Object info) 
   {
-  	report_error( message,  info);
+  	java_cup.runtime.Symbol symb = (java_cup.runtime.Symbol)info;
+  	Main.printError("Ligne : " + symb.left + " Colonne : " + symb.right + "   : " + message, 2);
   }
   
   public void report_error(String message, Object info) 
   {
   	java_cup.runtime.Symbol symb = (java_cup.runtime.Symbol)info;
-  	System.out.println("Ligne : " + symb.left + " Colonne : " + symb.right + "   : " + message);
+  	Main.printError("Ligne : " + symb.left + " Colonne : " + symb.right + "   : " + message, 1);
   }
 :};
     

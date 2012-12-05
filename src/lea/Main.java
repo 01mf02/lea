@@ -13,6 +13,7 @@ public class Main
     public static ConstantTable constTable = new ConstantTable();
     public static TypeTable typeTable = new TypeTable();
     public static SyntaxTree currentNode = null;	//Le noeud courant dans lequel on est rendu
+    private static boolean hasCompileErrors = false;
     
 	/**
 	 * @param args
@@ -38,6 +39,11 @@ public class Main
 					result=myP.parse();
 					try 
 					{
+						if(!hasCompileErrors)
+						{
+							//CODE POUR LAETITIA
+						}
+						
 					    //AbSynt root=(AbSynt)result.value;
 					    //System.out.println(root.toString());
 					    //root.toDot("detruire");
@@ -62,5 +68,33 @@ public class Main
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	//Le level c'est :
+	// 0 : WARNING
+	// 1 : ERROR
+	// 2 : FATAL ERROR
+	public static void printError(String message, int level)
+	{
+		String outputMess;
+		
+		switch(level)
+		{
+		case 0:
+			outputMess = "WARNING : " + message;
+			break;
+		case 1:
+			outputMess = "ERROR : " + message;
+			break;
+		case 2:
+			outputMess = "FATAL ERROR : " + message;
+			break;
+		default:
+			outputMess = message;
+			break;
+		}
+		
+		System.out.println(outputMess);
+		hasCompileErrors = true;
 	}
 }

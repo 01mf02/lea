@@ -1,19 +1,26 @@
 package lea.types;
 
 import lea.constants.*;
+import lea.Environment;
 
 public class StructType extends Type 
 {
+	public Environment env;
+	
 	public StructType()
 	{
-		this.left = null;
+
 	}
 	
-	/*public StructType(Type t)
+	public Environment getEnvironment()
 	{
-		this.left = t;
-	}*/
+		return env;
+	}
 	
+	public void setEnvironment(Environment e)
+	{
+		env = e;
+	}
 	
 	@Override
 	public boolean equals(Type t1) 
