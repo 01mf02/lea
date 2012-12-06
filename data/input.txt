@@ -7,7 +7,7 @@ fiche = struct {
 
 function foo(arg:int,arg2:string) : string {
 	fel:fiche;
-	fel.nom := 0;
+	tup:int,string;
 	
 	
 	tata:char;

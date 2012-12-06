@@ -32,7 +32,7 @@ terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
 
 terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALSEEXP;
 
-non terminal axiom,constDecl,funct,struct,structDecls, structDecl;
+non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl;
 non terminal Instruction decl;
 non terminal Type type;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -56,9 +56,11 @@ start with axiom;
 
 axiom ::= 
 		funct
-		|constDecl axiom
-		|funct axiom
-		|constDecl	
+		| funct axiom
+		| procedure
+		| procedure axiom
+		| constDecl axiom
+		| constDecl	
 		| struct axiom
 		| struct
 		;
@@ -66,15 +68,20 @@ axiom ::=
 type ::=
 	INT {: RESULT = new IntType();  :}
 	| FLOAT {: RESULT = new FloatType();  :}
+	| type:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :} 
 	| CHAR   {: RESULT = new CharType(); :}
 	| STRING  {: RESULT = new StringType(); :}
 	| BOOL {: RESULT = new BoolType(); :}
 	| LIST OF type:t {: RESULT = new ListType(t); :}
 	| IDENTIFIER:t 
 	{:
-		//if t i struct
-		//RESULT = new StructType();
-		RESULT = new StringType();
+		/*if(Main.)
+		{*/
+			RESULT = new StructType();
+		/*}
+		else*/
+			//error
+		
 	:}
 	/*| LIST OF IDENTIFIER:t 
 	{: //TODO : vérifier pour les identifier struct
@@ -166,6 +173,15 @@ funct ::=
 			
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:};
+procedure ::= 
+		PROCEDURE IDENTIFIER:id LPAR functDecls:f RPAR block:b
+		{:
+			FunctionInfo fctInfo = new FunctionInfo(f, null, b);
+			Main.fctTable.put(id, fctInfo);
+			
+			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
+		:};
+
 		
 functDecls ::=
 	functDecls:l COMMA functDecl:f
@@ -257,18 +273,35 @@ variable ::=
     		/*Type t = Main.currentNode.getEnvironment().get(v1).getType();
     		RESULT = new VariableLeaf(v1, t);*/
     	:}
-    	/*| IDENTIFIER:id LBRACKET IDENTIFIER:id RBRACKET
+    	| IDENTIFIER:id LPAR expr:e RPAR
+    	/*| IDENTIFIER:id LBRACKET expr:e RBRACKET
     	{:
-    		
-    	:}
-    	| IDENTIFIER:id LBRACKET INTEGER RBRACKET
-    	{:
-    		
+    		if(e instanceof IntConstant)
+    		{
+    			
+    		}
+    		else if(e instanceof NumberExp)
+    		{
+    			
+    		}
+    		else if(e instanceof IntConstant)
+    		{
+    			
+    		}
+    		else
+    			//error
     	:}*/
 	;
 	
     
+  /**Liste de TODO
+  List doit fonctionner
+  slot doit fonctionner
+  on doit importer tout les variables
+  tuples
+  retour fonction
   
+  */
   
   
   
