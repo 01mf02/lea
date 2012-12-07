@@ -1,19 +1,21 @@
 package lea.constants;
 
-import lea.types.EnumType;
+import lea.types.*;
 
 public class StringConstant implements Constant 
 {
 	String _value = "";
+	Type t;
 	
 	public StringConstant(String value)
 	{
 		_value = value;
+		t = new StringType();
 	}
     
-    public EnumType getType()
+    public Type getType()
     {
-    	return EnumType.STRING;
+    	return t;
     }
     
     public String getValue()

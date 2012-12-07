@@ -2,20 +2,22 @@ package lea.constants;
 
 import java.text.*;
 
-import lea.types.EnumType;
+import lea.types.*;
 
 public class FloatConstant implements Constant 
 {
 	float _value = 0;
+	Type t;
 	
 	public FloatConstant(String value)
 	{
 		_value = Float.parseFloat(value);
+		t = new FloatType();
 	}
     
-    public EnumType getType()
+    public Type getType()
     {
-    	return EnumType.FLOAT;
+    	return t;
     }
     
     public float getValue()

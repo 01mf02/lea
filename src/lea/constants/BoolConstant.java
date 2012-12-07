@@ -4,15 +4,17 @@ import lea.types.*;
 public class BoolConstant implements Constant 
 {
 	boolean _value = false;
+	Type t;
 	
 	public BoolConstant(String value)
 	{
 		_value = Boolean.parseBoolean(value);
+		t = new BoolType();
 	}
     
-    public EnumType getType()
+    public Type getType()
     {
-    	return EnumType.BOOLEAN;
+    	return t;
     }
     
     public boolean getValue()

@@ -7,8 +7,9 @@ fiche = struct {
 
 function foo(arg:int,arg2:string) : string {
 	fel:fiche;
-	tup:int,string;
-	
+	l: list of int;
+	l[MAX] := MAX +1;
+	fel.age := 5;
 	
 	tata:char;
 	

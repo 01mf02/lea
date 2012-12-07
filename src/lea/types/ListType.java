@@ -24,6 +24,6 @@ public class ListType extends Type
 	@Override
 	public boolean equals(Constant c1) 
 	{
-		return c1 instanceof ListConstant && equals(((ListConstant)c1).getListType());
+		return c1 instanceof ListConstant && equals(c1.getType());
 	}
 }

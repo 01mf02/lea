@@ -1,4 +1,5 @@
 package lea.syntax;
+import lea.types.*;
 
 public class Expression extends SyntaxTree 
 {
@@ -9,7 +10,7 @@ public class Expression extends SyntaxTree
 		
 	}
 	
-	public Expression(SyntaxTree a1, SyntaxTree a2)
+	public Expression(Expression a1, Expression a2)
 	{
 		super(a1, a2);
 	}
@@ -17,5 +18,10 @@ public class Expression extends SyntaxTree
 	public EnumTagExp getTag()
 	{
 		return expTag;
+	}
+	
+	public Type getType()
+	{
+		return this.getLeft().getType();		
 	}
 }

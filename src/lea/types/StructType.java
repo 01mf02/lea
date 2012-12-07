@@ -6,10 +6,16 @@ import lea.Environment;
 public class StructType extends Type 
 {
 	public Environment env;
+	private String name;
 	
-	public StructType()
+	public StructType(String s)
 	{
-
+		name = s;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public Environment getEnvironment()

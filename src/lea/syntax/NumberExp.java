@@ -7,7 +7,7 @@ public class NumberExp extends Expression
 		
 	}
 	
-	public NumberExp(SyntaxTree a1, SyntaxTree a2, EnumTagExp tag)
+	public NumberExp(Expression a1, Expression a2, EnumTagExp tag)
 	{
 		super(a1, a2);
 		expTag = tag;

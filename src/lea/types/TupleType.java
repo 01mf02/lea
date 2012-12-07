@@ -25,6 +25,6 @@ public class TupleType extends Type
 	@Override
 	public boolean equals(Constant c1) 
 	{
-		return c1 instanceof TupleConstant && equals(((TupleConstant)c1).getTupleType());
+		return c1 instanceof TupleConstant && equals(c1.getType());
 	}
 }

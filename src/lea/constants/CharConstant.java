@@ -1,19 +1,21 @@
 package lea.constants;
 
-import lea.types.EnumType;
+import lea.types.*;
 
 public class CharConstant implements Constant 
 {
 	char _value = ' ';
+	Type t;
 	
 	public CharConstant(String value)
 	{
 		_value = value.charAt(0);
+		t = new CharType();
 	}
     
-    public EnumType getType()
+    public Type getType()
     {
-    	return EnumType.CHAR;
+    	return t;
     }
     
     public char getValue()

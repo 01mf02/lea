@@ -16,9 +16,9 @@ public class TupleConstant implements Constant
 		tupleType = t;
 	}
     
-    public EnumType getType()
+    public Type getType()
     {
-    	return EnumType.ARRAY;
+    	return tupleType;
     }
     
     public Array getValue()
@@ -29,10 +29,5 @@ public class TupleConstant implements Constant
     public String toString()
     {
     	return _value.toString();
-    }
-    
-    public TupleType getTupleType()
-    {
-    	return tupleType;
     }
 }

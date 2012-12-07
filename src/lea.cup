@@ -41,7 +41,7 @@ non terminal SyntaxTree block;
 non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal String BOOLEXP;
-non terminal VariableLeaf variable;
+non terminal Expression variable;
 
 precedence left COMMA;
 precedence right ELSE;
@@ -51,6 +51,7 @@ precedence left LT, GT, LE, GE, EQ, DIFF;
 precedence left PLUS, MINUS;
 precedence left MULT, DIV, MODULO;
 precedence left MINUS_U;
+precedence left SLOT;
 
 start with axiom;
 
@@ -68,7 +69,7 @@ axiom ::=
 type ::=
 	INT {: RESULT = new IntType();  :}
 	| FLOAT {: RESULT = new FloatType();  :}
-	| type:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :} 
+	/*| type:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :} */
 	| CHAR   {: RESULT = new CharType(); :}
 	| STRING  {: RESULT = new StringType(); :}
 	| BOOL {: RESULT = new BoolType(); :}
@@ -77,7 +78,7 @@ type ::=
 	{:
 		/*if(Main.)
 		{*/
-			RESULT = new StructType();
+			RESULT = Main.typeTable.get(t);
 		/*}
 		else*/
 			//error
@@ -156,8 +157,12 @@ struct ::= IDENTIFIER:id EQ STRUCT
 	    
 	    Main.currentNode = sTree;
 	    //Ou mettre le fich?
-	    Main.typeTable.put(id,new StructType());
+	    Main.typeTable.put(id,new StructType(id));
 	:}LBRACE structDecls RBRACE 
+	{:
+		StructType st = (StructType)Main.typeTable.get(id);
+		st.setEnvironment(Main.currentNode.getEnvironment());
+	:}
 	;
 
 
@@ -207,7 +212,9 @@ instr ::=
 	| variable:v AFF expr:e SEMIC 
 	{: 
 		//TODO MHB : TYPE CHECKING HERE 
-		RESULT = new Assignment(v, e); 
+		//if(v instanceof VariableLeaf)
+			RESULT = new Assignment(v, e); 
+		//ELSE ERROR
 	:}
 	| REPEAT block:b WHILE LPAR expr:e RPAR 
 	{: RESULT = new Loop(e, b); :}
@@ -237,60 +244,89 @@ expr ::=
 	|LPAR expr:e RPAR {: RESULT = e; :}
 	|RETURN expr:e {: RESULT = new ReturnNode(e); :}
 	|INTEGER:it {: 
-		RESULT = new ConstantLeaf(new IntConstant(it), new IntType()); 
+		RESULT = new ConstantLeaf(new IntConstant(it)); 
 		:}
 	|FLOATEXP:d {: 
-		RESULT = new ConstantLeaf(new FloatConstant(d), new FloatType()); 
+		RESULT = new ConstantLeaf(new FloatConstant(d)); 
 		:}
 	|STRINGEXP:st {: 
-		RESULT = new ConstantLeaf(new StringConstant(st), new StringType());  
+		RESULT = new ConstantLeaf(new StringConstant(st));  
 		:}
 	|CHAREXP:c {: 
-		RESULT = new ConstantLeaf(new CharConstant(c), new CharType());  
+		RESULT = new ConstantLeaf(new CharConstant(c));  
 		:}
 	|variable:v {: RESULT = v; :}
 	|BOOLEXP:b {: 
-		RESULT = new ConstantLeaf(new BoolConstant(b), new BoolType()); 
+		RESULT = new ConstantLeaf(new BoolConstant(b)); 
 		:}
-	| expr:e1 COMMA expr:e2 {: RESULT = new ListNode(new Succ(e1, e2)); :}
+	| expr:e1 COMMA expr:e2 {:/* RESULT = new ListNode(new Succ(e1, e2));*/ :}
 	;
 	
 	
 variable ::=
     	IDENTIFIER:id 
     	{:    		
-    		//TODO MHB : RAISE ERROR IF t == null
+    		//TODO MHB : RAISE ERROR IF t & c == null
+    		Constant c = Main.constTable.get(id);
     		
-    		Type t = Main.currentNode.getEnvironment().get(id).getType();
-    		RESULT = new VariableLeaf(id, t);
-    	:}
-    	| IDENTIFIER:id SLOT
-    	{:
-    		Type t = Main.currentNode.getEnvironment().get(id).getType();
-    		RESULT = new VariableLeaf(id, t);
-    	:} variable:v1 {:
-    		
-    		/*Type t = Main.currentNode.getEnvironment().get(v1).getType();
-    		RESULT = new VariableLeaf(v1, t);*/
-    	:}
-    	| IDENTIFIER:id LPAR expr:e RPAR
-    	/*| IDENTIFIER:id LBRACKET expr:e RBRACKET
-    	{:
-    		if(e instanceof IntConstant)
+    		if(c == null)
     		{
+    			VariableInfo vi = Main.currentNode.getEnvironment().get(id);
     			
-    		}
-    		else if(e instanceof NumberExp)
-    		{
-    			
-    		}
-    		else if(e instanceof IntConstant)
-    		{
-    			
+				if(vi != null)
+				{
+					Type t = vi.getType();
+					RESULT = new VariableLeaf(id, t);
+				}
+				//ERROR IF t == NULL
     		}
     		else
-    			//error
-    	:}*/
+    			RESULT = new ConstantLeaf(c);
+    	:}
+    	| variable:v SLOT 
+    	{:
+    		if(v.getType() instanceof StructType)
+    		{     		
+    			StructType st = (StructType)v.getType();    			 
+				Main.currentNode.setEnvironment(st.getEnvironment()); 
+			}
+		:} 
+		variable:v1 
+		{:    	
+    		if(v.getType() instanceof StructType)
+    		{
+	    		StructType st = (StructType)v.getType();
+				VariableInfo vi = st.getEnvironment().get(((VariableLeaf)v1).getName());
+				System.out.println("Variable dans la structure : " + vi.toString());
+
+				RESULT = new StructAccessor(v, v1);
+    		}
+    	:}
+    	| IDENTIFIER:id LPAR expr:e RPAR
+    	{:
+    	
+    	:}
+    	| variable:v LBRACKET expr:e RBRACKET
+    	{:
+    		boolean isOk = false;
+    		
+    		if(v instanceof VariableLeaf)
+    		{
+    			if(v.getType() instanceof ListType)
+    			{
+		    		if(e.getType().equals(new IntType()))
+	    			{
+	    				RESULT = new ListAccessor(v, e);
+	    				isOk = true;
+	    			}
+	    		}
+    		}
+    			//error dans tous les autres cas
+    		if(!isOk)
+    		{
+    		
+    		}
+    	:}
 	;
 	
     

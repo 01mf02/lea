@@ -1,4 +1,5 @@
 package lea.syntax;
+import lea.types.*;
 
 public class BoolExp extends Expression 
 {
@@ -7,7 +8,7 @@ public class BoolExp extends Expression
 		
 	}
 	
-	public BoolExp(SyntaxTree a1, SyntaxTree a2, EnumTagExp tag)
+	public BoolExp(Expression a1, Expression a2, EnumTagExp tag)
 	{
 		super(a1, a2);
 		expTag = tag;

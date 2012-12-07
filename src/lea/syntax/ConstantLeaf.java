@@ -5,12 +5,10 @@ import lea.types.*;
 public class ConstantLeaf extends Expression 
 {
 	private Constant constValue;
-	private Type constType;
 	
-	public ConstantLeaf(Constant c, Type t)
+	public ConstantLeaf(Constant c)
 	{
 		constValue = c;
-		constType = t;
 	}
 	
 	public String getValue()
@@ -20,11 +18,11 @@ public class ConstantLeaf extends Expression
 	
 	public Type getType()
 	{
-		return constType;
+		return constValue.getType();
 	}
 	
 	public String toString()
 	{
-		return "CONST("+constValue.toString() + ":" + constType.toString()+")";
+		return "CONST("+constValue.toString() + ":" + constValue.getType().toString()+")";
 	}
 }
