@@ -8,19 +8,6 @@ import lea.types.*;
 import lea.constants.*;
 import lea.syntax.*;
 
-parser code  {: 
- public void report_fatal_error(String message, Object info) 
-  {
-  	java_cup.runtime.Symbol symb = (java_cup.runtime.Symbol)info;
-  	Main.printError("Ligne : " + symb.left + " Colonne : " + symb.right + "   : " + message, 2);
-  }
-  
-  public void report_error(String message, Object info) 
-  {
-  	java_cup.runtime.Symbol symb = (java_cup.runtime.Symbol)info;
-  	Main.printError("Ligne : " + symb.left + " Colonne : " + symb.right + "   : " + message, 1);
-  }
-:};
     
 terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
 terminal IF, ELSE, CASE,IN;
@@ -32,7 +19,7 @@ terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
 
 terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALSEEXP;
 
-non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl;
+non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl,erreur;
 non terminal Instruction decl;
 non terminal Type type;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -64,31 +51,50 @@ axiom ::=
 		| constDecl	
 		| struct axiom
 		| struct
+		| erreur axiom
+		| erreur
 		;
 		
-type ::=
-	INT {: RESULT = new IntType();  :}
-	| FLOAT {: RESULT = new FloatType();  :}
-	/*| type:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :} */
-	| CHAR   {: RESULT = new CharType(); :}
-	| STRING  {: RESULT = new StringType(); :}
-	| BOOL {: RESULT = new BoolType(); :}
-	| LIST OF type:t {: RESULT = new ListType(t); :}
-	| IDENTIFIER:t 
-	{:
-		/*if(Main.)
-		{*/
-			RESULT = Main.typeTable.get(t);
-		/*}
-		else*/
-			//error
 		
-	:}
-	/*| LIST OF IDENTIFIER:t 
-	{: //TODO : vérifier pour les identifier struct
-	RESULT =  RESULT = new ListType(t); 
-	:}*/
-	;
+erreur ::= 
+		error SEMIC
+		{:
+			System.out.println("\n Erreur dans un terminal : ; \n");
+		:}
+		| error RBRACE
+		{:
+			System.out.println("\n Erreur dans un terminal : } \n");
+		:}
+		| error LPAR
+		{:
+			System.out.println("\n Erreur dans un terminal : ) \n");
+		:}
+		;		
+		
+		
+type ::=
+		INT {: RESULT = new IntType();  :}
+		| FLOAT {: RESULT = new FloatType();  :}
+		| type:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :} 
+		| CHAR   {: RESULT = new CharType(); :}
+		| STRING  {: RESULT = new StringType(); :}
+		| BOOL {: RESULT = new BoolType(); :}
+		| LIST OF type:t {: RESULT = new ListType(t); :}
+		| IDENTIFIER:t 
+		{:
+			/*if(Main.)
+			{*/
+				RESULT = Main.typeTable.get(t);
+			/*}
+			else*/
+				//error
+			
+		:}
+		/*| LIST OF IDENTIFIER:t 
+		{: //TODO : vérifier pour les identifier struct
+		RESULT =  RESULT = new ListType(t); 
+		:}*/
+		;
 		
 		
 constDecl ::= 
@@ -99,76 +105,82 @@ constDecl ::=
 		:}
 		;
 		
+		
 block ::=
-	LBRACE
-	{:
-	    System.out.println("BLOCK");
-	    SyntaxTree sTree = new SyntaxTree(null, null);
-	    
-	    Main.currentNode = sTree;
-	:}  instrs:i RBRACE {: RESULT = i; :}
-	;
+		LBRACE
+		{:
+		    System.out.println("BLOCK");
+		    SyntaxTree sTree = new SyntaxTree(null, null);
+		    
+		    Main.currentNode = sTree;
+		:}  instrs:i RBRACE {: RESULT = i; :}
+		;
 
 
 decl ::=  IDENTIFIER:id COLON type:t SEMIC
-	{:
-		if(Main.currentNode != null)
-		{
-			Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
-			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
-		}
-		else
-			System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
-			
-		RESULT = new Assignment(new VariableLeaf(id, t), null);
-	:}
-| IDENTIFIER:id COLON type:t AFF expr:e SEMIC
-	{:
-		if(Main.currentNode != null)
-		{
-			Main.currentNode.getEnvironment().put(id, new VariableInfo(t, true));
-			
-			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
-			RESULT = new Assignment(new VariableLeaf(id, t), e); 
-		}
-		else
-			System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
-	:} ;
+		{:
+			if(Main.currentNode != null)
+			{
+				Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
+				System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+			}
+			else
+				System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
+				
+			RESULT = new Assignment(new VariableLeaf(id, t), null);
+		:}
+		| IDENTIFIER:id COLON type:t AFF expr:e SEMIC
+		{:
+			if(Main.currentNode != null)
+			{
+				Main.currentNode.getEnvironment().put(id, new VariableInfo(t, true));
+				
+				System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+				RESULT = new Assignment(new VariableLeaf(id, t), e); 
+			}
+			else
+				System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
+		:} 
+		;
 
-structDecls ::= structDecls structDecl | structDecl;
+
+structDecls ::= structDecls structDecl | structDecl | erreur;
+
 
 structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
-	{:
-		if(Main.currentNode != null)
-		{
-			Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
-			System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
-		}
-		else
-			System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
-			
-		RESULT = new Assignment(new VariableLeaf(id, t), null);
-	:};
+		{:
+			if(Main.currentNode != null)
+			{
+				Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
+				System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+			}
+			else
+				System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
+				
+			RESULT = new Assignment(new VariableLeaf(id, t), null);
+		:};
+
 
 struct ::= IDENTIFIER:id EQ STRUCT 
-	 {:
-		System.out.println("STRUCT");
-	    SyntaxTree sTree = new SyntaxTree(null, null);
-	    
-	    Main.currentNode = sTree;
-	    //Ou mettre le fich?
-	    Main.typeTable.put(id,new StructType(id));
-	:}LBRACE structDecls RBRACE 
-	{:
-		StructType st = (StructType)Main.typeTable.get(id);
-		st.setEnvironment(Main.currentNode.getEnvironment());
-	:}
-	;
+		 {:
+			System.out.println("STRUCT");
+		    SyntaxTree sTree = new SyntaxTree(null, null);
+		    
+		    Main.currentNode = sTree;
+		    //Ou mettre le fich?
+		    Main.typeTable.put(id,new StructType(id));
+		:}LBRACE structDecls RBRACE 
+		{:
+			StructType st = (StructType)Main.typeTable.get(id);
+			st.setEnvironment(Main.currentNode.getEnvironment());
+		:}
+		;
 
 
 BOOLEXP ::=
-	TRUEEXP:t {:RESULT = t; :}
-	|FALSEEXP:t {:RESULT = t; :};
+		TRUEEXP:t {:RESULT = t; :}
+		|FALSEEXP:t {:RESULT = t; :};
+
 
 funct ::= 
 		FUNCTION IDENTIFIER:id LPAR functDecls:f RPAR COLON type:t block:b
@@ -177,7 +189,10 @@ funct ::=
 			Main.fctTable.put(id, fctInfo);
 			
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
-		:};
+		:}
+		;
+		
+		
 procedure ::= 
 		PROCEDURE IDENTIFIER:id LPAR functDecls:f RPAR block:b
 		{:
@@ -185,82 +200,88 @@ procedure ::=
 			Main.fctTable.put(id, fctInfo);
 			
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
-		:};
+		:}
+		;
 
 		
 functDecls ::=
-	functDecls:l COMMA functDecl:f
-	{:
-		l.add(f);
-		RESULT = l;
-	:}
-	| functDecl:f 
-	{: 
-		LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
-		l.add(f);
-		RESULT = l;  
-	:}
-	;
+		functDecls:l COMMA functDecl:f
+		{:
+			l.add(f);
+			RESULT = l;
+		:}
+		| functDecl:f 
+		{: 
+			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
+			l.add(f);
+			RESULT = l;  
+		:}
+		;
+
 
 functDecl ::=  IDENTIFIER:id COLON type:t {: RESULT = new ArgumentInfo(id, t); :} ;
 		
+		
 instr ::= 
-	IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
-	| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
-	| REPEAT TO CASE
-	| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
-	| variable:v AFF expr:e SEMIC 
-	{: 
-		//TODO MHB : TYPE CHECKING HERE 
-		//if(v instanceof VariableLeaf)
-			RESULT = new Assignment(v, e); 
-		//ELSE ERROR
-	:}
-	| REPEAT block:b WHILE LPAR expr:e RPAR 
-	{: RESULT = new Loop(e, b); :}
-	| decl:d {: RESULT = d;	:}
-	;
+		IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
+		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
+		| REPEAT TO CASE
+		| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
+		| variable:v AFF expr:e SEMIC 
+		{: 
+			//TODO MHB : TYPE CHECKING HERE 
+			//if(v instanceof VariableLeaf)
+				RESULT = new Assignment(v, e); 
+			//ELSE ERROR
+		:}
+		| REPEAT block:b WHILE LPAR expr:e RPAR 
+		{: RESULT = new Loop(e, b); :}
+		| decl:d {: RESULT = d;	:}
+		| erreur
+		;
+
 
 instrs ::= 
-	instrs:i1 instr:i2   {: RESULT = new Succ(i1, i2); :}
-	| instr:i  {: RESULT = i; :}
-	;
+		instrs:i1 instr:i2   {: RESULT = new Succ(i1, i2); :}
+		| instr:i  {: RESULT = i; :}
+		;
+
 
 expr ::=
-	expr:e1 AND expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.AND); :} 
-	|expr:e1 OR expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.OR); :} 
-	|expr:e1 LT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LT); :} 
-	|expr:e1 GT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GT); :} 
-	|expr:e1 LE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LE); :} 
-	|expr:e1 GE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GE); :} 
-	|expr:e1 EQ expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); :} 
-	|expr:e1 DIFF expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIFF); :} 
-	|expr:e1 PLUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); :} 
-	|expr:e1 MINUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); :} 
-	|MINUS expr:e {: RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); :} %prec MINUS_U 
-	|expr:e1 MULT expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); :} 
-	|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); :} 
-	|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); :} 
-	|LPAR expr:e RPAR {: RESULT = e; :}
-	|RETURN expr:e {: RESULT = new ReturnNode(e); :}
-	|INTEGER:it {: 
-		RESULT = new ConstantLeaf(new IntConstant(it)); 
-		:}
-	|FLOATEXP:d {: 
-		RESULT = new ConstantLeaf(new FloatConstant(d)); 
-		:}
-	|STRINGEXP:st {: 
-		RESULT = new ConstantLeaf(new StringConstant(st));  
-		:}
-	|CHAREXP:c {: 
-		RESULT = new ConstantLeaf(new CharConstant(c));  
-		:}
-	|variable:v {: RESULT = v; :}
-	|BOOLEXP:b {: 
-		RESULT = new ConstantLeaf(new BoolConstant(b)); 
-		:}
-	| expr:e1 COMMA expr:e2 {:/* RESULT = new ListNode(new Succ(e1, e2));*/ :}
-	;
+		expr:e1 AND expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.AND); :} 
+		|expr:e1 OR expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.OR); :} 
+		|expr:e1 LT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LT); :} 
+		|expr:e1 GT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GT); :} 
+		|expr:e1 LE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LE); :} 
+		|expr:e1 GE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GE); :} 
+		|expr:e1 EQ expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); :} 
+		|expr:e1 DIFF expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIFF); :} 
+		|expr:e1 PLUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); :} 
+		|expr:e1 MINUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); :} 
+		|MINUS expr:e {: RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); :} %prec MINUS_U 
+		|expr:e1 MULT expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); :} 
+		|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); :} 
+		|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); :} 
+		|LPAR expr:e RPAR {: RESULT = e; :}
+		|RETURN expr:e {: RESULT = new ReturnNode(e); :}
+		|INTEGER:it {: 
+			RESULT = new ConstantLeaf(new IntConstant(it)); 
+			:}
+		|FLOATEXP:d {: 
+			RESULT = new ConstantLeaf(new FloatConstant(d)); 
+			:}
+		|STRINGEXP:st {: 
+			RESULT = new ConstantLeaf(new StringConstant(st));  
+			:}
+		|CHAREXP:c {: 
+			RESULT = new ConstantLeaf(new CharConstant(c));  
+			:}
+		|variable:v {: RESULT = v; :}
+		|BOOLEXP:b {: 
+			RESULT = new ConstantLeaf(new BoolConstant(b)); 
+			:}
+		/*| expr:e1 COMMA expr:e2 {: RESULT = new ListNode(new Succ(e1, e2)); :}*/
+		;
 	
 	
 variable ::=
@@ -304,7 +325,11 @@ variable ::=
     	:}
     	| IDENTIFIER:id LPAR expr:e RPAR
     	{:
-    	
+    		if(Main.fctTable.containsKey(id))
+    		{
+    			//FunctionCall extends expr?
+    		}
+    		//else error
     	:}
     	| variable:v LBRACKET expr:e RBRACKET
     	{:
@@ -327,7 +352,7 @@ variable ::=
     		
     		}
     	:}
-	;
+		;
 	
     
   /**Liste de TODO
@@ -336,7 +361,7 @@ variable ::=
   on doit importer tout les variables
   tuples
   retour fonction
-  
+  fonction sans decls
   */
   
   

@@ -1,20 +1,11 @@
+
+
+
+
+
+
 MAX=12;
 
-fiche = struct {
-	nom:int;
-	age:string;
-}
-
-function foo(arg:int,arg2:string) : string {
-	fel:fiche;
-	l: list of int;
-	l[MAX] := MAX +1;
-	fel.age := 5;
-	
-	tata:char;
-	
-	if(1 < 5)
-	{
-		mic:int := 10;	
-	}
+procedure foo(u:int)  {
+	fel:int;
 }
