@@ -1,11 +1,22 @@
-
-
-
-
-
-
 MAX=12;
 
-procedure foo(u:int)  {
-	fel:int;
+fiche = struct {
+	nom:int;
+	age:string;
+}
+
+function foo() : string {
+	tata:char;
+	tupler:int,int;
+	tata := thec(1);
+	
+	if(1 < 5)
+	{
+		mic:int := 10;	
+	}
+	return 1;
+}
+
+function thec(f:int) : char {
+	a:int;
 }

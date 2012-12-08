@@ -1,9 +1,9 @@
 package lea.syntax;
 
-public class FunctionCall extends SyntaxTree 
+public class FunctionCall extends Expression 
 {
-	public FunctionCall(SyntaxTree a1, SyntaxTree a2)
+	public FunctionCall(Expression a1,Expression a2)
 	{
-		super(a1, a2);
+		super(a1,a2);
 	}
 }

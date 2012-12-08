@@ -1,6 +1,6 @@
 package lea.syntax;
 
-public class ReturnNode extends Expression 
+public class ReturnNode extends Instruction 
 {
 	public ReturnNode(Expression a1)
 	{

@@ -90,10 +90,6 @@ type ::=
 				//error
 			
 		:}
-		/*| LIST OF IDENTIFIER:t 
-		{: //TODO : vérifier pour les identifier struct
-		RESULT =  RESULT = new ListType(t); 
-		:}*/
 		;
 		
 		
@@ -141,6 +137,8 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			else
 				System.out.println("D�CLARATION VARIABLE GLOBALE INTERDITE!! FAUT G�RER CA ICI!");
 		:} 
+		/*|erreur %prec
+		{::}*/
 		;
 
 
@@ -190,6 +188,14 @@ funct ::=
 			
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
+		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t block:b
+		{:
+			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
+			FunctionInfo fctInfo = new FunctionInfo(l, t, b);
+			Main.fctTable.put(id, fctInfo);
+			
+			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
+		:}
 		;
 		
 		
@@ -199,7 +205,15 @@ procedure ::=
 			FunctionInfo fctInfo = new FunctionInfo(f, null, b);
 			Main.fctTable.put(id, fctInfo);
 			
-			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
+			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
+		:}
+		|PROCEDURE IDENTIFIER:id LPAR RPAR block:b
+		{:
+			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
+			FunctionInfo fctInfo = new FunctionInfo(l, null, b);
+			Main.fctTable.put(id, fctInfo);
+			
+			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
 		:}
 		;
 
@@ -237,7 +251,12 @@ instr ::=
 		| REPEAT block:b WHILE LPAR expr:e RPAR 
 		{: RESULT = new Loop(e, b); :}
 		| decl:d {: RESULT = d;	:}
-		| erreur
+		| RETURN expr:e SEMIC {: RESULT = new  ReturnNode(e);:}
+		| erreur 
+		{:
+			//Crée un objet global pour les erreurs?
+			RESULT = new Instruction(null,null);
+		:}
 		;
 
 
@@ -263,7 +282,7 @@ expr ::=
 		|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); :} 
 		|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); :} 
 		|LPAR expr:e RPAR {: RESULT = e; :}
-		|RETURN expr:e {: RESULT = new ReturnNode(e); :}
+		/*|RETURN expr:e {: RESULT = new ReturnNode(e); :} Pas bonne endroit?*/
 		|INTEGER:it {: 
 			RESULT = new ConstantLeaf(new IntConstant(it)); 
 			:}
@@ -280,7 +299,11 @@ expr ::=
 		|BOOLEXP:b {: 
 			RESULT = new ConstantLeaf(new BoolConstant(b)); 
 			:}
-		/*| expr:e1 COMMA expr:e2 {: RESULT = new ListNode(new Succ(e1, e2)); :}*/
+		| expr:e1 COMMA expr:e2 
+		{: 
+			//ListNode s'attend a un Expression, mais succ lui renvoie un instruction. (Mettre en commentaire pour test)
+			RESULT = new ListNode(new Succ(e1, e2)); 
+		:}
 		;
 	
 	
@@ -328,6 +351,7 @@ variable ::=
     		if(Main.fctTable.containsKey(id))
     		{
     			//FunctionCall extends expr?
+    			RESULT = new FunctionCall( e,e);
     		}
     		//else error
     	:}
