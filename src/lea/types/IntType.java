@@ -12,12 +12,12 @@ public class IntType extends Type
 	@Override
 	public boolean equals(Type t1) 
 	{
-		return t1 instanceof IntType;
+		return t1 instanceof IntType || t1 instanceof FloatType;
 	}
 
 	@Override
 	public boolean equals(Constant c1) 
 	{
-		return c1 instanceof IntConstant;
+		return c1 instanceof IntConstant || c1 instanceof FloatConstant;
 	}
 }

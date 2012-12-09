@@ -353,14 +353,14 @@ expr ::=
 		:} 
 		|expr:e1 PLUS expr:e2 
 		{: 
-			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType()) && !e1.getType().equals(new StringType())) 
+			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType()) && !e1.getType().equals(new StringType())) 
 				Main.printError("Les types à gauche et à droite d'un + doivent être du même type et soit entier, réel ou chaîne de caractères", 1);
 				
 			RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); 
 		:} 
 		|expr:e1 MINUS expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
 				Main.printError("Les types à gauche et à droite d'un - doivent être du même type et soit entier ou réel", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); 
@@ -374,21 +374,21 @@ expr ::=
 		:} %prec MINUS_U 
 		|expr:e1 MULT expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
 				Main.printError("Les types à gauche et à droite d'un * doivent être du même type et soit entier ou réel", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); 
 		:} 
 		|expr:e1 DIV expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
 				Main.printError("Les types à gauche et à droite d'un / doivent être du même type et soit entier ou réel", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); 
 		:} 
 		|expr:e1 MODULO expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
 				Main.printError("Les types à gauche et à droite d'un % doivent être du même type et soit entier ou réel", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); 

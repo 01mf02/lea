@@ -18,23 +18,27 @@ public class StructAccessor extends Expression
 	{
 		String str = "";
 
-		/*SyntaxTree st = this;
+		SyntaxTree st = this;
 		
-		while(st.getRight() != null)
-		{			
-			st = st.getRight();
-		}	
-		if(st instanceof VariableLeaf)
+		while(st != null)
 		{
-			VariableLeaf vl = (VariableLeaf)st;
-			vl.getName();
-			
-			if(vi != null)
+			if(st.getLeft() != null)
 			{
-				vi.initialize();
+				if(st.getLeft() instanceof StructAccessor)
+					str += ((StructAccessor)st.getLeft()).toVariableString() + ".";
+				else if(st.getLeft() instanceof VariableLeaf)
+					str += ((VariableLeaf)st.getLeft()).getName() + ".";
 			}
-		}*/
-		
+			
+			st = st.getRight();
+			
+			if(st != null)
+			{
+				if(st instanceof VariableLeaf)
+					str += ((VariableLeaf)st).getName();
+			}
+		}
+
 		return str;
 	}
 	

@@ -18,7 +18,6 @@ function foo() : string {
 	tupler:int,int;
 	tata := thec(1);
 	bob:fiche;
-	a:int;
 	
 	if(1 < 5)
 	{

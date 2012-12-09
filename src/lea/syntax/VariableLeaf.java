@@ -1,6 +1,6 @@
 package lea.syntax;
 
-import lea.types.Type;
+import lea.types.*;
 
 public class VariableLeaf extends Expression 
 {
@@ -10,7 +10,11 @@ public class VariableLeaf extends Expression
 	public VariableLeaf(String s, Type t)
 	{
 		name = s;
-		objectType = t;
+		
+		if(t != null)
+			objectType = t;
+		else
+			objectType = new UnknownType();
 	}
 	
 	public String getName()
