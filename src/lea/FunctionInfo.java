@@ -5,7 +5,7 @@ import java.util.*;
 import lea.types.*;
 import lea.syntax.*;
 
-public class FunctionInfo 
+public class FunctionInfo
 {
 	private LinkedList<ArgumentInfo> args;
 	private Type outputType;

@@ -3,20 +3,29 @@ MAX=12;
 fiche = struct {
 	nom:int;
 	age:string;
+	fiche2:fiche;
+	liste:list of int;
+}
+
+function thec(f:int) : char {
+	a:int := f;
+	
+	return 'h';
 }
 
 function foo() : string {
 	tata:char;
 	tupler:int,int;
 	tata := thec(1);
+	bob:fiche;
+	a:int;
 	
 	if(1 < 5)
 	{
 		mic:int := 10;	
+		bob.nom := mic;
+		bob.fiche2.age := "HEY!!";
 	}
+	bob.nom := 10 + 1000 / 20;
 	return 1;
-}
-
-function thec(f:int) : char {
-	a:int;
 }

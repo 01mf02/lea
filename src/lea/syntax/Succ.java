@@ -6,4 +6,9 @@ public class Succ extends Instruction
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "Succ"+super.toString();
+	}
 }

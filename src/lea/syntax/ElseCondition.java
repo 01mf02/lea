@@ -6,4 +6,9 @@ public class ElseCondition extends SyntaxTree
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "Else"+super.toString();
+	}
 }

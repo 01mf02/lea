@@ -13,4 +13,14 @@ public class BoolExp extends Expression
 		super(a1, a2);
 		expTag = tag;
 	}
+	
+	public String toString()
+	{
+		return "BooleanExp("+expTag.toString()+")"+super.toString();
+	}
+	
+	public Type getType()
+	{
+		return new BoolType();
+	}
 }

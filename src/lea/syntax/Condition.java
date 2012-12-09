@@ -6,4 +6,9 @@ public class Condition extends Instruction
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "If"+super.toString();
+	}
 }

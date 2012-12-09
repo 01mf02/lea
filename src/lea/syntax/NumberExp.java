@@ -12,4 +12,9 @@ public class NumberExp extends Expression
 		super(a1, a2);
 		expTag = tag;
 	}
+	
+	public String toString()
+	{
+		return "NumberExp("+expTag.toString()+")"+super.toString();
+	}
 }

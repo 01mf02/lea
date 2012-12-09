@@ -6,4 +6,9 @@ public class Instruction extends SyntaxTree
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "Instr"+super.toString();
+	}
 }

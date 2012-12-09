@@ -6,4 +6,9 @@ public class Assignment extends Instruction
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "Assign"+super.toString();
+	}
 }

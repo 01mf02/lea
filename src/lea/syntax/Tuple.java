@@ -6,4 +6,9 @@ public class Tuple extends SyntaxTree
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "Tuple"+super.toString();
+	}
 }

@@ -23,6 +23,6 @@ public class ConstantLeaf extends Expression
 	
 	public String toString()
 	{
-		return "CONST("+constValue.toString() + ":" + constValue.getType().toString()+")";
+		return "Const("+constValue.toString() + ":" + constValue.getType().toString()+")";
 	}
 }

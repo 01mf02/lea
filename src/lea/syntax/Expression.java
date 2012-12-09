@@ -24,4 +24,9 @@ public class Expression extends SyntaxTree
 	{
 		return this.getLeft().getType();		
 	}
+	
+	public String toString()
+	{
+		return "Expression"+super.toString();
+	}
 }

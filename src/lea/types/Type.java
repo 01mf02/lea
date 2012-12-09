@@ -67,9 +67,13 @@ public abstract class Type {
     	this.right = right;
     }
     
-    public EnumType getType()
+    /*public Type getType()
     {
     	return this.type;
+    }*/
+    public Type getType()
+    {
+    	return this;
     }
     
     /*public String toString() {

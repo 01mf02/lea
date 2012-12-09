@@ -18,6 +18,9 @@ private Symbol symbol (int type) {
 private Symbol symbol (int type, Object value) {
     return new Symbol (type, yyline, yycolumn, value);
 }
+
+int getLine() { return yyline+1; }
+int getColumn() { return yycolumn+1; }
 %}
 
 Identifier	= [a-zA-Z][a-zA-Z0-9_]*
@@ -26,7 +29,7 @@ WhiteSpace	= {LineTerminator} | [ \t\f]
 Integer		= [0-9]+
 Float		= [0-9]*"."[0-9]+
 String		= \"[^\"]*\"
-Char		= \'[.]\'
+Char		= \'[^\']\'
 
 %%
 
@@ -101,7 +104,7 @@ Char		= \'[.]\'
 {Integer}	{   return symbol(LeaSymbol.INTEGER, yytext()); }
 {Float}		{  return symbol(LeaSymbol.FLOATEXP, yytext()); }
 {String}	{  return symbol(LeaSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }
-{Char}			{  return symbol(LeaSymbol.CHAREXP, yytext()); }
+{Char}			{  return symbol(LeaSymbol.CHAREXP, yytext().substring(1, yytext().length()-1)); }
 
 /* -------------------------------------------------
 	Commentaires - Caracteres non pris en compte

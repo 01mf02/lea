@@ -20,7 +20,7 @@ public class VariableLeaf extends Expression
 	
 	public Type getType()
 	{
-		return objectType;
+		return objectType.getType();
 	}
 	
 	public String toString()

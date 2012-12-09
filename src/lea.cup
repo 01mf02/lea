@@ -59,15 +59,15 @@ axiom ::=
 erreur ::= 
 		error SEMIC
 		{:
-			System.out.println("\n Erreur dans un terminal : ; \n");
+			Main.printError("\n point-virgule ( ; ) manquant à la fin d'une ligne. \n", 1);
 		:}
 		| error RBRACE
 		{:
-			System.out.println("\n Erreur dans un terminal : } \n");
+			Main.printError("\n Accolade droite ( } ) manquante \n", 1);
 		:}
 		| error LPAR
 		{:
-			System.out.println("\n Erreur dans un terminal : ) \n");
+			Main.printError("\n Parenthèse droite ( ) ) manquante \n", 1);
 		:}
 		;		
 		
@@ -82,13 +82,14 @@ type ::=
 		| LIST OF type:t {: RESULT = new ListType(t); :}
 		| IDENTIFIER:t 
 		{:
-			/*if(Main.)
-			{*/
-				RESULT = Main.typeTable.get(t);
-			/*}
-			else*/
-				//error
+			Type type = Main.typeTable.get(t);
 			
+			if(type == null)
+			{
+				Main.printError("Type non trouvable : " + t, 1);
+			}			
+			
+			RESULT = type;
 		:}
 		;
 		
@@ -97,7 +98,7 @@ constDecl ::=
 		IDENTIFIER:id EQ INTEGER:i SEMIC
 		{:
 		  	Main.constTable.put(id, new IntConstant(i));
-		  	System.out.println("\nCONST : " + Main.constTable.toString() + "\n");
+		  	//System.out.println("\nCONST : " + Main.constTable.toString() + "\n");
 		:}
 		;
 		
@@ -105,11 +106,15 @@ constDecl ::=
 block ::=
 		LBRACE
 		{:
-		    System.out.println("BLOCK");
+		    //System.out.println("BLOCK");
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
+		    sTree.setEnvironment(Main.currentNode.getEnvironment());
+		    if(!sTree.getFirstEnvironment().isEmpty())
+		    	sTree.pushEnvironment(new Environment());
+		    
 		    Main.currentNode = sTree;
-		:}  instrs:i RBRACE {: RESULT = i; :}
+		:}  instrs:i RBRACE {: RESULT = i; Main.currentNode.popEnvironment(); :}
 		;
 
 
@@ -117,11 +122,14 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 		{:
 			if(Main.currentNode != null)
 			{
-				Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
-				System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+				boolean initialized = false;
+				
+				if(t instanceof ListType || t instanceof StructType)
+					initialized = true;
+				
+				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, initialized));
+				//System.out.println("ENV : \n" + Main.currentNode.getEnvironment().toString());
 			}
-			else
-				System.out.println("DÔøΩCLARATION VARIABLE GLOBALE INTERDITE!! FAUT GÔøΩRER CA ICI!");
 				
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
 		:}
@@ -129,13 +137,14 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 		{:
 			if(Main.currentNode != null)
 			{
-				Main.currentNode.getEnvironment().put(id, new VariableInfo(t, true));
+				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));
 				
-				System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+				//System.out.println("ENV : \n" + Main.currentNode.getEnvironment().toString());
 				RESULT = new Assignment(new VariableLeaf(id, t), e); 
 			}
-			else
-				System.out.println("DÔøΩCLARATION VARIABLE GLOBALE INTERDITE!! FAUT GÔøΩRER CA ICI!");
+			
+			if(!t.equals(e.getType()))
+				Main.printError("Types incompatibles", 1);
 		:} 
 		/*|erreur %prec
 		{::}*/
@@ -149,11 +158,9 @@ structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
 		{:
 			if(Main.currentNode != null)
 			{
-				Main.currentNode.getEnvironment().put(id, new VariableInfo(t, false));
-				System.out.println("ENV : " + Main.currentNode.getEnvironment().toString());
+				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, false));
+				//System.out.println("ENV : \n" + Main.currentNode.getEnvironment().toString());
 			}
-			else
-				System.out.println("DÔøΩCLARATION VARIABLE GLOBALE INTERDITE!! FAUT GÔøΩRER CA ICI!");
 				
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
 		:};
@@ -161,16 +168,14 @@ structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
 
 struct ::= IDENTIFIER:id EQ STRUCT 
 		 {:
-			System.out.println("STRUCT");
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
 		    Main.currentNode = sTree;
-		    //Ou mettre le fich?
 		    Main.typeTable.put(id,new StructType(id));
 		:}LBRACE structDecls RBRACE 
 		{:
 			StructType st = (StructType)Main.typeTable.get(id);
-			st.setEnvironment(Main.currentNode.getEnvironment());
+			st.setEnvironment(Main.currentNode.getFirstEnvironment());
 		:}
 		;
 
@@ -181,18 +186,24 @@ BOOLEXP ::=
 
 
 funct ::= 
-		FUNCTION IDENTIFIER:id LPAR functDecls:f RPAR COLON type:t block:b
+		FUNCTION IDENTIFIER:id LPAR {: Main.currentNode = new SyntaxTree(null, null); :} functDecls:f RPAR COLON type:t block:b
 		{:
 			FunctionInfo fctInfo = new FunctionInfo(f, t, b);
 			Main.fctTable.put(id, fctInfo);
 			
+			if(!b.containsReturn())
+				Main.printError("La fonction " + id + " doit retourner une valeur!", 1);
+				
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
-		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t block:b
+		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t {: Main.currentNode = new SyntaxTree(null, null); :} block:b
 		{:
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
 			FunctionInfo fctInfo = new FunctionInfo(l, t, b);
 			Main.fctTable.put(id, fctInfo);
+			
+			if(!b.containsReturn())
+				Main.printError("La fonction " + id + " doit retourner une valeur!", 1);
 			
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
@@ -200,14 +211,14 @@ funct ::=
 		
 		
 procedure ::= 
-		PROCEDURE IDENTIFIER:id LPAR functDecls:f RPAR block:b
+		PROCEDURE IDENTIFIER:id LPAR {: Main.currentNode = new SyntaxTree(null, null); :} functDecls:f RPAR block:b
 		{:
 			FunctionInfo fctInfo = new FunctionInfo(f, null, b);
 			Main.fctTable.put(id, fctInfo);
 			
 			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
 		:}
-		|PROCEDURE IDENTIFIER:id LPAR RPAR block:b
+		|PROCEDURE IDENTIFIER:id LPAR RPAR  {: Main.currentNode = new SyntaxTree(null, null); :} block:b
 		{:
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
 			FunctionInfo fctInfo = new FunctionInfo(l, null, b);
@@ -233,7 +244,7 @@ functDecls ::=
 		;
 
 
-functDecl ::=  IDENTIFIER:id COLON type:t {: RESULT = new ArgumentInfo(id, t); :} ;
+functDecl ::=  IDENTIFIER:id COLON type:t {: Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));  RESULT = new ArgumentInfo(id, t); :} ;
 		
 		
 instr ::= 
@@ -243,10 +254,27 @@ instr ::=
 		| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
 		| variable:v AFF expr:e SEMIC 
 		{: 
-			//TODO MHB : TYPE CHECKING HERE 
-			//if(v instanceof VariableLeaf)
+			if(v.getType() != null && e.getType() != null)
+			{
+				if(!v.getType().equals(e.getType()))
+					Main.printError("Types incompatibles", 1);
+					
+				if(v instanceof VariableLeaf)
+				{
+					VariableLeaf vl = (VariableLeaf)v;
+					VariableInfo vi = Main.currentNode.findInEnvironment(vl.getName());
+					
+					if(vi != null)
+						vi.initialize();
+				}
+				else if(v instanceof StructAccessor)
+				{
+					 StructAccessor sa = (StructAccessor)v;
+					 sa.initializeVar();
+				}
+				
 				RESULT = new Assignment(v, e); 
-			//ELSE ERROR
+			}
 		:}
 		| REPEAT block:b WHILE LPAR expr:e RPAR 
 		{: RESULT = new Loop(e, b); :}
@@ -267,22 +295,105 @@ instrs ::=
 
 
 expr ::=
-		expr:e1 AND expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.AND); :} 
-		|expr:e1 OR expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.OR); :} 
-		|expr:e1 LT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LT); :} 
-		|expr:e1 GT expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GT); :} 
-		|expr:e1 LE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.LE); :} 
-		|expr:e1 GE expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.GE); :} 
-		|expr:e1 EQ expr:e2 {: RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); :} 
-		|expr:e1 DIFF expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIFF); :} 
-		|expr:e1 PLUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); :} 
-		|expr:e1 MINUS expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); :} 
-		|MINUS expr:e {: RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); :} %prec MINUS_U 
-		|expr:e1 MULT expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); :} 
-		|expr:e1 DIV expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); :} 
-		|expr:e1 MODULO expr:e2 {: RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); :} 
+		expr:e1 AND expr:e2 
+		{:
+			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
+				Main.printError("Les types à gauche et à droite d'un && doivent être du type bool", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.AND); 
+		:} 
+		|expr:e1 OR expr:e2
+		{:
+			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
+				Main.printError("Les types à gauche et à droite d'un || doivent être du type bool", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.OR); 
+		:}
+		|expr:e1 LT expr:e2 
+		{:
+			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
+				Main.printError("Les types à gauche et à droite d'un < doivent être du type entier ou réel", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.LT); 
+		:} 
+		|expr:e1 GT expr:e2
+		{:
+			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
+				Main.printError("Les types à gauche et à droite d'un <= doivent être du type entier ou réel", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.GT); 
+		:} 
+		|expr:e1 LE expr:e2 
+		{:
+			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
+				Main.printError("Les types à gauche et à droite d'un > doivent être du type entier ou réel", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.LE); 
+		:} 
+		|expr:e1 GE expr:e2 
+		{:
+			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
+				Main.printError("Les types à gauche et à droite d'un >= doivent être du type entier ou réel", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.GE); 
+		:}  
+		|expr:e1 EQ expr:e2 
+		{: 
+			if(!e1.getType().equals(e2.getType())) 
+				Main.printError("Les types à gauche et à droite d'un = doivent être du même type", 1);
+				
+			RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); 
+		:} 
+		|expr:e1 DIFF expr:e2 
+		{: 
+			if(!e1.getType().equals(e2.getType())) 
+				Main.printError("Les types à gauche et à droite d'un != doivent être du même type", 1);
+			
+			RESULT = new BoolExp(e1, e2, EnumTagExp.DIFF); 
+		:} 
+		|expr:e1 PLUS expr:e2 
+		{: 
+			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType()) && !e1.getType().equals(new StringType())) 
+				Main.printError("Les types à gauche et à droite d'un + doivent être du même type et soit entier, réel ou chaîne de caractères", 1);
+				
+			RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); 
+		:} 
+		|expr:e1 MINUS expr:e2
+		{: 
+			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+				Main.printError("Les types à gauche et à droite d'un - doivent être du même type et soit entier ou réel", 1);
+			
+			RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); 
+		:} 
+		|MINUS expr:e
+		{: 
+			if(!e.getType().equals(new IntType())) 
+				Main.printError("Le type à droite d'un - doit être un entier ou un réel", 1);
+			
+			RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); 	
+		:} %prec MINUS_U 
+		|expr:e1 MULT expr:e2
+		{: 
+			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+				Main.printError("Les types à gauche et à droite d'un * doivent être du même type et soit entier ou réel", 1);
+			
+			RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); 
+		:} 
+		|expr:e1 DIV expr:e2
+		{: 
+			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+				Main.printError("Les types à gauche et à droite d'un / doivent être du même type et soit entier ou réel", 1);
+			
+			RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); 
+		:} 
+		|expr:e1 MODULO expr:e2
+		{: 
+			if(!e1.getType().equals(e2.getType()) && !e1.getType().equals(new IntType())) 
+				Main.printError("Les types à gauche et à droite d'un % doivent être du même type et soit entier ou réel", 1);
+			
+			RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); 
+		:} 
 		|LPAR expr:e RPAR {: RESULT = e; :}
-		/*|RETURN expr:e {: RESULT = new ReturnNode(e); :} Pas bonne endroit?*/
 		|INTEGER:it {: 
 			RESULT = new ConstantLeaf(new IntConstant(it)); 
 			:}
@@ -295,14 +406,31 @@ expr ::=
 		|CHAREXP:c {: 
 			RESULT = new ConstantLeaf(new CharConstant(c));  
 			:}
-		|variable:v {: RESULT = v; :}
+		|variable:v 
+		{: 
+			if(v instanceof VariableLeaf)
+			{
+				VariableLeaf vl = (VariableLeaf)v;
+				VariableInfo vi = Main.currentNode.findInEnvironment(vl.getName());
+				
+				if(vi != null && !vi.initialized())
+					Main.printError("Variable non initialisée : " + vl.getName(), 0);
+			}
+			else if(v instanceof StructAccessor)
+			{
+				StructAccessor sa = (StructAccessor)v;
+				if(!sa.isVarInitialized())
+					Main.printError("Variable non initialisée : " + sa.toVariableString(), 0);
+			}
+			
+			RESULT = v; 
+		:}
 		|BOOLEXP:b {: 
 			RESULT = new ConstantLeaf(new BoolConstant(b)); 
 			:}
 		| expr:e1 COMMA expr:e2 
 		{: 
-			//ListNode s'attend a un Expression, mais succ lui renvoie un instruction. (Mettre en commentaire pour test)
-			RESULT = new ListNode(new Succ(e1, e2)); 
+			RESULT = new ListNode(new Expression(e1, e2)); 
 		:}
 		;
 	
@@ -315,14 +443,18 @@ variable ::=
     		
     		if(c == null)
     		{
-    			VariableInfo vi = Main.currentNode.getEnvironment().get(id);
+    			VariableInfo vi = Main.currentNode.findInEnvironment(id);
     			
 				if(vi != null)
 				{
 					Type t = vi.getType();
 					RESULT = new VariableLeaf(id, t);
 				}
-				//ERROR IF t == NULL
+				else
+				{
+					Main.printError("La variable ou la constante " + id + " n'a pas été trouvée", 1);
+					RESULT = new VariableLeaf(id + " NOT FOUND", null);
+				}
     		}
     		else
     			RESULT = new ConstantLeaf(c);
@@ -332,7 +464,7 @@ variable ::=
     		if(v.getType() instanceof StructType)
     		{     		
     			StructType st = (StructType)v.getType();    			 
-				Main.currentNode.setEnvironment(st.getEnvironment()); 
+				Main.currentNode.pushEnvironment(st.getEnvironment()); 
 			}
 		:} 
 		variable:v1 
@@ -341,25 +473,29 @@ variable ::=
     		{
 	    		StructType st = (StructType)v.getType();
 				VariableInfo vi = st.getEnvironment().get(((VariableLeaf)v1).getName());
-				System.out.println("Variable dans la structure : " + vi.toString());
-
+				
+				Main.currentNode.popEnvironment();
+				
 				RESULT = new StructAccessor(v, v1);
     		}
     	:}
     	| IDENTIFIER:id LPAR expr:e RPAR
     	{:
-    		if(Main.fctTable.containsKey(id))
+    		FunctionInfo info = Main.fctTable.get(id);
+    		if(info != null)
     		{
-    			//FunctionCall extends expr?
-    			RESULT = new FunctionCall( e,e);
+    			RESULT = new FunctionCall( new FunctionRef(id, info), e);
     		}
-    		//else error
+			else
+			{
+				Main.printError("Fonction "+id+" introuvable!", 1);
+			}
     	:}
     	| variable:v LBRACKET expr:e RBRACKET
     	{:
     		boolean isOk = false;
     		
-    		if(v instanceof VariableLeaf)
+    		if(v instanceof VariableLeaf || v instanceof ListAccessor || v instanceof StructAccessor)
     		{
     			if(v.getType() instanceof ListType)
     			{
@@ -373,16 +509,13 @@ variable ::=
     			//error dans tous les autres cas
     		if(!isOk)
     		{
-    		
+    			Main.printError("Accesseur à la liste impossible, mauvais type", 1);
     		}
     	:}
 		;
 	
     
   /**Liste de TODO
-  List doit fonctionner
-  slot doit fonctionner
-  on doit importer tout les variables
   tuples
   retour fonction
   fonction sans decls

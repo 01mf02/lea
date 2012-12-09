@@ -14,6 +14,7 @@ public class Main
     public static TypeTable typeTable = new TypeTable();
     public static SyntaxTree currentNode = null;	//Le noeud courant dans lequel on est rendu
     private static boolean hasCompileErrors = false;
+    private static LeaLexer myLex;
     
 	/**
 	 * @param args
@@ -30,7 +31,7 @@ public class Main
 			try 
 			{
 				file = new FileReader(args[0]);
-			    LeaLexer myLex = new LeaLexer(file);
+			    myLex = new LeaLexer(file);
 			    LeaParser myP = new LeaParser(myLex);
 			    
 			    Symbol result=null;
@@ -81,13 +82,15 @@ public class Main
 		switch(level)
 		{
 		case 0:
-			outputMess = "WARNING : " + message;
+			outputMess = "WARNING (ligne "+myLex.getLine()+", colonne "+myLex.getColumn()+") : " + message;
 			break;
 		case 1:
-			outputMess = "ERROR : " + message;
+			outputMess = "ERROR (ligne "+myLex.getLine()+", colonne "+myLex.getColumn()+") : " + message;
+			hasCompileErrors = true;
 			break;
 		case 2:
-			outputMess = "FATAL ERROR : " + message;
+			outputMess = "FATAL ERROR (ligne "+myLex.getLine()+", colonne "+myLex.getColumn()+") : " + message;
+			hasCompileErrors = true;
 			break;
 		default:
 			outputMess = message;
@@ -95,6 +98,5 @@ public class Main
 		}
 		
 		System.out.println(outputMess);
-		hasCompileErrors = true;
 	}
 }

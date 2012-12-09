@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import lea.Environment;
+import lea.*;
 import lea.constants.*;
 import lea.types.*;
 
@@ -15,7 +15,7 @@ public class SyntaxTree
 {
     private SyntaxTree left;
     private SyntaxTree right;
-    private Environment env;	    // current environnement
+    private EnvironmentStack env;	    // current environnement
     private Type type;
     
     protected SyntaxTree()
@@ -28,9 +28,11 @@ public class SyntaxTree
     {
     	this.left=left;
     	this.right=right;
-    	this.env= new Environment();
+    	this.env= new EnvironmentStack();
     	this.type=t;
     	//System.out.print(toString()+"\n"); 
+    	
+    	env.push(new Environment());
     }
     
     public SyntaxTree(SyntaxTree left, SyntaxTree right) 
@@ -63,14 +65,58 @@ public class SyntaxTree
     	return type;
     }
     
-    public void setEnvironment(Environment e)
+    public void setEnvironment(EnvironmentStack e)
     {
     	env = e;
     }
     
-    public Environment getEnvironment()
+    public Environment getFirstEnvironment()
+    {
+    	return env.lastElement();
+    }
+    
+    public EnvironmentStack getEnvironment()
     {
     	return env;
+    }
+    
+    public VariableInfo findInEnvironment(String id)
+    {
+    	return env.getVariable(id);
+    }
+    
+    public void pushEnvironment(Environment e)
+    {
+    	if(env == null)
+    		env = new EnvironmentStack();
+    	
+    	env.push(e);
+    }
+    
+    public Environment popEnvironment()
+    {
+    	if(!env.isEmpty())
+    		return env.pop();
+    	
+    	return null;
+    }
+    
+    public boolean containsReturn()
+    {
+    	boolean result = false;
+    	
+    	if(this instanceof ReturnNode)
+    		return true;
+    	
+		if ((left != null) || (right != null))
+		{		    
+		    if (left != null)
+		    	result = left.containsReturn() || result;
+		    if (right != null)
+		    	result = right.containsReturn() || result;
+		}
+		
+		return result;
     }
     
     public String toString() 

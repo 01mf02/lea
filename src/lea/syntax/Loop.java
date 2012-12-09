@@ -6,4 +6,9 @@ public class Loop extends Instruction
 	{
 		super(a1, a2);
 	}
+	
+	public String toString()
+	{
+		return "Loop"+super.toString();
+	}
 }

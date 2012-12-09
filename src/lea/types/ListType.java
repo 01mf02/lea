@@ -1,5 +1,6 @@
 package lea.types;
 
+import lea.Main;
 import lea.constants.*;
 
 public class ListType extends Type 

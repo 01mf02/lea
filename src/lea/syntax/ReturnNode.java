@@ -6,4 +6,9 @@ public class ReturnNode extends Instruction
 	{
 		super(a1, null);
 	}
+	
+	public String toString()
+	{
+		return "Return"+super.toString();
+	}
 }
