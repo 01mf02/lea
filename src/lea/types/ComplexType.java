@@ -28,4 +28,9 @@ public class ComplexType extends Type
 	{
 		return false;
 	}
+	
+	public String toString()
+	{
+		return "complex";
+	}
 }

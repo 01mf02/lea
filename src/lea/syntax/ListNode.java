@@ -6,6 +6,11 @@ public class ListNode extends Expression
 	{
 		super(a1, null);
 	}
+	
+	public String toString()
+	{
+		return "ListNode"+super.toString();
+	}
 }
 
 

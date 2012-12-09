@@ -12,6 +12,7 @@ public class Main
     public static FunctionTable fctTable = new FunctionTable();
     public static ConstantTable constTable = new ConstantTable();
     public static TypeTable typeTable = new TypeTable();
+    public static NativeFunctionTable nativeFctTable = new NativeFunctionTable();
     public static SyntaxTree currentNode = null;	//Le noeud courant dans lequel on est rendu
     private static boolean hasCompileErrors = false;
     private static LeaLexer myLex;
@@ -22,10 +23,10 @@ public class Main
 	public static void main(String[] args) {
 		try {
 
-			// TODO: set up type and function table here
-			// add functions like writeln() and read() to function table
-
 			System.out.println("Lea compiler initialized.");
+			
+			//Génère la liste des fonctions natives du langage
+			nativeFctTable.generateList();
 
 			FileReader file;
 			try 

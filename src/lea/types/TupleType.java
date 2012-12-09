@@ -27,4 +27,9 @@ public class TupleType extends Type
 	{
 		return c1 instanceof TupleConstant && equals(c1.getType());
 	}
+	
+	public String toString()
+	{
+		return "tuple";
+	}
 }

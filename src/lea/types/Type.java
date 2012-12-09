@@ -67,27 +67,13 @@ public abstract class Type {
     	this.right = right;
     }
     
-    /*public Type getType()
-    {
-    	return this.type;
-    }*/
     public Type getType()
     {
     	return this;
     }
     
-    /*public String toString() {
-	String result = new String();
-	switch (type) {
-	case INT:
-	case FLOAT:
-	case STRING:
-	case BOOLEAN:
-		result += type.toString();break;
-	case ARRAY:result += "ARRAY ["+integer+"] OF "+left.toString(); break;
-	case POINTER:result += "POINTER OF "+left.toString(); break;
-	    //case ERROR:result += "ERROR"; break;
-	};
-	return result;
-    }*/
+    public String toString() 
+    {
+    	return "type";
+    }
 }

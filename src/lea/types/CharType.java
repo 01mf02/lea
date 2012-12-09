@@ -20,4 +20,9 @@ public class CharType extends Type
 	{
 		return c1 instanceof CharConstant;
 	}
+	
+	public String toString()
+	{
+		return "char";
+	}
 }

@@ -1,6 +1,5 @@
 package lea.types;
 
-import lea.Main;
 import lea.constants.*;
 
 public class ListType extends Type 
@@ -26,5 +25,10 @@ public class ListType extends Type
 	public boolean equals(Constant c1) 
 	{
 		return c1 instanceof ListConstant && equals(c1.getType());
+	}
+	
+	public String toString()
+	{
+		return "list";
 	}
 }

@@ -44,4 +44,9 @@ public class StructType extends Type
 	{
 		return false;
 	}
+	
+	public String toString()
+	{
+		return "struct";
+	}
 }

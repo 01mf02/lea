@@ -20,4 +20,9 @@ public class BoolType extends Type
 	{
 		return c1 instanceof BoolConstant;
 	}
+	
+	public String toString()
+	{
+		return "bool";
+	}
 }

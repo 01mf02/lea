@@ -20,4 +20,9 @@ public class FloatType extends Type
 	{
 		return c1 instanceof FloatConstant || c1 instanceof IntConstant;
 	}
+	
+	public String toString()
+	{
+		return "float";
+	}
 }

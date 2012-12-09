@@ -59,15 +59,15 @@ axiom ::=
 erreur ::= 
 		error SEMIC
 		{:
-			Main.printError("\n point-virgule ( ; ) manquant à la fin d'une ligne. \n", 1);
+			Main.printError("Point-virgule ( ; ) manquant à la fin d'une ligne. \n", 1);
 		:}
 		| error RBRACE
 		{:
-			Main.printError("\n Accolade droite ( } ) manquante \n", 1);
+			Main.printError("Accolade droite ( } ) manquante \n", 1);
 		:}
 		| error LPAR
 		{:
-			Main.printError("\n Parenthèse droite ( ) ) manquante \n", 1);
+			Main.printError("Parenthèse droite ( ) ) manquante \n", 1);
 		:}
 		;		
 		
@@ -185,7 +185,7 @@ BOOLEXP ::=
 		|FALSEEXP:t {:RESULT = t; :};
 
 
-funct ::= 
+funct ::=
 		FUNCTION IDENTIFIER:id LPAR {: Main.currentNode = new SyntaxTree(null, null); :} functDecls:f RPAR COLON type:t block:b
 		{:
 			FunctionInfo fctInfo = new FunctionInfo(f, t, b);
@@ -438,7 +438,6 @@ expr ::=
 variable ::=
     	IDENTIFIER:id 
     	{:    		
-    		//TODO MHB : RAISE ERROR IF t & c == null
     		Constant c = Main.constTable.get(id);
     		
     		if(c == null)
@@ -488,7 +487,16 @@ variable ::=
     		}
 			else
 			{
-				Main.printError("Fonction "+id+" introuvable!", 1);
+				NativeFunctionInfo nfi = Main.nativeFctTable.get(id);
+				if(nfi == null)
+					Main.printError("Fonction "+id+" introuvable!", 1);
+				else
+				{
+					if(!Main.nativeFctTable.isCallPermitted(id, e, null))
+					{
+						Main.printError("Fonction "+id+" introuvable ou appelée incorrectement", 1);
+					}
+				}
 			}
     	:}
     	| variable:v LBRACKET expr:e RBRACKET
@@ -519,6 +527,7 @@ variable ::=
   tuples
   retour fonction
   fonction sans decls
+  function call comme du monde (peut être utilisé comme instruction aussi)
   */
   
   

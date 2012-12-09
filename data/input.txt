@@ -18,7 +18,7 @@ function foo() : string {
 	tupler:int,int;
 	tata := thec(1);
 	bob:fiche;
-	
+		
 	if(1 < 5)
 	{
 		mic:int := 10;	

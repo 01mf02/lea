@@ -20,4 +20,9 @@ public class StringType extends Type
 	{
 		return c1 instanceof StringConstant;
 	}
+	
+	public String toString()
+	{
+		return "string";
+	}
 }
