@@ -25,7 +25,7 @@ public class Main
 
 			System.out.println("Lea compiler initialized.");
 			
-			//Génère la liste des fonctions natives du langage
+			//Genere la liste des fonctions natives du langage
 			nativeFctTable.generateList();
 
 			FileReader file;
@@ -49,7 +49,7 @@ public class Main
 						//Generation des .dot
 						for (Map.Entry<String, FunctionInfo> entry : fctTable.entrySet())
 						{
-						    entry.getValue().getSyntaxTree().toDot("dot/Dot_"+entry.getKey());
+						    entry.getValue().getSyntaxTree().toDot("data/"+entry.getKey());
 						}
 					}	
 					catch (Exception e) 
