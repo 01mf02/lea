@@ -1,0 +1,6 @@
+* Translate all output messages to English.
+* Make parser accept input.lea without errors.
+* Test, test, test. Did I mention we should test? TEST!
+* Do we really need UnknownType?
+* Fix dot output.
+* Fix multi-line comments, especially when commenting out code.
