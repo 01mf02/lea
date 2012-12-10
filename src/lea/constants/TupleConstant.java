@@ -1,18 +1,16 @@
 package lea.constants;
 
 import java.lang.reflect.Array;
-
-import lea.types.EnumType;
 import lea.types.*;
 
 public class TupleConstant implements Constant 
 {
-	Array _value = null;
+	Array value = null;
 	TupleType tupleType;
 	
-	public TupleConstant(Array value, TupleType t)
+	public TupleConstant(Array v, TupleType t)
 	{
-		_value = value;
+		value = v;
 		tupleType = t;
 	}
     
@@ -23,11 +21,11 @@ public class TupleConstant implements Constant
     
     public Array getValue()
     {
-    	return _value;
+    	return value;
     }
     
     public String toString()
     {
-    	return _value.toString();
+    	return value.toString();
     }
 }

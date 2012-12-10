@@ -5,17 +5,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import lea.*;
-import lea.constants.*;
 import lea.types.*;
 
 // Abstract Syntax Tree
-// decorated with attributs 
+// decorated with attributes 
 
 public class SyntaxTree 
 {
     private SyntaxTree left;
     private SyntaxTree right;
-    private EnvironmentStack env;	    // current environnement
+    private EnvironmentStack env;	    // current environment
     private Type type;
     
     protected SyntaxTree()

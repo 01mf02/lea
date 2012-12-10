@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.util.Map;
 import lea.syntax.*;
 
-import java_cup.runtime.Symbol;
-
 public class Main 
 {
     public static FunctionTable fctTable = new FunctionTable();
@@ -35,10 +33,9 @@ public class Main
 			    myLex = new LeaLexer(file);
 			    LeaParser myP = new LeaParser(myLex);
 			    
-			    Symbol result=null;
 			    try 
 			    {
-					result=myP.parse();
+					myP.parse();
 					try 
 					{
 						if(!hasCompileErrors)
