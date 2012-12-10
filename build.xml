@@ -14,12 +14,19 @@
   <description>
     Léa compiler
   </description>
+
+  <!-- ================================= 
+       target: main
+	   Placeholder for default target.
+       ================================= -->
+  <target name="main" depends="default">
+  </target>
   
   <!-- ================================= 
        target: default
 	   Compiles the project and executes it afterwards.
        ================================= -->
-  <target name="default" depends="lea" description="Compilation and execution">
+  <target name="default" depends="java" description="Compilation and execution">
     
     <java 
 	classname="lea.Main"
@@ -31,10 +38,10 @@
   </target>
   
   <!-- ================================= 
-       target: lea
+       target: java
 	   Compiles the Java files.
        ================================= -->
-  <target name="lea" depends="parser, lexer" description="Java compilation">
+  <target name="java" depends="parser" description="Java compilation">
 
     <mkdir dir="${bin.dir}" />
     <javac 
@@ -64,7 +71,7 @@
        target: parser
 	   Creates the parser files.
        ================================= -->
-  <target name="parser" description="Parser compilation">
+  <target name="parser" depends="lexer" description="Parser compilation">
     
     <taskdef name="cup" classname="java_cup.anttask.CUPTask">
       <classpath location="${CUPLib}/java-cup-11a.jar" />
