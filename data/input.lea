@@ -1,21 +1,22 @@
-MAX = 12;
+MEANING = 12;
+PI = 3.14;
+SHAKESPEARE = "To be or not to be ...";
 
-fonction maudite() : int {
- 	a:int;
- 	a := 0;
- 	return 1;
-}
-
-procedure foo()  {
-	tata:char;
-	l:list of int;
-	return ;
-}
-
-procedure main()
+procedure types()
 {
+	i : int;
+	i := MEANING;
+	
+	f : float;
+	f := PI;
+
+	s : string;
+	s := SHAKESPEARE;
 }
 
-
-
-
+// Should be changed to use right parameters later.
+function main() : int
+{
+	writeln("Hello World!");
+	return 0;
+}
