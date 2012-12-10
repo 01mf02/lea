@@ -1,0 +1,3 @@
+digraph SyntaxTree { [label="Return"];
+ [label="Const(1:int) (int)"];
+}

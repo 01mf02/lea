@@ -11,4 +11,9 @@ public class Instruction extends SyntaxTree
 	{
 		return "Instr"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Instr";
+	}
 }

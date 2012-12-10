@@ -11,4 +11,9 @@ public class Loop extends Instruction
 	{
 		return "Loop"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Loop";
+	}
 }

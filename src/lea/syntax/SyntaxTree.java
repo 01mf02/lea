@@ -136,44 +136,36 @@ public class SyntaxTree
 		}
 		return result;
     }
+
+	
+	public String toDotString()
+	{
+		return "Root";
+	}
     
-    /*
     public void toDot(StringBuffer str) {
-	str.append(this.id+" [label=\""+tag.toString());
-	switch (tag){
-	case INTEGER:
-	case REAL:
-	case STRING:
-	case VAR:      
-	    str.append(": "+this.str); 
-	    break;
-	}
-	if (type!=null){
-	    str.append(" (");
-	    str.append(type.toString());
-	    str.append(")");
-	}
-	str.append("\"];\n");
-	if (left != null){
-	    left.toDot(str);
-	    str.append(this.id+" -> "+left.id+";\n");
-	}
-	if (right != null){
-	    right.toDot(str);
-	    str.append(this.id+" -> "+right.id+";\n");
-	}
-	if (env != null && env.getRoot()!=null){
-	    if (tag==EnumTag.VAR){
-		str.append(env.getNum()+" [shape=\"box\", label=\"s"+env.getNum()+"\"];\n");
-		str.append(this.id+" -> "+env.getNum()+" [color=\"yellow\"];\n");
-	    }
-	}
+	str.append(" [label=\""+this.toDotString());
+	
+		if (getType()!=null){
+		    str.append(" (");
+		    str.append(getType().toString());
+		    str.append(")");
+		}
+		str.append("\"];\n");
+		if (left != null)
+		{
+		    left.toDot(str);
+		}
+		if (right != null)
+		{
+		    right.toDot(str);
+		}
     }
     
     public void toDot(String file) {
 	try {
 	    BufferedWriter out = new BufferedWriter(new FileWriter("./"+file+".dot"));
-	    out.write("digraph ArbreSyntAbstr {");
+	    out.write("digraph SyntaxTree {");
 	    StringBuffer str = new StringBuffer();
 	    toDot(str);
 	    out.write(str.toString());
@@ -182,5 +174,5 @@ public class SyntaxTree
 	} catch (IOException e) {
 	    System.out.println("ERROR: build dot");
 	}		
-    }*/
+    }
 }

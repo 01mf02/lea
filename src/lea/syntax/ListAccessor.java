@@ -17,4 +17,9 @@ public class ListAccessor extends Expression
 	{
 		return this.getLeft().getType().getLeft();
 	}
+	
+	public String toDotString()
+	{
+		return "ListAccess";
+	}
 }

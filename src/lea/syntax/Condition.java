@@ -11,4 +11,9 @@ public class Condition extends Instruction
 	{
 		return "If"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "If";
+	}
 }

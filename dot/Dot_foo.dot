@@ -1,0 +1,19 @@
+digraph SyntaxTree { [label="Succ"];
+ [label="Succ"];
+ [label="Succ"];
+ [label="Succ"];
+ [label="Succ"];
+ [label="Assign"];
+ [label="Variable(tata:char) (char)"];
+ [label="Assign"];
+ [label="Variable(tupler:tuple) (tuple)"];
+ [label="Assign"];
+ [label="Variable(tupler:tuple) (tuple)"];
+ [label="ListNode (tuple)"];
+ [label="ListNode (tuple)"];
+ [label="Const(1:int) (int)"];
+ [label="Const(1:int) (int)"];
+ [label="Const(s:string) (string)"];
+ [label="Return"];
+ [label="Const(1:int) (int)"];
+}

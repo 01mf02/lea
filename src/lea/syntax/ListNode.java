@@ -17,6 +17,11 @@ public class ListNode extends Expression
 	{		
 		return new TupleType(this.getLeft().getType(), this.getRight().getType());
 	}
+	
+	public String toDotString()
+	{
+		return "ListNode";
+	}
 }
 
 

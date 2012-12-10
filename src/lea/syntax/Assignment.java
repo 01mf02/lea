@@ -11,4 +11,9 @@ public class Assignment extends Instruction
 	{
 		return "Assign"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Assign";
+	}
 }

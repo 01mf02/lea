@@ -11,4 +11,9 @@ public class Succ extends Instruction
 	{
 		return "Succ"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Succ";
+	}
 }

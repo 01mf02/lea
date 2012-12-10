@@ -29,4 +29,9 @@ public class Expression extends SyntaxTree
 	{
 		return "Expression"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Expression";
+	}
 }

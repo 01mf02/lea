@@ -50,4 +50,9 @@ public class FunctionRef extends Expression
 		else
 			return "FunctionRef("+name+", " + nfi.toString()+")";
 	}
+	
+	public String toDotString()
+	{
+		return this.toString();
+	}
 }

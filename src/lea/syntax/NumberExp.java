@@ -17,4 +17,9 @@ public class NumberExp extends Expression
 	{
 		return "NumberExp("+expTag.toString()+")"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "NumberExp("+expTag.toString()+")";
+	}
 }

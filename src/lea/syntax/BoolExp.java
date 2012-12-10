@@ -23,4 +23,9 @@ public class BoolExp extends Expression
 	{
 		return new BoolType();
 	}
+	
+	public String toDotString()
+	{
+		return "BooleanExp("+expTag.toString()+")";
+	}
 }

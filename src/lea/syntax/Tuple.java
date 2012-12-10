@@ -11,4 +11,9 @@ public class Tuple extends SyntaxTree
 	{
 		return "Tuple"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Tuple";
+	}
 }

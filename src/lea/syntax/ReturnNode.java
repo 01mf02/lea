@@ -11,4 +11,9 @@ public class ReturnNode extends Instruction
 	{
 		return "Return"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Return";
+	}
 }

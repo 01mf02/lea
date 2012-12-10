@@ -11,4 +11,9 @@ public class FunctionCall extends Expression
 	{
 		return "Call"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Call";
+	}
 }

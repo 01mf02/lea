@@ -11,4 +11,9 @@ public class ElseCondition extends SyntaxTree
 	{
 		return "Else"+super.toString();
 	}
+	
+	public String toDotString()
+	{
+		return "Else";
+	}
 }

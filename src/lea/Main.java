@@ -46,9 +46,11 @@ public class Main
 							//CODE POUR LAETITIA
 						}
 						
-					    //AbSynt root=(AbSynt)result.value;
-					    //System.out.println(root.toString());
-					    //root.toDot("detruire");
+						//Generation des .dot
+						for (Map.Entry<String, FunctionInfo> entry : fctTable.entrySet())
+						{
+						    entry.getValue().getSyntaxTree().toDot("dot/Dot_"+entry.getKey());
+						}
 					}	
 					catch (Exception e) 
 					{

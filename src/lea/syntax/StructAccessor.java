@@ -14,6 +14,11 @@ public class StructAccessor extends Expression
 		return "StructAccess"+super.toString();
 	}
 	
+	public String toDotString()
+	{
+		return "StructAccess";
+	}
+	
 	public String toVariableString()
 	{
 		String str = "";
