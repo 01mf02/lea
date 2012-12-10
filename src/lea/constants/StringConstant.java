@@ -4,12 +4,12 @@ import lea.types.*;
 
 public class StringConstant implements Constant 
 {
-	String _value = "";
+	String value = "";
 	Type t;
 	
-	public StringConstant(String value)
+	public StringConstant(String v)
 	{
-		_value = value;
+		value = v;
 		t = new StringType();
 	}
     
@@ -20,7 +20,7 @@ public class StringConstant implements Constant
     
     public String getValue()
     {
-    	return _value;
+    	return value;
     }
     
     public String toString()

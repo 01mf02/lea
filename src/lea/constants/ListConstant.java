@@ -7,12 +7,12 @@ import lea.types.ListType;
 
 public class ListConstant implements Constant 
 {
-	Array _value = null;
+	Array value = null;
 	ListType listType;
 	
-	public ListConstant(Array value, ListType t)
+	public ListConstant(Array v, ListType t)
 	{
-		_value = value;
+		value = v;
 		listType = t;
 	}
     
@@ -23,11 +23,11 @@ public class ListConstant implements Constant
     
     public Array getValue()
     {
-    	return _value;
+    	return value;
     }
     
     public String toString()
     {
-    	return _value.toString();
+    	return value.toString();
     }
 }

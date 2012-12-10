@@ -4,11 +4,6 @@ import lea.constants.*;
 
 public class StringType extends Type 
 {
-	public StringType()
-	{
-		type = EnumType.STRING;
-	}
-
 	@Override
 	public boolean equals(Type t1) 
 	{

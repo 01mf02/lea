@@ -3,12 +3,12 @@ import lea.types.*;
 
 public class BoolConstant implements Constant 
 {
-	boolean _value = false;
+	boolean value = false;
 	Type t;
 	
-	public BoolConstant(String value)
+	public BoolConstant(String v)
 	{
-		_value = Boolean.parseBoolean(value);
+		value = Boolean.parseBoolean(v);
 		t = new BoolType();
 	}
     
@@ -19,12 +19,12 @@ public class BoolConstant implements Constant
     
     public boolean getValue()
     {
-    	return _value;
+    	return value;
     }
     
     public String toString()
     {
-    	if(_value)
+    	if (value)
     		return "TRUE";
     	else
     		return "FALSE";

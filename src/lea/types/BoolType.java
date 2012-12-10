@@ -4,11 +4,6 @@ import lea.constants.*;
 
 public class BoolType extends Type 
 {
-	public BoolType()
-	{
-		type = EnumType.BOOLEAN;
-	}
-
 	@Override
 	public boolean equals(Type t1) 
 	{

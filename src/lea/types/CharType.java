@@ -4,11 +4,6 @@ import lea.constants.*;
 
 public class CharType extends Type 
 {
-	public CharType()
-	{
-		type = EnumType.CHAR;
-	}
-
 	@Override
 	public boolean equals(Type t1) 
 	{

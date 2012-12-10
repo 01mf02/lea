@@ -6,12 +6,12 @@ import lea.types.*;
 
 public class FloatConstant implements Constant 
 {
-	float _value = 0;
+	float value = 0;
 	Type t;
 	
-	public FloatConstant(String value)
+	public FloatConstant(String v)
 	{
-		_value = Float.parseFloat(value);
+		value = Float.parseFloat(v);
 		t = new FloatType();
 	}
     
@@ -22,7 +22,7 @@ public class FloatConstant implements Constant
     
     public float getValue()
     {
-    	return _value;
+    	return value;
     }
     
     public String toString()
@@ -30,6 +30,6 @@ public class FloatConstant implements Constant
 	    DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
 	    decimalFormat.applyPattern("# ##0.00###########");
 	    
-	    return decimalFormat.format(_value);
+	    return decimalFormat.format(value);
     }
 }

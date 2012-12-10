@@ -8,8 +8,6 @@ public class TupleType extends Type
 	{
 		this.left = t1;
 		this.right = t2;
-		
-		type = EnumType.TUPLE;
 	}
 
 	@Override

@@ -4,12 +4,12 @@ import lea.types.*;
 
 public class IntConstant implements Constant 
 {
-	int _value = 0;
+	int value = 0;
 	Type t;
 	
-	public IntConstant(String value)
+	public IntConstant(String v)
 	{
-		_value = Integer.parseInt(value);
+		value = Integer.parseInt(v);
 		t = new IntType();
 	}
     
@@ -20,11 +20,11 @@ public class IntConstant implements Constant
     
     public int getValue()
     {
-    	return _value;
+    	return value;
     }
     
     public String toString()
     {
-    	return Integer.toString(_value);
+    	return Integer.toString(value);
     }
 }

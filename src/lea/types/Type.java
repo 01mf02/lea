@@ -8,7 +8,6 @@ public abstract class Type {
     
     protected Type left;
     protected Type right;
-    protected EnumType type;	
     
     protected Type()
     {
@@ -72,8 +71,5 @@ public abstract class Type {
     	return this;
     }
     
-    public String toString() 
-    {
-    	return "type";
-    }
+    public abstract String toString();
 }

@@ -32,7 +32,7 @@
 	classname="lea.Main"
 	classpath=".:${bin.dir}:${lib.dir}/java-cup-11a-runtime.jar"
 	output="data/output.txt">
-      <arg value="data/input.txt"/>
+      <arg value="data/input.lea"/>
     </java>
     
   </target>
