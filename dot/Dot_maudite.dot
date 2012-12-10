@@ -1,9 +1,0 @@
-digraph SyntaxTree { [label="Succ"];
- [label="Succ"];
- [label="Assign"];
- [label="Variable(a:int) (int)"];
- [label="Assign"];
- [label="Variable(a:int) (int)"];
- [label="Const(0:int) (int)"];
- [label="Return"];
-}
