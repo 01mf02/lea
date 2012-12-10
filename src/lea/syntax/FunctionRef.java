@@ -1,12 +1,13 @@
 package lea.syntax;
 
-import lea.FunctionInfo;
+import lea.*;
 import lea.types.*;
 
 public class FunctionRef extends Expression 
 {
 	private String name;
 	private FunctionInfo info;
+	private NativeFunctionInfo nfi;
 	
 	public FunctionRef(String n, FunctionInfo fi)
 	{
@@ -14,6 +15,11 @@ public class FunctionRef extends Expression
 		info = fi;
 	}
 	
+	public FunctionRef(String n, NativeFunctionInfo fi)
+	{
+		name = n;
+		nfi = fi;
+	}
 	public String getName()
 	{
 		return name;
@@ -24,13 +30,24 @@ public class FunctionRef extends Expression
 		return info;
 	}
 	
+	public NativeFunctionInfo getNativeFunctionInfo()
+	{
+		return nfi;
+	}
+	
 	public Type getType()
 	{
-		return info.getOutputType();
+		if(info != null)
+			return info.getOutputType();
+		else
+			return nfi.getOutputType();
 	}
 	
 	public String toString()
 	{
-		return "FunctionRef("+name+", " + info.toString()+")";
+		if(info != null)
+			return "FunctionRef("+name+", " + info.toString()+")";
+		else
+			return "FunctionRef("+name+", " + nfi.toString()+")";
 	}
 }
