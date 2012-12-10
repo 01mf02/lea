@@ -1,6 +1,10 @@
 *.java~
+.settings/
+.classpath
+.project
 bin/
 data/output.txt
+data/*.dot
 src/lea/LeaLexer.java
 src/lea/LeaParser.java
 src/lea/LeaSymbol.java
