@@ -40,6 +40,20 @@ public class NativeFunctionTable implements Map<String, NativeFunctionInfo>
 		nfi.setOutputType(new StringType());
 		
 		this.put("read", nfi);
+
+		//toString
+		nfi = new NativeFunctionInfo();
+		nfi.setOutputType(new StringType());
+		nfi.pushType(new StringType());
+		nfi.pushType(new ListType(null));
+		nfi.pushType(new BoolType());
+		nfi.pushType(new FloatType());
+		nfi.pushType(new CharType());
+		nfi.pushType(new IntType());
+		nfi.pushType(new TupleType(null, null));
+		nfi.pushType(new StructType(null));
+		
+		this.put("toString", nfi);
 	}
 	
 	public boolean isCallPermitted(String id, Expression e, Type from)
@@ -49,12 +63,26 @@ public class NativeFunctionTable implements Map<String, NativeFunctionInfo>
 		NativeFunctionInfo nfi = this.get(id);
 		LinkedList<Type> args = new LinkedList<Type>();
 		
-		if ((e.getLeft() != null) || (e.getRight() != null))
+		SyntaxTree tmp = e;
+		
+		if(tmp.getLeft() == null && tmp.getRight() == null)
+			args.add(tmp.getType());
+		else
 		{
-		    if (e.getLeft() != null)
-		    	args.add(e.getLeft().getType());
-		    if (e.getRight() != null)
-		    	args.add(e.getLeft().getType());
+			while ((tmp.getLeft() != null) || (tmp.getRight() != null))
+			{
+			    if (tmp.getRight() != null)
+			    {
+			    	if(tmp.getRight().getLeft() == null && tmp.getRight().getRight() == null)
+			    		args.add(0, tmp.getRight().getType());
+			    }
+			    if (tmp.getLeft() != null)
+			    {
+			    	if(tmp.getLeft().getLeft() == null && tmp.getLeft().getRight() == null)
+			    		args.add(0, tmp.getLeft().getType());
+			    }
+			    tmp = tmp.getLeft();
+			}
 		}
 
 		if(nfi != null)
@@ -68,7 +96,7 @@ public class NativeFunctionTable implements Map<String, NativeFunctionInfo>
 				{
 					for(int i = 0; i < args.size(); i++)
 					{
-						if(args.get(i).getType() != funcArgs.get(i).getType())
+						if(!args.get(i).getType().equals(funcArgs.get(i).getType()))
 						{
 							argumentsFit = false;
 							break;

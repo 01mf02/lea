@@ -48,7 +48,7 @@ public class NativeFunctionInfo
 		if(outputType != null)
 			str += " : "  + outputType.toString();
 		
-		str += "from : [ " + accessibleFrom.toString() + " ] ";
+		str += " from : [ " + accessibleFrom.toString() + " ] ";
 		
 		return str;
 	}

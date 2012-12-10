@@ -18,7 +18,10 @@ function foo() : string {
 	tupler:int,int;
 	tata := thec(1);
 	bob:fiche;
-		
+	haha:string := "hehe";
+	
+	writeln(haha);
+				
 	if(1 < 5)
 	{
 		mic:int := 10;	

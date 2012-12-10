@@ -279,6 +279,7 @@ instr ::=
 		| REPEAT block:b WHILE LPAR expr:e RPAR 
 		{: RESULT = new Loop(e, b); :}
 		| decl:d {: RESULT = d;	:}
+		| variable:v {: Main.printError("Salut! " + v.toString(), 0); :}
 		| RETURN expr:e SEMIC {: RESULT = new  ReturnNode(e);:}
 		| erreur 
 		{:
@@ -531,7 +532,16 @@ variable ::=
   */
   
   
+  /*
+  NOTES POUR PHIL (de Mic)
+  Pour ce qui est des FunctionCall, je pense qu'il serait bien de les extraire de variable et d'en faire un cas a part parce que sinon
+  on se complique trop la vie je pense...tu verras a ca! En gros writeln("toto") marche, mais pas encore le maListe.toString() ni read()
+  Faut faire les boucles aussi, y'en manque pas mal a faire sur ce cote la! Pour les fonctions du systeme (writeln, read, toString, etc)
+  J'ai fait une table de NativeFunctionTable et elle est testee, elle marche tres bien!
   
+  On s'en reparle si tu as des questions!
+  Note : check aussi fonctions a plusieurs parametres qui ne marchent pas! Merci^^
+  */
   
   
   
