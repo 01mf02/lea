@@ -127,6 +127,7 @@ block ::=
 		    
 		    Main.currentNode = sTree;
 		:}  instrs:i RBRACE {: RESULT = i; Main.currentNode.popEnvironment(); :}
+		| LBRACE RBRACE {: RESULT = new Instruction(null,null); :}
 		;
 
 
@@ -158,8 +159,6 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			if(!t.equals(e.getType()))
 				Main.printError("Types incompatibles", 1);
 		:} 
-		/*|erreur %prec
-		{::}*/
 		;
 
 
@@ -269,6 +268,27 @@ instr ::=
 		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
 		| REPEAT TO CASE
 		| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
+		| variable:v AFF LBRACKET expr:e RBRACKET SEMIC 
+		{: 
+			//TODO : Gestion des types list vs tuples
+			if(v.getType() != null && e.getType() != null)
+			{
+				if(v.getType() instanceof ListType)
+				{
+					if(!v.getType().equals(e.getType()))
+					{
+		
+						Main.printError("Types incompatibles "  + e.getType(), 1);
+					}
+				}
+				else
+				{
+					Main.printError(v+ " is not of type list", 1);			
+				}							
+					
+				RESULT = new Assignment(v, e); 
+			}
+		:}
 		| variable:v AFF expr:e SEMIC 
 		{: 
 			if(v.getType() != null && e.getType() != null)
@@ -303,15 +323,52 @@ instr ::=
 				RESULT = new Assignment(v, e); 
 			}
 		:}
+		| WHILE LPAR expr:e RPAR block:b
+		{:
+		//Distinguer while et repeat
+			if(e.getType() instanceof BoolType)
+			{
+				RESULT = new Loop(e, b); 
+			} 
+			else
+			{
+				Main.printError("Expression must be a boolean", 1);
+			}
+		:}
 		| REPEAT block:b WHILE LPAR expr:e RPAR 
 		{:
-		//TODO : e = bool
-		 RESULT = new Loop(e, b); :}
+			if(e.getType() instanceof BoolType)
+			{
+				RESULT = new Loop(e, b); 
+			} 
+			else
+			{
+				Main.printError("Expression must be a boolean", 1);
+			}
+		:}
 		| decl:d {: RESULT = d;	:}
 		| variable:v SEMIC {: //Main.printError("Salut! " + v.toString(), 0); 
 		:}
-		| RETURN expr:e SEMIC {: RESULT = new  ReturnNode(e);:}
-		| RETURN  SEMIC {: RESULT = new  ReturnNode(null);:}
+		| RETURN expr:e SEMIC {: 
+			if(Main.currentNode.getType() == e.getType() )
+			{
+				RESULT = new  ReturnNode(e);
+			}	 
+			else
+			{
+				Main.printError("The return must be of type " + Main.currentNode.getType(), 1);
+			}
+		:}
+		| RETURN  SEMIC {:
+			if(Main.currentNode.getType() == null )
+			{
+				RESULT = new  ReturnNode(null);
+			}	 
+			else
+			{
+				Main.printError("Procedure can't return value", 1);
+			}
+		 :}
 		| erreur 
 		{:
 			//Crée un objet global pour les erreurs?
@@ -432,6 +489,7 @@ expr ::=
 			RESULT = new ListNode(e1, e2);
 			//RESULT = new TupleConstant();
 		:}
+		//| LBRACKET expr:e LBRACKET {: RESULT = e; :}
 		|LPAR expr:e RPAR {: RESULT = e; :}
 		|INTEGER:it {: 
 			RESULT = new ConstantLeaf(new IntConstant(it)); 
@@ -571,27 +629,6 @@ variable ::=
 			}
     	:}
     	| functCall:fc {: RESULT = fc;:}
-    	/*| IDENTIFIER:id LPAR expr:e RPAR
-    	{:
-    		FunctionInfo info = Main.fctTable.get(id);
-    		if(info != null)
-    		{
-    			RESULT = new FunctionCall( new FunctionRef(id, info), e);
-    		}
-			else
-			{
-				NativeFunctionInfo nfi = Main.nativeFctTable.get(id);
-				if(nfi == null)
-					Main.printError("Fonction "+id+" introuvable!", 1);
-				else
-				{
-					if(!Main.nativeFctTable.isCallPermitted(id, e, null))
-					{
-						Main.printError("Fonction "+id+" introuvable ou appel�e incorrectement", 1);
-					}
-				}
-			}
-    	:}*/
     	| variable:v LBRACKET expr:e RBRACKET
     	{:
     		boolean isOk = false;
@@ -617,9 +654,8 @@ variable ::=
 	
     
   /**Liste de TODO
-  tuples
   retour fonction
-  fonction sans decls
+  gestion des commentaires accent
   function call comme du monde (peut �tre utilis� comme instruction aussi)
   */
   
@@ -634,14 +670,5 @@ variable ::=
   On s'en reparle si tu as des questions!
   Note : check aussi fonctions a plusieurs parametres qui ne marchent pas! Merci^^
   */
-  
-  
-  
-  
-  
-  
-  
-  
-  
    
     

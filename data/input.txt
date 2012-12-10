@@ -1,24 +1,19 @@
 MAX = 12;
 
-procedure maudite() {
+fonction maudite() : int {
  	a:int;
  	a := 0;
- 	return;
+ 	return 1;
 }
 
-function foo(a:int,b:int) : int {
+procedure foo()  {
 	tata:char;
-	tupler:(int,int,string);
-	tupler := (1,1,"s");
-	maudite();
-	tupler.writeln("sdfsd");
-	
-	
-	return 1;
+	l:list of int;
+	return ;
 }
 
-function sansArg() : int {
-	return 1;
+procedure main()
+{
 }
 
 
