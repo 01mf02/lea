@@ -15,8 +15,23 @@ procedure types()
 	s := SHAKESPEARE;
 }
 
-
-function foo() : int
+procedure deif()
 {
-	return MEANING;
+	gh:int;
+	gh := 1;
+	if(gh > 2)
+	{
+		gh := 1;
+	}
+}
+
+function ret() : int
+{
+	gh:int;
+	gh := 1;
+	if(gh > 2)
+	{
+		gh := 1;
+	}
+	return gh;
 }

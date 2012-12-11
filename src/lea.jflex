@@ -2,6 +2,7 @@ package generated;
 
 import java_cup.runtime.*;
 import java.io.*;
+import generated.*;
 import lea.*;
 
 %%

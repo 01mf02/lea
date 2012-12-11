@@ -4,6 +4,7 @@ import java_cup.runtime.*;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import generated.*;
 import lea.*;
 import lea.types.*;
 import lea.constants.*;
@@ -560,7 +561,7 @@ functCall ::=
 			{
 				NativeFunctionInfo nfi = Main.nativeFctTable.get(id);
 				if(nfi == null)
-					Main.printError("Fonction "+id+" introuvable!", 1);
+					Main.printError("Fonction "+id+" not found", 1);
 				else
 				{
 					if(!Main.nativeFctTable.isCallPermitted(id, null, null))
@@ -585,7 +586,7 @@ functCall ::=
 			{
 				NativeFunctionInfo nfi = Main.nativeFctTable.get(id);
 				if(nfi == null)
-					Main.printError("Fonction "+id+" introuvable!", 1);
+					Main.printError("Fonction "+id+" not found", 1);
 				else
 				{
 					if(!Main.nativeFctTable.isCallPermitted(id, e, null))
