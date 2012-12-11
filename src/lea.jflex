@@ -1,10 +1,12 @@
-package lea;
+package generated;
 
 import java_cup.runtime.*;
 import java.io.*;
+import lea.*;
 
 %%
 %class LeaLexer
+%public
 %line
 %column
 %cupsym LeaSymbol
@@ -19,8 +21,8 @@ private Symbol symbol (int type, Object value) {
     return new Symbol (type, yyline, yycolumn, value);
 }
 
-int getLine() { return yyline+1; }
-int getColumn() { return yycolumn+1; }
+public int getLine() { return yyline+1; }
+public int getColumn() { return yycolumn+1; }
 %}
 
 Identifier	= [a-zA-Z][a-zA-Z0-9_]*

@@ -2,6 +2,7 @@ package lea;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import generated.*;
 
 import lea.syntax.SyntaxTree;
 

@@ -1,9 +1,10 @@
-package lea;
+package generated;
  
 import java_cup.runtime.*;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import lea.*;
 import lea.types.*;
 import lea.constants.*;
 import lea.syntax.*;

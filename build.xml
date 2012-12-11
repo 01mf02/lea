@@ -5,8 +5,6 @@
 <project name="lea" default="default">
   <property name="JFlexLib" location="lib" />
   <property name="CUPLib" location="lib" />
-  <property name="parser.dir" location="src" />
-  <property name="lexer.dir" location="src" />
   <property name="bin.dir" location="bin" />
   <property name="lib.dir" location="lib" />
   <property name="src.dir" location="src" />
@@ -63,7 +61,7 @@
     </taskdef>
     
     <jflex 
-	file="${lexer.dir}/lea.jflex" 
+	file="${src.dir}/lea.jflex" 
 	destdir="${src.dir}" />
   </target>
   
@@ -78,7 +76,7 @@
     </taskdef>
     
     <cup 
-	srcfile="${parser.dir}/lea.cup"
+	srcfile="${src.dir}/lea.cup"
 	destdir="${src.dir}"
 	parser="LeaParser"
 	symbols="LeaSymbol"
