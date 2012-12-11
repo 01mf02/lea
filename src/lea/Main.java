@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import generated.*;
 
+import lea.generator.Generator;
 import lea.syntax.SyntaxTree;
 
 public class Main {
@@ -50,6 +51,7 @@ public class Main {
 
 		if (!hasCompileErrors) {
 			// CODE POUR LAETITIA
+			Generator generator = new Generator(constTable, typeTable, fctTable);
 		}
 
 		return 0;
