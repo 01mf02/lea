@@ -317,6 +317,7 @@ instr ::=
 			if(e.getType() instanceof BoolType)
 			{
 				RESULT = new While(e, b); 
+				
 			} 
 			else
 			{
@@ -350,7 +351,7 @@ instr ::=
 			
 		:}
 		| RETURN expr:e SEMIC {: 
-			Main.printError("NO NO NO " + Main.currentNode.getLeft() + Main.currentNode.getRight(), 1);
+			Main.printError("NO NO NO " + Main.currentNode.getLeft() + Main.currentNode.getRight(), 0);
 			if(Main.currentNode.getType() == e.getType() )
 			{
 				RESULT = new  ReturnNode(e);
@@ -401,98 +402,98 @@ expr ::=
 		expr:e1 AND expr:e2 
 		{:
 			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-				Main.printError("Les types � gauche et � droite d'un && doivent �tre du type bool", 1);
+				Main.printError("The types on each side for operator && must be boolean", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.AND); 
 		:} 
 		|expr:e1 OR expr:e2
 		{:
 			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-				Main.printError("Les types � gauche et � droite d'un || doivent �tre du type bool", 1);
+				Main.printError("The types on each side for operator || must be boolean", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.OR); 
 		:}
 		|expr:e1 LT expr:e2 
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("Les types � gauche et � droite d'un < doivent �tre du type entier ou r�el", 1);
+				Main.printError("The types on each side for operator < must be integer or real", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.LT); 
 		:} 
 		|expr:e1 GT expr:e2
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("Les types � gauche et � droite d'un <= doivent �tre du type entier ou r�el", 1);
+				Main.printError("The types on each side for operator <= must be integer or real", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.GT); 
 		:} 
 		|expr:e1 LE expr:e2 
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("Les types � gauche et � droite d'un > doivent �tre du type entier ou r�el", 1);
+				Main.printError("The types on each side for operator > must be integer or real", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.LE); 
 		:} 
 		|expr:e1 GE expr:e2 
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("Les types � gauche et � droite d'un >= doivent �tre du type entier ou r�el", 1);
+				Main.printError("The types on each side for operator >= must be integer or real", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.GE); 
 		:}  
 		|expr:e1 EQ expr:e2 
 		{: 
 			if(!e1.getType().equals(e2.getType())) 
-				Main.printError("Les types � gauche et � droite d'un = doivent �tre du m�me type", 1);
+				Main.printError("The types on each side for operator = must be the same type", 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); 
 		:} 
 		|expr:e1 DIFF expr:e2 
 		{: 
 			if(!e1.getType().equals(e2.getType())) 
-				Main.printError("Les types � gauche et � droite d'un != doivent �tre du m�me type", 1);
+				Main.printError("The types on each side for operator != must be the same type", 1);
 			
 			RESULT = new BoolExp(e1, e2, EnumTagExp.DIFF); 
 		:} 
 		|expr:e1 PLUS expr:e2 
 		{: 
 			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType()) && !e1.getType().equals(new StringType())) 
-				Main.printError("Les types � gauche et � droite d'un + doivent �tre du m�me type et soit entier, r�el ou cha�ne de caract�res", 1);
+				Main.printError("The types on each side for operator + must be integer, real or string", 1);
 				
 			RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); 
 		:} 
 		|expr:e1 MINUS expr:e2
 		{: 
 			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("Les types � gauche et � droite d'un - doivent �tre du m�me type et soit entier ou r�el", 1);
+				Main.printError("The types on each side for operator - must be integer or real", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); 
 		:} 
 		|MINUS expr:e
 		{: 
 			if(!e.getType().equals(new IntType())) 
-				Main.printError("The type on the right must be an integer or a real", 1);
+				Main.printError("The type on the right side must be an integer or a real", 1);
 			
 			RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); 	
 		:} %prec MINUS_U 
 		|expr:e1 MULT expr:e2
 		{: 
 			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("Les types � gauche et � droite d'un * doivent �tre du m�me type et soit entier ou r�el", 1);
+				Main.printError("The types on each side for operator * must be the same type and an integer or a real", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); 
 		:} 
 		|expr:e1 DIV expr:e2
 		{: 
 			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("Les types � gauche et � droite d'un / doivent �tre du m�me type et soit entier ou r�el", 1);
+				Main.printError("The types on each side for operator / must be the same type and an integer or a real", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); 
 		:} 
 		|expr:e1 MODULO expr:e2
 		{: 
 			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("Les types � gauche et � droite d'un % doivent �tre du m�me type et soit entier ou r�el", 1);
+				Main.printError("The types on each side for operator % must be integer", 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); 
 		:} 
