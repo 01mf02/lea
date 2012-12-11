@@ -3,7 +3,6 @@ package lea;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import lea.generator.*;
-
 import lea.generator.Generator;
 import lea.syntax.SyntaxTree;
 

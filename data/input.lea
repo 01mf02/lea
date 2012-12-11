@@ -15,9 +15,8 @@ procedure types()
 	s := SHAKESPEARE;
 }
 
-// Should be changed to use right parameters later.
-function main() : int
+
+function foo() : int
 {
-	writeln("Hello World!");
-	return ;
+	return MEANING;
 }

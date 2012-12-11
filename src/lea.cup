@@ -231,7 +231,7 @@ funct ::=
 			Main.fctTable.put(id, fctInfo);
 			
 			if(!b.containsReturn())
-				Main.printError("La fonction " + id + " doit retourner une valeur!", 1);
+				Main.printError("Function " + id + " must return a value\n", 1);
 			
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
@@ -316,7 +316,7 @@ instr ::=
 		//Distinguer while et repeat
 			if(e.getType() instanceof BoolType)
 			{
-				RESULT = new Loop(e, b); 
+				RESULT = new While(e, b); 
 			} 
 			else
 			{
@@ -327,8 +327,9 @@ instr ::=
 		{:
 			if(e.getType() instanceof BoolType)
 			{
-				RESULT = new Loop(e, b); 
+				RESULT = new Repeat(e, b); 
 			} 
+			
 			else
 			{
 				Main.printError("Expression must be a boolean", 1);
@@ -337,9 +338,19 @@ instr ::=
 		| decl:d {: RESULT = d;	:}
 		| variable:v SEMIC 
 		{: 
-			//Main.printError("Salut! " + v.toString(), 0); 
+			if(v instanceof FunctionCall)
+			{
+				//TODO : doit renvoyer un instruction
+				//RESULT = v;
+			}
+			else
+			{
+				Main.printError(v.toString() + " is not a function", 0); 
+			}
+			
 		:}
 		| RETURN expr:e SEMIC {: 
+			Main.printError("NO NO NO " + Main.currentNode.getLeft() + Main.currentNode.getRight(), 1);
 			if(Main.currentNode.getType() == e.getType() )
 			{
 				RESULT = new  ReturnNode(e);
@@ -347,15 +358,21 @@ instr ::=
 			else
 			{
 				//Main.printError("The return must be of type " + Main.currentNode.toString(), 1);
+				//Main.printError("NO NO NO " + Main.currentNode.getLeft() + Main.currentNode.getRight(), 1);
+				//TODO : a changer
+				RESULT = new  ReturnNode(null);
 			}
 		:}
 		| RETURN  SEMIC {:
+
 			if(Main.currentNode.getType() == null )
 			{
 				RESULT = new  ReturnNode(null);
 			}	 
 			else
 			{
+			//TODO : a changer
+				RESULT = new  ReturnNode(null);
 				Main.printError("Procedure can't return value", 1);
 			}
 		 :}
@@ -454,7 +471,7 @@ expr ::=
 		|MINUS expr:e
 		{: 
 			if(!e.getType().equals(new IntType())) 
-				Main.printError("Le type � droite d'un - doit �tre un entier ou un r�el", 1);
+				Main.printError("The type on the right must be an integer or a real", 1);
 			
 			RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); 	
 		:} %prec MINUS_U 
@@ -513,13 +530,13 @@ expr ::=
 				VariableInfo vi = Main.currentNode.findInEnvironment(vl.getName());
 				
 				if(vi != null && !vi.initialized())
-					Main.printError("Variable non initialis�e : " + vl.getName(), 0);
+					Main.printError("Variable not set : " + vl.getName(), 0);
 			}
 			else if(v instanceof StructAccessor)
 			{
 				StructAccessor sa = (StructAccessor)v;
 				if(!sa.isVarInitialized())
-					Main.printError("Variable non initialis�e : " + sa.toVariableString(), 0);
+					Main.printError("Variable not set : " + sa.toVariableString(), 0);
 			}
 			
 			RESULT = v; 
@@ -547,7 +564,7 @@ functCall ::=
 				{
 					if(!Main.nativeFctTable.isCallPermitted(id, null, null))
 					{
-						Main.printError("Fonction "+id+" introuvable ou appel�e incorrectement", 1);
+						Main.printError("Function "+id+" undifined or wrong call", 1);
 					}
 					else
 					{
@@ -572,7 +589,7 @@ functCall ::=
 				{
 					if(!Main.nativeFctTable.isCallPermitted(id, e, null))
 					{
-						Main.printError("Fonction "+id+" introuvable ou appel�e incorrectement", 1);
+						Main.printError("Function "+id+" undifined or wrong call", 1);
 					}
 					else
 						RESULT = new FunctionCall(new FunctionRef(id, nfi), e);
@@ -598,7 +615,7 @@ variable ::=
 				}
 				else
 				{
-					Main.printError("La variable ou la constante " + id + " n'a pas �t� trouv�e", 1);
+					Main.printError("Variable or constante " + id + " not found", 1);
 					RESULT = new VariableLeaf(id + " NOT FOUND", null);
 				}
     		}
@@ -649,7 +666,7 @@ variable ::=
     			//error dans tous les autres cas
     		if(!isOk)
     		{
-    			Main.printError("Accesseur � la liste impossible, mauvais type", 1);
+    			Main.printError("Accessor to the list impossible, wrong type", 1);
     		}
     	:}
 		;
@@ -669,8 +686,6 @@ variable ::=
   Faut faire les boucles aussi, y'en manque pas mal a faire sur ce cote la! Pour les fonctions du systeme (writeln, read, toString, etc)
   J'ai fait une table de NativeFunctionTable et elle est testee, elle marche tres bien!
   
-  On s'en reparle si tu as des questions!
-  Note : check aussi fonctions a plusieurs parametres qui ne marchent pas! Merci^^
   */
    
     
