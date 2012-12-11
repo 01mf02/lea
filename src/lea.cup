@@ -215,21 +215,37 @@ BOOLEXP ::=
 
 
 funct ::=
-		FUNCTION IDENTIFIER:id LPAR {: Main.currentNode = new SyntaxTree(null, null); :} functDecls:f RPAR COLON type:t block:b
+		FUNCTION IDENTIFIER:id LPAR 
+		{: 
+			Main.currentNode = new SyntaxTree(null, null); 
+		:} 
+		functDecls:f RPAR COLON type:t
 		{:
-			FunctionInfo fctInfo = new FunctionInfo(f, t, b);
-			Main.fctTable.put(id, fctInfo);
+			FunctionInfo fctInfo = new FunctionInfo(f, t);
+			Main.functInfo = fctInfo;
+		:}
+		 block:b
+		{:
+			Main.functInfo.setSyntaxTree(b);
+			Main.fctTable.put(id, Main.functInfo);
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
 				
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
-		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t {: Main.currentNode = new SyntaxTree(null, null); :} block:b
-		{:
+		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t 
+		{: 
+			Main.currentNode = new SyntaxTree(null, null); 
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
-			FunctionInfo fctInfo = new FunctionInfo(l, t, b);
-			Main.fctTable.put(id, fctInfo);
+			FunctionInfo fctInfo = new FunctionInfo(l, t);
+			Main.functInfo = fctInfo;
+		:} 
+		block:b
+		{:
+		
+			Main.functInfo.setSyntaxTree(b);
+			Main.fctTable.put(id, Main.functInfo);
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
@@ -240,18 +256,33 @@ funct ::=
 		
 		
 procedure ::= 
-		PROCEDURE IDENTIFIER:id LPAR {: Main.currentNode = new SyntaxTree(null, null); :} functDecls:f RPAR block:b
+		PROCEDURE IDENTIFIER:id LPAR 
 		{:
-			FunctionInfo fctInfo = new FunctionInfo(f, null, b);
-			Main.fctTable.put(id, fctInfo);
+			Main.currentNode = new SyntaxTree(null, null); 
+		:} 
+		functDecls:f RPAR 
+		{:
+			FunctionInfo fctInfo = new FunctionInfo(f, null);
+			Main.functInfo = fctInfo;
+		:}
+		block:b
+		{:
+			Main.functInfo.setSyntaxTree(b);
+			Main.fctTable.put(id, Main.functInfo);
 			
 			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
 		:}
-		|PROCEDURE IDENTIFIER:id LPAR RPAR  {: Main.currentNode = new SyntaxTree(null, null); :} block:b
-		{:
+		|PROCEDURE IDENTIFIER:id LPAR RPAR  
+		{: 
+			Main.currentNode = new SyntaxTree(null, null); 
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
-			FunctionInfo fctInfo = new FunctionInfo(l, null, b);
-			Main.fctTable.put(id, fctInfo);
+			FunctionInfo fctInfo = new FunctionInfo(l, null);
+			Main.functInfo = fctInfo;
+		:} 
+		block:b
+		{:
+			Main.functInfo.setSyntaxTree(b);
+			Main.fctTable.put(id, Main.functInfo);
 			
 			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
 		:}
@@ -351,31 +382,45 @@ instr ::=
 			}
 			
 		:}
-		| RETURN expr:e SEMIC {: 
-			Main.printError("NO NO NO " + Main.currentNode.getLeft() + Main.currentNode.getRight(), 0);
-			if(Main.currentNode.getType() == e.getType() )
+		| RETURN expr:e SEMIC 
+		{: 
+			if(Main.functInfo != null)
 			{
-				RESULT = new  ReturnNode(e);
-			}	 
+				if(Main.functInfo.getOutputType().equals( e.getType()) )
+				{
+					RESULT = new  ReturnNode(e);
+				}	 
+				else
+				{
+					Main.printError("The return must be of type " + Main.functInfo.getOutputType() + e.getType() , 1);
+					
+					//TODO : a changer
+					RESULT = new  ReturnNode(null);
+				}
+			}
 			else
 			{
-				//Main.printError("The return must be of type " + Main.currentNode.toString(), 1);
-				//Main.printError("NO NO NO " + Main.currentNode.getLeft() + Main.currentNode.getRight(), 1);
-				//TODO : a changer
-				RESULT = new  ReturnNode(null);
+				Main.printError("Error  with a function", 1);
 			}
 		:}
-		| RETURN  SEMIC {:
-
-			if(Main.currentNode.getType() == null )
+		| RETURN  SEMIC 
+		{:
+			if(Main.functInfo != null)
 			{
-				RESULT = new  ReturnNode(null);
-			}	 
+				if(Main.functInfo.getOutputType() == null )
+				{
+					RESULT = new  ReturnNode(null);
+				}	 
+				else
+				{
+				//TODO : a changer
+					RESULT = new  ReturnNode(null);
+					Main.printError("Procedure can't return value", 1);
+				}
+			}
 			else
 			{
-			//TODO : a changer
-				RESULT = new  ReturnNode(null);
-				Main.printError("Procedure can't return value", 1);
+				Main.printError("Error  with a function", 1);
 			}
 		 :}
 		| erreur 
@@ -403,70 +448,70 @@ expr ::=
 		expr:e1 AND expr:e2 
 		{:
 			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-				Main.printError("The types on each side for operator && must be boolean", 1);
+				Main.printError("The types on each side for operator && must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.AND); 
 		:} 
 		|expr:e1 OR expr:e2
 		{:
 			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-				Main.printError("The types on each side for operator || must be boolean", 1);
+				Main.printError("The types on each side for operator || must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.OR); 
 		:}
 		|expr:e1 LT expr:e2 
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("The types on each side for operator < must be integer or real", 1);
+				Main.printError("The types on each side for operator < must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.LT); 
 		:} 
 		|expr:e1 GT expr:e2
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("The types on each side for operator <= must be integer or real", 1);
+				Main.printError("The types on each side for operator <= must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.GT); 
 		:} 
 		|expr:e1 LE expr:e2 
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("The types on each side for operator > must be integer or real", 1);
+				Main.printError("The types on each side for operator > must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.LE); 
 		:} 
 		|expr:e1 GE expr:e2 
 		{:
 			if(!e1.getType().equals(new IntType()) || !e2.getType().equals(new IntType()))
-				Main.printError("The types on each side for operator >= must be integer or real", 1);
+				Main.printError("The types on each side for operator >= must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.GE); 
 		:}  
 		|expr:e1 EQ expr:e2 
 		{: 
 			if(!e1.getType().equals(e2.getType())) 
-				Main.printError("The types on each side for operator = must be the same type", 1);
+				Main.printError("The types on each side for operator = must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); 
 		:} 
 		|expr:e1 DIFF expr:e2 
 		{: 
 			if(!e1.getType().equals(e2.getType())) 
-				Main.printError("The types on each side for operator != must be the same type", 1);
+				Main.printError("The types on each side for operator != must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 			
 			RESULT = new BoolExp(e1, e2, EnumTagExp.DIFF); 
 		:} 
 		|expr:e1 PLUS expr:e2 
 		{: 
-			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType()) && !e1.getType().equals(new StringType())) 
-				Main.printError("The types on each side for operator + must be integer, real or string", 1);
+			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new StringType()))) 
+				Main.printError("The types on each side for operator + must be integer, real or string. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); 
 		:} 
 		|expr:e1 MINUS expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("The types on each side for operator - must be integer or real", 1);
+			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) ) 
+				Main.printError("The types on each side for operator - must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); 
 		:} 
@@ -479,22 +524,22 @@ expr ::=
 		:} %prec MINUS_U 
 		|expr:e1 MULT expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("The types on each side for operator * must be the same type and an integer or a real", 1);
+			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) ) 
+				Main.printError("The types on each side for operator * must be the same type and an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); 
 		:} 
 		|expr:e1 DIV expr:e2
 		{: 
-			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("The types on each side for operator / must be the same type and an integer or a real", 1);
+			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) ) 
+				Main.printError("The types on each side for operator / must be the same type and an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); 
 		:} 
 		|expr:e1 MODULO expr:e2
 		{: 
 			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("The types on each side for operator % must be integer", 1);
+				Main.printError("The types on each side for operator % must be integer. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 			
 			RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); 
 		:} 

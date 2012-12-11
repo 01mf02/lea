@@ -13,6 +13,7 @@ procedure types()
 
 	s : string;
 	s := SHAKESPEARE;
+	return;
 }
 
 procedure deif()
@@ -23,6 +24,7 @@ procedure deif()
 	{
 		gh := 1;
 	}
+	types();
 }
 
 function ret() : int
@@ -35,3 +37,31 @@ function ret() : int
 	}
 	return gh;
 }
+
+function wooToComplexFunction(arg:int,arg0:string) : int
+{
+	if(ret() + arg > 2)
+	{
+		it:int := 0;
+		while(arg - it > 0)
+		{
+			dre:float := 0.0 ;
+			dre := PI * dre;
+			
+			str:string;
+			str := arg0 + "chocolat";
+		}
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+	
+}
+
+function main(arg:int,arg0:string) : int
+{
+	return wooToComplexFunction(100,"GRELE");
+}
+

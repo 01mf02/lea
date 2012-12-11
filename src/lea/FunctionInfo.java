@@ -23,6 +23,13 @@ public class FunctionInfo
 		sTree = s;
 	}
 	
+	public FunctionInfo(LinkedList<ArgumentInfo> lArgs, Type outputT)
+	{
+		args = lArgs;
+		outputType = outputT;
+		sTree = null;
+	}
+	
 	public String toString()
 	{
 		String str = "(" + args.toString() + ")";

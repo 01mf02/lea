@@ -14,7 +14,11 @@ public class Main {
 
 	// Le noeud courant dans lequel on est rendu
 	public static SyntaxTree currentNode = null;
-
+	
+	//Les informations de la fonction que l'on traite
+	public static FunctionInfo functInfo = null;
+	
+	
 	private static boolean hasCompileErrors = false;
 	private static LeaLexer lexer;
 
