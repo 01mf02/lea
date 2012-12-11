@@ -4,6 +4,7 @@ SHAKESPEARE = "To be or not to be ...";
 
 procedure types()
 {
+
 	i : int;
 	i := MEANING;
 	
@@ -18,5 +19,5 @@ procedure types()
 function main() : int
 {
 	writeln("Hello World!");
-	return 0;
+	return ;
 }

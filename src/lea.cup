@@ -27,7 +27,7 @@ non terminal LinkedList<ArgumentInfo> functDecls;
 non terminal ArgumentInfo functDecl;
 non terminal SyntaxTree block;
 non terminal Instruction instrs, instr;
-non terminal Expression expr;
+non terminal Expression expr,listDecl;
 non terminal String BOOLEXP;
 non terminal Expression variable,functCall;
 
@@ -100,9 +100,9 @@ type ::=
 		:}
 		;
 		
-		
+
 constDecl ::= 
-		IDENTIFIER:id EQ INTEGER:i SEMIC
+		IDENTIFIER:id EQ expr:i SEMIC
 		{:
 			if(Main.constTable.containsKey(id))
 			{
@@ -110,10 +110,26 @@ constDecl ::=
 			}
 			else
 			{
-				Main.constTable.put(id, new IntConstant(i));
+				if(i instanceof ConstantLeaf)
+				{				
+					Constant c = ((ConstantLeaf)i).getConstant();
+					Main.constTable.put(id, c);
+				}
+				else if(i instanceof ListNode)
+				{
+				 //TODO si cMest un tuple
+				}
+				else
+				{
+					Main.printError("Constant can't be set: " + id, 1);
+				}
+				
+			//TODO
+				
 			}
 		:}
-		;
+		;	
+
 		
 		
 block ::=
@@ -204,7 +220,7 @@ funct ::=
 			Main.fctTable.put(id, fctInfo);
 			
 			if(!b.containsReturn())
-				Main.printError("La fonction " + id + " doit retourner une valeur!", 1);
+				Main.printError("Function " + id + " must return a value\n", 1);
 				
 			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
@@ -269,43 +285,14 @@ instr ::=
 		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
 		| REPEAT TO CASE
 		| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
-		| variable:v AFF LBRACKET expr:e RBRACKET SEMIC 
-		{: 
-			//TODO : Gestion des types list vs tuples
-			if(v.getType() != null && e.getType() != null)
-			{
-				if(v.getType() instanceof ListType)
-				{
-					if(!v.getType().equals(e.getType()))
-					{
-		
-						Main.printError("Types incompatibles "  + e.getType(), 1);
-					}
-				}
-				else
-				{
-					Main.printError(v+ " is not of type list", 1);			
-				}							
-					
-				RESULT = new Assignment(v, e); 
-			}
-		:}
 		| variable:v AFF expr:e SEMIC 
 		{: 
 			if(v.getType() != null && e.getType() != null)
 			{
-				if(true || !(v.getType() instanceof TupleType))
+				if(!v.getType().equals(e.getType()))
 				{
-					if(!v.getType().equals(e.getType()))
-					{
-						Main.printError("Types incompatibles"  + v.getType().toString(), 1);
-					}
-				}
-				else
-				{
-						
-				}				
-					
+					Main.printError("Type mismatch. Expecting : "  + v.getType().toString() + ". Got : "  + e.getType().toString(), 1);
+				}					
 					
 				if(v instanceof VariableLeaf)
 				{
@@ -348,7 +335,9 @@ instr ::=
 			}
 		:}
 		| decl:d {: RESULT = d;	:}
-		| variable:v SEMIC {: //Main.printError("Salut! " + v.toString(), 0); 
+		| variable:v SEMIC 
+		{: 
+			//Main.printError("Salut! " + v.toString(), 0); 
 		:}
 		| RETURN expr:e SEMIC {: 
 			if(Main.currentNode.getType() == e.getType() )
@@ -357,7 +346,7 @@ instr ::=
 			}	 
 			else
 			{
-				Main.printError("The return must be of type " + Main.currentNode.getType(), 1);
+				//Main.printError("The return must be of type " + Main.currentNode.toString(), 1);
 			}
 		:}
 		| RETURN  SEMIC {:
@@ -377,11 +366,18 @@ instr ::=
 		:}
 		;
 
-
 instrs ::= 
 		instrs:i1 instr:i2   {: RESULT = new Succ(i1, i2); :}
 		| instr:i  {: RESULT = i; :}
 		;
+		
+		
+listDecl ::=
+		 LBRACKET expr:e RBRACKET
+		 {:
+			 RESULT = new ListNode(e, null);
+		 :}
+		 ;
 
 
 expr ::=
@@ -490,7 +486,12 @@ expr ::=
 			RESULT = new ListNode(e1, e2);
 			//RESULT = new TupleConstant();
 		:}
-		//| LBRACKET expr:e LBRACKET {: RESULT = e; :}
+		| listDecl:dl {:
+		RESULT = dl;
+		:}
+		/*| LBRACKET expr:e LBRACKET {:
+		RESULT = new ListNode(e, null);
+		:}*/
 		|LPAR expr:e RPAR {: RESULT = e; :}
 		|INTEGER:it {: 
 			RESULT = new ConstantLeaf(new IntConstant(it)); 

@@ -21,6 +21,11 @@ public class ConstantLeaf extends Expression
 		return constValue.getType();
 	}
 	
+	public Constant getConstant()
+	{
+		return constValue;
+	}
+	
 	public String toString()
 	{
 		return "Const("+constValue.toString() + ":" + constValue.getType().toString()+")";

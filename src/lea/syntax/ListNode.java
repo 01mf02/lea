@@ -1,7 +1,6 @@
 package lea.syntax;
+import lea.types.*;
 
-import lea.types.TupleType;
-import lea.types.Type;
 
 public class ListNode extends Expression {
 	public ListNode(Expression a1, Expression a2) {
@@ -13,8 +12,10 @@ public class ListNode extends Expression {
 	}
 
 	public Type getType() {
-		return new TupleType(this.getLeft().getType(), this.getRight()
-				.getType());
+		if(this.getRight() != null)
+			return new TupleType(this.getLeft().getType(), this.getRight().getType());
+		else
+			return new ListType(this.getLeft().getType());
 	}
 
 	public String toDotString() {
