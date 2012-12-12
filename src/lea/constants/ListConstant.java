@@ -1,18 +1,45 @@
 package lea.constants;
 
-import java.lang.reflect.Array;
+import java.util.LinkedList;
 
+import lea.syntax.*;
 import lea.types.*;
-import lea.types.ListType;
 
 public class ListConstant implements Constant 
 {
-	Array value = null;
+	LinkedList<String> value = null;
 	ListType listType;
 	
-	public ListConstant(Array v, ListType t)
+	public ListConstant(ListNode ln, ListType t)
 	{
-		value = v;
+		Expression tmp = (Expression)ln.getLeft();
+		LinkedList<String> nodesValues = new LinkedList<String>();
+
+		//Obtient tous les noeuds
+		if (tmp.getLeft() != null || tmp.getRight() != null)
+		{
+			while ((tmp.getLeft() != null) || (tmp.getRight() != null)) 
+			{
+				if (tmp.getRight() != null) 
+				{
+					if (tmp.getRight().getLeft() == null && tmp.getRight().getRight() == null)
+					{
+						ConstantLeaf c = (ConstantLeaf)tmp.getRight();
+						nodesValues.add(0, c.getValue());
+					}
+				}
+				if (tmp.getLeft() != null) 
+				{
+					if (tmp.getLeft().getLeft() == null && tmp.getLeft().getRight() == null)
+					{
+						ConstantLeaf c = (ConstantLeaf)tmp.getLeft();
+						nodesValues.add(0, c.getValue());
+					}
+				}
+				tmp = (Expression)tmp.getLeft();
+			}
+		}
+		value = nodesValues;
 		listType = t;
 	}
     
@@ -21,7 +48,7 @@ public class ListConstant implements Constant
     	return listType;
     }
     
-    public Array getValue()
+    public LinkedList<String> getValue()
     {
     	return value;
     }

@@ -33,7 +33,8 @@ public class StructType extends Type
 	{
 		if(t1 instanceof StructType)
 		{
-			return aux_equals(t1, this);
+			StructType st = (StructType)t1;
+			return st.getEnvironment() == env;
 		}
 		
 		return false;
@@ -47,6 +48,6 @@ public class StructType extends Type
 	
 	public String toString()
 	{
-		return "struct";
+		return "struct ("+name+")";
 	}
 }

@@ -28,7 +28,8 @@ non terminal LinkedList<ArgumentInfo> functDecls;
 non terminal ArgumentInfo functDecl;
 non terminal SyntaxTree block;
 non terminal Instruction instrs, instr;
-non terminal Expression expr,listDecl;
+non terminal Expression expr;
+non terminal ListNode listDecl;
 non terminal String BOOLEXP;
 non terminal Expression variable,functCall;
 
@@ -118,7 +119,13 @@ constDecl ::=
 				}
 				else if(i instanceof ListNode)
 				{
-				 //TODO si cMest un tuple
+					ListConstant c = new ListConstant((ListNode)i, (ListType)i.getType());
+					Main.constTable.put(id, c);
+				}
+				else if(i instanceof TupleNode)
+				{
+					TupleConstant c = new TupleConstant((TupleNode)i, (TupleType)i.getType());
+					Main.constTable.put(id, c);
 				}
 				else
 				{
@@ -136,13 +143,11 @@ constDecl ::=
 block ::=
 		LBRACE
 		{:
-		    //System.out.println("BLOCK");
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
 		    sTree.setEnvironment(Main.currentNode.getEnvironment());
-		    if(!sTree.getFirstEnvironment().isEmpty())
-		    	sTree.pushEnvironment(new Environment());
-		    
+	    	sTree.pushEnvironment(new Environment());
+
 		    Main.currentNode = sTree;
 		:}  instrs:i RBRACE {: RESULT = i; Main.currentNode.popEnvironment(); :}
 		| LBRACE RBRACE {: RESULT = new Instruction(null,null); :}
@@ -159,7 +164,6 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 					initialized = true;
 				
 				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, initialized));
-				//System.out.println("ENV : \n" + Main.currentNode.getEnvironment().toString());
 			}
 				
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
@@ -170,12 +174,11 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			{
 				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));
 				
-				//System.out.println("ENV : \n" + Main.currentNode.getEnvironment().toString());
 				RESULT = new Assignment(new VariableLeaf(id, t), e); 
 			}
 			
 			if(!t.equals(e.getType()))
-				Main.printError("Types incompatibles", 1);
+				Main.printError("Type mismatch. Expecting : "  + t.toString() + ". Got : "  + e.getType().toString(), 1);
 		:} 
 		;
 
@@ -188,7 +191,6 @@ structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
 			if(Main.currentNode != null)
 			{
 				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, false));
-				//System.out.println("ENV : \n" + Main.currentNode.getEnvironment().toString());
 			}
 				
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
@@ -231,8 +233,6 @@ funct ::=
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
-				
-			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
 		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t 
 		{: 
@@ -249,8 +249,6 @@ funct ::=
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
-			
-			System.out.println("\n\nFCT : " + Main.fctTable.toString() + "\n");
 		:}
 		;
 		
@@ -269,8 +267,6 @@ procedure ::=
 		{:
 			Main.functInfo.setSyntaxTree(b);
 			Main.fctTable.put(id, Main.functInfo);
-			
-			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
 		:}
 		|PROCEDURE IDENTIFIER:id LPAR RPAR  
 		{: 
@@ -283,8 +279,6 @@ procedure ::=
 		{:
 			Main.functInfo.setSyntaxTree(b);
 			Main.fctTable.put(id, Main.functInfo);
-			
-			System.out.println("\n\nPROCEDURE : " + Main.fctTable.toString() + "\n");
 		:}
 		;
 
@@ -353,7 +347,7 @@ instr ::=
 			} 
 			else
 			{
-				Main.printError("Expression must be a boolean", 1);
+				Main.printError("Loop test expression must be a boolean", 1);
 			}
 		:}
 		| REPEAT block:b WHILE LPAR expr:e RPAR 
@@ -365,7 +359,7 @@ instr ::=
 			
 			else
 			{
-				Main.printError("Expression must be a boolean", 1);
+				Main.printError("Loop test expression must be a boolean", 1);
 			}
 		:}
 		| decl:d {: RESULT = d;	:}
@@ -374,7 +368,8 @@ instr ::=
 			if(v instanceof FunctionCall)
 			{
 				//TODO : doit renvoyer un instruction
-				//RESULT = v;
+				//NOTE DE MIC : C'est ce que je propose, l'instruction va "absorber" le type de retour de la fonction s'il y en a.
+				RESULT = new Instruction(v, null);
 			}
 			else
 			{
@@ -392,7 +387,7 @@ instr ::=
 				}	 
 				else
 				{
-					Main.printError("The return must be of type " + Main.functInfo.getOutputType() + e.getType() , 1);
+					Main.printError("The return must be of type " + Main.functInfo.getOutputType() +". Got : "+ e.getType() , 1);
 					
 					//TODO : a changer
 					RESULT = new  ReturnNode(null);
@@ -443,7 +438,6 @@ listDecl ::=
 		 :}
 		 ;
 
-
 expr ::=
 		expr:e1 AND expr:e2 
 		{:
@@ -461,14 +455,14 @@ expr ::=
 		:}
 		|expr:e1 LT expr:e2 
 		{:
-			if(!e1.getType().equals(new IntType()) ||  || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
+			if(!e1.getType().equals(new IntType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
 				Main.printError("The types on each side for operator < must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.LT); 
 		:} 
 		|expr:e1 GT expr:e2
 		{:
-			if(!e1.getType().equals(new IntType()) || || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
+			if(!e1.getType().equals(new IntType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
 				Main.printError("The types on each side for operator <= must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new BoolExp(e1, e2, EnumTagExp.GT); 
@@ -503,7 +497,7 @@ expr ::=
 		:} 
 		|expr:e1 PLUS expr:e2 
 		{: 
-			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType()) || || e1.getType().equals(new StringType()))) 
+			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType()) || e1.getType().equals(new StringType()))) 
 				Main.printError("The types on each side for operator + must be integer, real or string. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				
 			RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); 
@@ -545,17 +539,16 @@ expr ::=
 		:} 
 		| expr:e1 COMMA expr:e2 
 		{: 	
-			//Main.printError("Les " + e1.getType().toString() + "Les " +e2.getType().toString() + " jj j ", 1);
-			//RESULT = new ListNode(new Expression(e1, e2)); 
-			RESULT = new ListNode(e1, e2);
-			//RESULT = new TupleConstant();
+			RESULT = new TupleNode(e1, e2);
 		:}
 		| listDecl:dl {:
-		RESULT = dl;
+			if(!dl.isListHasAllSameType())
+			{
+				Main.printError("The list expression needs to contain the same type everywhere", 1);
+			}
+		
+			RESULT = dl;
 		:}
-		/*| LBRACKET expr:e LBRACKET {:
-		RESULT = new ListNode(e, null);
-		:}*/
 		|LPAR expr:e RPAR {: RESULT = e; :}
 		|INTEGER:it {: 
 			RESULT = new ConstantLeaf(new IntConstant(it)); 

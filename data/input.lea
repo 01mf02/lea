@@ -1,8 +1,15 @@
 MEANING = 12;
-PI = 3.14;
+PI = 3.14159265358979;
 SHAKESPEARE = "To be or not to be ...";
+LIST_OF_INT = [1,2,3,4,5,6];
+TUPLE_OF_THREE = 34, SHAKESPEARE, PI;
 
 fiche = struct {
+	age:int;
+	nom:string;
+	sexe:bool;
+}
+fiche2 = struct {
 	age:int;
 	nom:string;
 	sexe:bool;
@@ -26,23 +33,21 @@ procedure deif()
 {
 	gh:int;
 	
-	/*
-	======================= ICI probleme de stack overflow =================
-	
 	listee:list of list of list of fiche;
 	lyst:list of list of fiche;
 	
 	lyst := listee[1];
-	luistie := lyst[gh];
 	
 	luistie:list of fiche;
+	luistie := lyst[gh];
+	
 	polist:fiche;
 	
 	polist.nom := "Raoul";
 	polist.age := 22;
 	polist.sexe := True;
 	
-	luistie[1] := polist;*/
+	luistie[1] := polist;
 
 	
 	gh := 1;
@@ -71,6 +76,8 @@ function ret() : int
 //This is way too complex
 function wooTooComplexFunction(arg:int,arg0:string) : int
 {
+	ret();	//Absorbing return type
+	
 	if(ret() + arg > 2)
 	{
 		it:int := 0;
@@ -95,6 +102,13 @@ function wooTooComplexFunction(arg:int,arg0:string) : int
 qu'on met sur plusieurs lignes*/
 function main(arg:int,arg0:string) : int
 {
+	li:list of int := LIST_OF_INT;
+	liSimple:list of int := [123];
+	liComplex:list of list of int := [[12,23],[12, 222, 333], [123, 7]];
+	
+	tp:(int, string, float) := TUPLE_OF_THREE;
+	tpComplex:(int, float) := (3 + 10 * 2, PI + PI);
+	
 	return wooTooComplexFunction(100,"GRELE");
 }
 

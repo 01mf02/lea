@@ -1,16 +1,51 @@
 package lea.constants;
 
-import java.lang.reflect.Array;
+import java.util.LinkedList;
+
 import lea.types.*;
+import lea.syntax.*;
 
 public class TupleConstant implements Constant 
 {
-	Array value = null;
+	LinkedList<String> value = null;
 	TupleType tupleType;
 	
-	public TupleConstant(Array v, TupleType t)
+	public TupleConstant(TupleNode tn, TupleType t)
 	{
-		value = v;
+		Expression tmpL = (Expression)tn.getLeft();
+		Expression tmpR = (Expression)tn.getRight();
+		
+		LinkedList<String> nodesValues = new LinkedList<String>();
+
+		//Obtient tous les noeuds
+		if (tmpL.getLeft() != null || tmpL.getRight() != null)
+		{
+			while ((tmpL.getLeft() != null) || (tmpL.getRight() != null)) 
+			{
+				if (tmpL.getRight() != null) 
+				{
+					if (tmpL.getRight().getLeft() == null && tmpL.getRight().getRight() == null)
+					{
+						ConstantLeaf c = (ConstantLeaf)tmpL.getRight();
+						nodesValues.add(0, c.getValue());
+					}
+				}
+				if (tmpL.getLeft() != null) 
+				{
+					if (tmpL.getLeft().getLeft() == null && tmpL.getLeft().getRight() == null)
+					{
+						ConstantLeaf c = (ConstantLeaf)tmpL.getLeft();
+						nodesValues.add(0, c.getValue());
+					}
+				}
+				tmpL = (Expression)tmpL.getLeft();
+			}
+		}	
+		
+		ConstantLeaf c = (ConstantLeaf)tmpR;
+		nodesValues.add(c.getValue());
+		
+		value = nodesValues;
 		tupleType = t;
 	}
     
@@ -19,7 +54,7 @@ public class TupleConstant implements Constant
     	return tupleType;
     }
     
-    public Array getValue()
+    public LinkedList<String> getValue()
     {
     	return value;
     }

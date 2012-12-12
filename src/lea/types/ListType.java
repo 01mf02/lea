@@ -28,6 +28,6 @@ public class ListType extends Type
 	
 	public String toString()
 	{
-		return "list";
+		return "list of " + this.getLeft().toString();
 	}
 }

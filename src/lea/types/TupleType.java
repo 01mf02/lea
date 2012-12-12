@@ -28,6 +28,12 @@ public class TupleType extends Type
 	
 	public String toString()
 	{
-		return "tuple";
+		String str = "tuple(";
+		if(this.getLeft() != null)
+			str += this.getLeft().getType().toString();
+		if(this.getRight() != null)
+			str += ", " + this.getRight().getType().toString();
+		
+		return str + ")";
 	}
 }
