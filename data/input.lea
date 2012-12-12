@@ -2,6 +2,12 @@ MEANING = 12;
 PI = 3.14;
 SHAKESPEARE = "To be or not to be ...";
 
+fiche = struct {
+	age:int;
+	nom:string;
+	sexe:bool;
+}
+
 procedure types()
 {
 
@@ -19,6 +25,26 @@ procedure types()
 procedure deif()
 {
 	gh:int;
+	
+	/*
+	======================= ICI probleme de stack overflow =================
+	
+	listee:list of list of list of fiche;
+	lyst:list of list of fiche;
+	
+	lyst := listee[1];
+	luistie := lyst[gh];
+	
+	luistie:list of fiche;
+	polist:fiche;
+	
+	polist.nom := "Raoul";
+	polist.age := 22;
+	polist.sexe := True;
+	
+	luistie[1] := polist;*/
+
+	
 	gh := 1;
 	if(gh > 2)
 	{
@@ -31,14 +57,19 @@ function ret() : int
 {
 	gh:int;
 	gh := 1;
-	if(gh > 2)
+	repeat
 	{
-		gh := 1;
+		if(gh > 2)
+		{
+			gh := 1;
+		}
 	}
+	while(true)
 	return gh;
 }
 
-function wooToComplexFunction(arg:int,arg0:string) : int
+//This is way too complex
+function wooTooComplexFunction(arg:int,arg0:string) : int
 {
 	if(ret() + arg > 2)
 	{
@@ -60,8 +91,10 @@ function wooToComplexFunction(arg:int,arg0:string) : int
 	
 }
 
+/*Je suis un commentaire
+qu'on met sur plusieurs lignes*/
 function main(arg:int,arg0:string) : int
 {
-	return wooToComplexFunction(100,"GRELE");
+	return wooTooComplexFunction(100,"GRELE");
 }
 
