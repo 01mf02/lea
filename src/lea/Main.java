@@ -8,12 +8,6 @@ import lea.syntax.*;
 
 public class Main {
 	
-	private static boolean hasCompileErrors = false;
-	private static LeaLexer lexer;
-
-	/**
-	 * @param args
-	 */
 	public static int main(String[] args) {
 		System.out.println("Léa compiler initialized.");
 
@@ -34,7 +28,7 @@ public class Main {
 
 		fctTable.saveDotToDir("data");
 
-		if (!hasCompileErrors) {
+		if (!parser.hasCompileErrors()) {
 			Generator generator = new Generator(constTable, typeTable, fctTable);
 		}
 
@@ -49,7 +43,7 @@ public class Main {
 			System.err.println("File '" + filename + "' not found!");
 		}
 
-		lexer = new LeaLexer(file);
+		LeaLexer lexer = new LeaLexer(file);
 		LeaParser parser = new LeaParser(lexer);
 
 		try {
@@ -63,31 +57,5 @@ public class Main {
 
 		System.out.println("Parsing completed!");
 		return parser;
-	}
-
-	public static void printError(String message, int level) {
-		String prefix = "";
-
-		switch (level) {
-		case 0:
-			prefix += "Warning";
-			break;
-		case 1:
-			prefix += "Error";
-			hasCompileErrors = true;
-			break;
-		case 2:
-			prefix += "Fatal error";
-			hasCompileErrors = true;
-			break;
-		default:
-			break;
-		}
-
-		if (level >= 0 && level <= 2)
-			prefix += " at line " + lexer.getLine() + ", column "
-					+ lexer.getColumn() + ": ";
-
-		System.out.println(prefix + message);
 	}
 }

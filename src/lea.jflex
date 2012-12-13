@@ -17,29 +17,50 @@ import lea.*;
 %state COMMENT
 
 %{
-  StringBuffer str = new StringBuffer();
+	StringBuffer str = new StringBuffer();
   
-private Symbol symbol (int type) {
-    return new Symbol (type, yyline, yycolumn);
-}
+	private Symbol symbol (int type) {
+		return new Symbol (type, yyline, yycolumn);
+	}
 
-private Symbol symbol (int type, Object value) {
-    return new Symbol (type, yyline, yycolumn, value);
-}
+	private Symbol symbol (int type, Object value) {
+		return new Symbol (type, yyline, yycolumn, value);
+	}
 
-public int getLine() { return yyline+1; }
-public int getColumn() { return yycolumn+1; }
+	public boolean hasCompileErrors = false;
+
+	public void printError(String message, int level) {
+		String prefix = "";
+
+		switch (level) {
+		case 0:
+			prefix += "Warning";
+			break;
+		case 1:
+			prefix += "Error";
+			hasCompileErrors = true;
+			break;
+		case 2:
+			prefix += "Fatal error";
+			hasCompileErrors = true;
+			break;
+		default:
+			break;
+		}
+
+		if (level >= 0 && level <= 2)
+			prefix += " at line " + (yyline + 1) + ", column " + (yycolumn + 1)
+					+ ": ";
+
+		System.out.println(prefix + message);
+	}
 %}
 
 %eof{ 
 	if(yystate() == IN_STRING)
-	{
-		Main.printError("End string character not found", 2);
-	}
+		printError("End string character not found", 2);
 	else if(yystate() == COMMENT)
-	{
-		Main.printError("End comment character not found", 2);
-	}
+		printError("End comment character not found", 2);
 %eof}
 
 Identifier	= [a-zA-Z][a-zA-Z0-9_]*

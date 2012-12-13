@@ -12,10 +12,25 @@ import lea.syntax.*;
 
 parser code
 {:
-	public ConstantTable getConstantTable() { return action_obj.constTable ; }
-	public TypeTable getTypeTable() { return action_obj.typeTable ; }
-	public FunctionTable getFunctionTable() { return action_obj.fctTable ; }
-	public NativeFunctionTable getNativeFunctionTable() { return action_obj.nativeFctTable ; }
+	public ConstantTable getConstantTable() { return action_obj.constTable; }
+	public TypeTable getTypeTable() { return action_obj.typeTable; }
+	public FunctionTable getFunctionTable() { return action_obj.fctTable; }
+	public NativeFunctionTable getNativeFunctionTable() { return action_obj.nativeFctTable; }
+
+	private LeaLexer lexer;
+
+	public LeaParser(LeaLexer lexer) {
+		super(lexer);
+		this.lexer = lexer;
+	}
+
+	public void printError(String message, int level) {
+		lexer.printError(message, level);
+	}
+
+	public boolean hasCompileErrors() {
+		return lexer.hasCompileErrors;
+	}
 :}
 
 action code
@@ -28,7 +43,7 @@ action code
 	// Le noeud courant dans lequel on est rendu
 	private SyntaxTree currentNode = null;
 	
-	//Les informations de la fonction que l'on traite
+	// Les informations de la fonction que l'on traite
 	private FunctionInfo functInfo = null;
 
 
@@ -37,7 +52,7 @@ action code
 			case AND:
 			case OR:
 				if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-					Main.printError("The types on each side for operator " + op + " must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+					parser.printError("The types on each side for operator " + op + " must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				break;
 
 			case LT:
@@ -45,17 +60,17 @@ action code
 			case GT:
 			case GE:
 				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType()))))
-					Main.printError("The types on each side for operator " + op + " must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+					parser.printError("The types on each side for operator " + op + " must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				break;
 
 			case EQ:
 			case DIFF:
 				if(!e1.getType().equals(e2.getType())) 
-					Main.printError("The types on each side for operator " + op + " must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+					parser.printError("The types on each side for operator " + op + " must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				break;
 
 			default:
-				Main.printError("Unrecognized operator!",1);
+				parser.printError("Unrecognized operator!",1);
 				break;
 		}
 				
@@ -66,28 +81,28 @@ action code
 		switch (op) {
 			case PLUS:
 				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType())) && !(e1.getType().equals(new StringType()))))
-					Main.printError("The types on each side for operator + must be integer, real or string. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+					parser.printError("The types on each side for operator + must be integer, real or string. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				break;
 
 			case MINUS:
 			case MULT:
 			case DIV:
 				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType()))))
-					Main.printError("The types on each side for operator " + op + " must be an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+					parser.printError("The types on each side for operator " + op + " must be an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				break;
 
 			case MINUS_U:
 				if(!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType())))
-					Main.printError("The type on the right side for operator - must be an integer or a real", 1);
+					parser.printError("The type on the right side for operator - must be an integer or a real", 1);
 				break;
 			
 			case MOD:
 				if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType()))
-					Main.printError("The types on each side for operator % must be integer. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+					parser.printError("The types on each side for operator % must be integer. Got : " + e1.getType() + " X " +  e2.getType(), 1);
 				break;
 
 			default:
-				Main.printError("Unrecognized operator!",1);
+				parser.printError("Unrecognized operator!",1);
 				break;
 		}
 
@@ -147,15 +162,15 @@ axiom ::=
 erreur ::= 
 		error SEMIC
 		{:
-			Main.printError("\";\" is missing \n", 1);
+			parser.printError("\";\" is missing \n", 1);
 		:}
 		| error RBRACE
 		{:
-			Main.printError("\"}\" is missing \n", 1);
+			parser.printError("\"}\" is missing \n", 1);
 		:}
 		| error LPAR
 		{:
-			Main.printError("\"(\" is missing \n", 1);
+			parser.printError("\"(\" is missing \n", 1);
 		:}
 		;		
 		
@@ -180,7 +195,7 @@ type ::=
 			
 			if(type == null)
 			{
-				Main.printError("Type non trouvable : " + t, 1);
+				parser.printError("Type non trouvable : " + t, 1);
 			}			
 			
 			RESULT = type;
@@ -193,7 +208,7 @@ constDecl ::=
 		{:
 			if(constTable.containsKey(id))
 			{
-				Main.printError("Constant already declared : " + id, 1);
+				parser.printError("Constant already declared : " + id, 1);
 			}
 			else
 			{
@@ -214,7 +229,7 @@ constDecl ::=
 				}
 				else
 				{
-					Main.printError("Constant can't be set: " + id, 1);
+					parser.printError("Constant can't be set: " + id, 1);
 				}
 				
 			//TODO
@@ -263,7 +278,7 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			}
 			
 			if(!t.equals(e.getType()))
-				Main.printError("Type mismatch. Expecting : "  + t.toString() + ". Got : "  + e.getType().toString(), 1);
+				parser.printError("Type mismatch. Expecting : "  + t.toString() + ". Got : "  + e.getType().toString(), 1);
 		:} 
 		;
 
@@ -316,7 +331,7 @@ funct ::=
 			fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
-				Main.printError("Function " + id + " must return a value\n", 1);
+				parser.printError("Function " + id + " must return a value\n", 1);
 		:}
 		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t 
 		{: 
@@ -330,7 +345,7 @@ funct ::=
 			fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
-				Main.printError("Function " + id + " must return a value\n", 1);
+				parser.printError("Function " + id + " must return a value\n", 1);
 		:}
 		;
 		
@@ -397,7 +412,7 @@ instr ::=
 			{
 				if(!v.getType().equals(e.getType()))
 				{
-					Main.printError("Type mismatch. Expecting : "  + v.getType().toString() + ". Got : "  + e.getType().toString(), 1);
+					parser.printError("Type mismatch. Expecting : "  + v.getType().toString() + ". Got : "  + e.getType().toString(), 1);
 				}					
 					
 				if(v instanceof VariableLeaf)
@@ -427,7 +442,7 @@ instr ::=
 			} 
 			else
 			{
-				Main.printError("Loop test expression must be a boolean", 1);
+				parser.printError("Loop test expression must be a boolean", 1);
 			}
 		:}
 		| REPEAT block:b WHILE LPAR expr:e RPAR 
@@ -439,7 +454,7 @@ instr ::=
 			
 			else
 			{
-				Main.printError("Loop test expression must be a boolean", 1);
+				parser.printError("Loop test expression must be a boolean", 1);
 			}
 		:}
 		| decl:d {: RESULT = d;	:}
@@ -453,7 +468,7 @@ instr ::=
 			}
 			else
 			{
-				Main.printError(v.toString() + " is not a function", 0); 
+				parser.printError(v.toString() + " is not a function", 0); 
 			}
 			
 		:}
@@ -467,7 +482,7 @@ instr ::=
 				}	 
 				else
 				{
-					Main.printError("The return must be of type " + functInfo.getOutputType() +". Got : "+ e.getType() , 1);
+					parser.printError("The return must be of type " + functInfo.getOutputType() +". Got : "+ e.getType() , 1);
 					
 					//TODO : a changer
 					RESULT = new  ReturnNode(null);
@@ -475,7 +490,7 @@ instr ::=
 			}
 			else
 			{
-				Main.printError("Error  with a function", 1);
+				parser.printError("Error  with a function", 1);
 			}
 		:}
 		| RETURN  SEMIC 
@@ -490,12 +505,12 @@ instr ::=
 				{
 				//TODO : a changer
 					RESULT = new  ReturnNode(null);
-					Main.printError("Procedure can't return value", 1);
+					parser.printError("Procedure can't return value", 1);
 				}
 			}
 			else
 			{
-				Main.printError("Error  with a function", 1);
+				parser.printError("Error  with a function", 1);
 			}
 		 :}
 		| erreur 
@@ -542,7 +557,7 @@ expr ::=
 		| listDecl:dl {:
 			if(!dl.isListHasAllSameType())
 			{
-				Main.printError("The list expression needs to contain the same type everywhere", 1);
+				parser.printError("The list expression needs to contain the same type everywhere", 1);
 			}
 		
 			RESULT = dl;
@@ -568,13 +583,13 @@ expr ::=
 				VariableInfo vi = currentNode.findInEnvironment(vl.getName());
 				
 				if(vi != null && !vi.initialized())
-					Main.printError("Variable not set : " + vl.getName(), 0);
+					parser.printError("Variable not set : " + vl.getName(), 0);
 			}
 			else if(v instanceof StructAccessor)
 			{
 				StructAccessor sa = (StructAccessor)v;
 				if(!sa.isVarInitialized())
-					Main.printError("Variable not set : " + sa.toVariableString(), 0);
+					parser.printError("Variable not set : " + sa.toVariableString(), 0);
 			}
 			
 			RESULT = v; 
@@ -597,12 +612,12 @@ functCall ::=
 			{
 				NativeFunctionInfo nfi = nativeFctTable.get(id);
 				if(nfi == null)
-					Main.printError("Fonction "+id+" not found", 1);
+					parser.printError("Fonction "+id+" not found", 1);
 				else
 				{
 					if(!nativeFctTable.isCallPermitted(id, null, null))
 					{
-						Main.printError("Function "+id+" undefined or wrong call", 1);
+						parser.printError("Function "+id+" undefined or wrong call", 1);
 					}
 					else
 					{
@@ -622,12 +637,12 @@ functCall ::=
 			{
 				NativeFunctionInfo nfi = nativeFctTable.get(id);
 				if(nfi == null)
-					Main.printError("Fonction "+id+" not found", 1);
+					parser.printError("Fonction "+id+" not found", 1);
 				else
 				{
 					if(!nativeFctTable.isCallPermitted(id, e, null))
 					{
-						Main.printError("Function "+id+" undefined or wrong call", 1);
+						parser.printError("Function "+id+" undefined or wrong call", 1);
 					}
 					else
 						RESULT = new FunctionCall(new FunctionRef(id, nfi), e);
@@ -653,7 +668,7 @@ variable ::=
 				}
 				else
 				{
-					Main.printError("Variable or constant " + id + " not found", 1);
+					parser.printError("Variable or constant " + id + " not found", 1);
 					RESULT = new VariableLeaf(id + " NOT FOUND", null);
 				}
     		}
@@ -704,7 +719,7 @@ variable ::=
     			//error dans tous les autres cas
     		if(!isOk)
     		{
-    			Main.printError("Accessor to the list impossible, wrong type", 1);
+    			parser.printError("Accessor to the list impossible, wrong type", 1);
     		}
     	:}
 		;
