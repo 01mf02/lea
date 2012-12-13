@@ -10,6 +10,23 @@ import lea.types.*;
 import lea.constants.*;
 import lea.syntax.*;
 
+parser code
+{:
+	public ConstantTable constTable = new ConstantTable();
+	public TypeTable typeTable = new TypeTable();
+	public FunctionTable fctTable = new FunctionTable();
+	public NativeFunctionTable nativeFctTable = new NativeFunctionTable();
+:}
+
+action code
+{:
+	// Le noeud courant dans lequel on est rendu
+	public static SyntaxTree currentNode = null;
+	
+	//Les informations de la fonction que l'on traite
+	public static FunctionInfo functInfo = null;
+:}
+
     
 terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
 terminal IF, ELSE, CASE,IN;
@@ -91,7 +108,7 @@ type ::=
 		| LIST OF type:t {: RESULT = new ListType(t); :}
 		| IDENTIFIER:t 
 		{:
-			Type type = Main.typeTable.get(t);
+			Type type = parser.typeTable.get(t);
 			
 			if(type == null)
 			{
@@ -106,7 +123,7 @@ type ::=
 constDecl ::= 
 		IDENTIFIER:id EQ expr:i SEMIC
 		{:
-			if(Main.constTable.containsKey(id))
+			if(parser.constTable.containsKey(id))
 			{
 				Main.printError("Constant already declared : " + id, 1);
 			}
@@ -115,17 +132,17 @@ constDecl ::=
 				if(i instanceof ConstantLeaf)
 				{				
 					Constant c = ((ConstantLeaf)i).getConstant();
-					Main.constTable.put(id, c);
+					parser.constTable.put(id, c);
 				}
 				else if(i instanceof ListNode)
 				{
 					ListConstant c = new ListConstant((ListNode)i, (ListType)i.getType());
-					Main.constTable.put(id, c);
+					parser.constTable.put(id, c);
 				}
 				else if(i instanceof TupleNode)
 				{
 					TupleConstant c = new TupleConstant((TupleNode)i, (TupleType)i.getType());
-					Main.constTable.put(id, c);
+					parser.constTable.put(id, c);
 				}
 				else
 				{
@@ -145,34 +162,34 @@ block ::=
 		{:
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
-		    sTree.setEnvironment(Main.currentNode.getEnvironment());
+		    sTree.setEnvironment(currentNode.getEnvironment());
 	    	sTree.pushEnvironment(new Environment());
 
-		    Main.currentNode = sTree;
-		:}  instrs:i RBRACE {: RESULT = i; Main.currentNode.popEnvironment(); :}
+		    currentNode = sTree;
+		:}  instrs:i RBRACE {: RESULT = i; currentNode.popEnvironment(); :}
 		| LBRACE RBRACE {: RESULT = new Instruction(null,null); :}
 		;
 
 
 decl ::=  IDENTIFIER:id COLON type:t SEMIC
 		{:
-			if(Main.currentNode != null)
+			if(currentNode != null)
 			{
 				boolean initialized = false;
 				
 				if(t instanceof ListType || t instanceof StructType)
 					initialized = true;
 				
-				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, initialized));
+				currentNode.getFirstEnvironment().put(id, new VariableInfo(t, initialized));
 			}
 				
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
 		:}
 		| IDENTIFIER:id COLON type:t AFF expr:e SEMIC
 		{:
-			if(Main.currentNode != null)
+			if(currentNode != null)
 			{
-				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));
+				currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));
 				
 				RESULT = new Assignment(new VariableLeaf(id, t), e); 
 			}
@@ -188,9 +205,9 @@ structDecls ::= structDecls structDecl | structDecl | erreur;
 
 structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
 		{:
-			if(Main.currentNode != null)
+			if(currentNode != null)
 			{
-				Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, false));
+				currentNode.getFirstEnvironment().put(id, new VariableInfo(t, false));
 			}
 				
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
@@ -201,12 +218,12 @@ struct ::= IDENTIFIER:id EQ STRUCT
 		 {:
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
-		    Main.currentNode = sTree;
-		    Main.typeTable.put(id,new StructType(id));
+		    currentNode = sTree;
+		    parser.typeTable.put(id,new StructType(id));
 		:}LBRACE structDecls RBRACE 
 		{:
-			StructType st = (StructType)Main.typeTable.get(id);
-			st.setEnvironment(Main.currentNode.getFirstEnvironment());
+			StructType st = (StructType)parser.typeTable.get(id);
+			st.setEnvironment(currentNode.getFirstEnvironment());
 		:}
 		;
 
@@ -219,33 +236,30 @@ BOOLEXP ::=
 funct ::=
 		FUNCTION IDENTIFIER:id LPAR 
 		{: 
-			Main.currentNode = new SyntaxTree(null, null); 
+			currentNode = new SyntaxTree(null, null); 
 		:} 
 		functDecls:f RPAR COLON type:t
 		{:
-			FunctionInfo fctInfo = new FunctionInfo(f, t);
-			Main.functInfo = fctInfo;
+			functInfo = new FunctionInfo(f, t);
 		:}
 		 block:b
 		{:
-			Main.functInfo.setSyntaxTree(b);
-			Main.fctTable.put(id, Main.functInfo);
+			functInfo.setSyntaxTree(b);
+			parser.fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
 		:}
 		|FUNCTION IDENTIFIER:id LPAR RPAR COLON type:t 
 		{: 
-			Main.currentNode = new SyntaxTree(null, null); 
+			currentNode = new SyntaxTree(null, null); 
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
-			FunctionInfo fctInfo = new FunctionInfo(l, t);
-			Main.functInfo = fctInfo;
+			functInfo = new FunctionInfo(l, t);
 		:} 
 		block:b
 		{:
-		
-			Main.functInfo.setSyntaxTree(b);
-			Main.fctTable.put(id, Main.functInfo);
+			functInfo.setSyntaxTree(b);
+			parser.fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
@@ -256,29 +270,27 @@ funct ::=
 procedure ::= 
 		PROCEDURE IDENTIFIER:id LPAR 
 		{:
-			Main.currentNode = new SyntaxTree(null, null); 
+			currentNode = new SyntaxTree(null, null); 
 		:} 
 		functDecls:f RPAR 
 		{:
-			FunctionInfo fctInfo = new FunctionInfo(f, null);
-			Main.functInfo = fctInfo;
+			functInfo = new FunctionInfo(f, null);
 		:}
 		block:b
 		{:
-			Main.functInfo.setSyntaxTree(b);
-			Main.fctTable.put(id, Main.functInfo);
+			functInfo.setSyntaxTree(b);
+			parser.fctTable.put(id, functInfo);
 		:}
 		|PROCEDURE IDENTIFIER:id LPAR RPAR  
 		{: 
-			Main.currentNode = new SyntaxTree(null, null); 
+			currentNode = new SyntaxTree(null, null); 
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
-			FunctionInfo fctInfo = new FunctionInfo(l, null);
-			Main.functInfo = fctInfo;
+			functInfo = new FunctionInfo(l, null);
 		:} 
 		block:b
 		{:
-			Main.functInfo.setSyntaxTree(b);
-			Main.fctTable.put(id, Main.functInfo);
+			functInfo.setSyntaxTree(b);
+			parser.fctTable.put(id, functInfo);
 		:}
 		;
 
@@ -300,7 +312,7 @@ functDecls ::=
 
 functDecl ::=  IDENTIFIER:id COLON type:t 
 		{: 
-			Main.currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));  
+			currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));  
 			RESULT = new ArgumentInfo(id, t); 
 		:} 
 		;
@@ -323,7 +335,7 @@ instr ::=
 				if(v instanceof VariableLeaf)
 				{
 					VariableLeaf vl = (VariableLeaf)v;
-					VariableInfo vi = Main.currentNode.findInEnvironment(vl.getName());
+					VariableInfo vi = currentNode.findInEnvironment(vl.getName());
 					
 					if(vi != null)
 						vi.initialize();
@@ -379,15 +391,15 @@ instr ::=
 		:}
 		| RETURN expr:e SEMIC 
 		{: 
-			if(Main.functInfo != null)
+			if(functInfo != null)
 			{
-				if(Main.functInfo.getOutputType().equals( e.getType()) )
+				if(functInfo.getOutputType().equals( e.getType()) )
 				{
 					RESULT = new  ReturnNode(e);
 				}	 
 				else
 				{
-					Main.printError("The return must be of type " + Main.functInfo.getOutputType() +". Got : "+ e.getType() , 1);
+					Main.printError("The return must be of type " + functInfo.getOutputType() +". Got : "+ e.getType() , 1);
 					
 					//TODO : a changer
 					RESULT = new  ReturnNode(null);
@@ -400,9 +412,9 @@ instr ::=
 		:}
 		| RETURN  SEMIC 
 		{:
-			if(Main.functInfo != null)
+			if(functInfo != null)
 			{
-				if(Main.functInfo.getOutputType() == null )
+				if(functInfo.getOutputType() == null )
 				{
 					RESULT = new  ReturnNode(null);
 				}	 
@@ -567,7 +579,7 @@ expr ::=
 			if(v instanceof VariableLeaf)
 			{
 				VariableLeaf vl = (VariableLeaf)v;
-				VariableInfo vi = Main.currentNode.findInEnvironment(vl.getName());
+				VariableInfo vi = currentNode.findInEnvironment(vl.getName());
 				
 				if(vi != null && !vi.initialized())
 					Main.printError("Variable not set : " + vl.getName(), 0);
@@ -590,21 +602,21 @@ expr ::=
 functCall ::= 
  		IDENTIFIER:id LPAR RPAR
     	{:
-    		FunctionInfo info = Main.fctTable.get(id);
+    		FunctionInfo info = parser.fctTable.get(id);
     		if(info != null)
     		{
     			RESULT = new FunctionCall( new FunctionRef(id, info), null);
     		}
 			else
 			{
-				NativeFunctionInfo nfi = Main.nativeFctTable.get(id);
+				NativeFunctionInfo nfi = parser.nativeFctTable.get(id);
 				if(nfi == null)
 					Main.printError("Fonction "+id+" not found", 1);
 				else
 				{
-					if(!Main.nativeFctTable.isCallPermitted(id, null, null))
+					if(!parser.nativeFctTable.isCallPermitted(id, null, null))
 					{
-						Main.printError("Function "+id+" undifined or wrong call", 1);
+						Main.printError("Function "+id+" undefined or wrong call", 1);
 					}
 					else
 					{
@@ -615,21 +627,21 @@ functCall ::=
     	:}
 		| IDENTIFIER:id LPAR expr:e RPAR
     	{:
-    		FunctionInfo info = Main.fctTable.get(id);
+    		FunctionInfo info = parser.fctTable.get(id);
     		if(info != null)
     		{
     			RESULT = new FunctionCall( new FunctionRef(id, info), e);
     		}
 			else
 			{
-				NativeFunctionInfo nfi = Main.nativeFctTable.get(id);
+				NativeFunctionInfo nfi = parser.nativeFctTable.get(id);
 				if(nfi == null)
 					Main.printError("Fonction "+id+" not found", 1);
 				else
 				{
-					if(!Main.nativeFctTable.isCallPermitted(id, e, null))
+					if(!parser.nativeFctTable.isCallPermitted(id, e, null))
 					{
-						Main.printError("Function "+id+" undifined or wrong call", 1);
+						Main.printError("Function "+id+" undefined or wrong call", 1);
 					}
 					else
 						RESULT = new FunctionCall(new FunctionRef(id, nfi), e);
@@ -642,11 +654,11 @@ functCall ::=
 variable ::=
     	IDENTIFIER:id 
     	{:    		
-    		Constant c = Main.constTable.get(id);
+    		Constant c = parser.constTable.get(id);
     		
     		if(c == null)
     		{
-    			VariableInfo vi = Main.currentNode.findInEnvironment(id);
+    			VariableInfo vi = currentNode.findInEnvironment(id);
     			
 				if(vi != null)
 				{
@@ -667,7 +679,7 @@ variable ::=
     		if(v.getType() instanceof StructType)
     		{     		
     			StructType st = (StructType)v.getType();    			 
-				Main.currentNode.pushEnvironment(st.getEnvironment()); 
+				currentNode.pushEnvironment(st.getEnvironment()); 
 			}
 		:} 
 		variable:v1 
@@ -677,7 +689,7 @@ variable ::=
 	    		StructType st = (StructType)v.getType();
 				VariableInfo vi = st.getEnvironment().get(((VariableLeaf)v1).getName());
 				
-				Main.currentNode.popEnvironment();
+				currentNode.popEnvironment();
 				
 				RESULT = new StructAccessor(v, v1);
     		}

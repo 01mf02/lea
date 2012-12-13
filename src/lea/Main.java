@@ -7,17 +7,6 @@ import lea.generator.*;
 import lea.syntax.*;
 
 public class Main {
-	public static FunctionTable fctTable = new FunctionTable();
-	public static ConstantTable constTable = new ConstantTable();
-	public static TypeTable typeTable = new TypeTable();
-	public static NativeFunctionTable nativeFctTable = new NativeFunctionTable();
-
-	// Le noeud courant dans lequel on est rendu
-	public static SyntaxTree currentNode = null;
-	
-	//Les informations de la fonction que l'on traite
-	public static FunctionInfo functInfo = null;
-	
 	
 	private static boolean hasCompileErrors = false;
 	private static LeaLexer lexer;
@@ -27,9 +16,6 @@ public class Main {
 	 */
 	public static int main(String[] args) {
 		System.out.println("Léa compiler initialized.");
-
-		// Genere la liste des fonctions natives du langage
-		nativeFctTable.generateList();
 
 		FileReader file = null;
 		try {
@@ -49,11 +35,24 @@ public class Main {
 			return -1;
 		}
 
-		printTables();
+		FunctionTable fctTable = parser.fctTable;
+		ConstantTable constTable = parser.constTable;
+		TypeTable typeTable = parser.typeTable;
+
+
+		System.out.println("Constant table:");
+		System.out.println(constTable);
+
+		System.out.println("Type table:");
+		System.out.println(typeTable);
+
+		System.out.println("Function table:");
+		System.out.println(fctTable);
+
+
 		fctTable.saveDotToDir("data");
 
 		if (!hasCompileErrors) {
-			// CODE POUR LAETITIA
 			Generator generator = new Generator(constTable, typeTable, fctTable);
 		}
 
@@ -84,16 +83,5 @@ public class Main {
 					+ lexer.getColumn() + ": ";
 
 		System.out.println(prefix + message);
-	}
-
-	private static void printTables() {
-		System.out.println("Constant table:");
-		System.out.println(constTable);
-
-		System.out.println("Type table:");
-		System.out.println(typeTable);
-
-		System.out.println("Function table:");
-		System.out.println(fctTable);
 	}
 }

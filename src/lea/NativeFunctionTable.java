@@ -19,7 +19,7 @@ import lea.types.Type;
 public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 	private static final long serialVersionUID = -7081722780266458658L;
 
-	public void generateList() {
+	public NativeFunctionTable() {
 		// Length (accessible string et liste)
 		NativeFunctionInfo nfi = new NativeFunctionInfo();
 
