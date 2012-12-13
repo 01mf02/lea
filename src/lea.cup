@@ -12,19 +12,24 @@ import lea.syntax.*;
 
 parser code
 {:
-	public ConstantTable constTable = new ConstantTable();
-	public TypeTable typeTable = new TypeTable();
-	public FunctionTable fctTable = new FunctionTable();
-	public NativeFunctionTable nativeFctTable = new NativeFunctionTable();
+	public ConstantTable getConstantTable() { return action_obj.constTable ; }
+	public TypeTable getTypeTable() { return action_obj.typeTable ; }
+	public FunctionTable getFunctionTable() { return action_obj.fctTable ; }
+	public NativeFunctionTable getNativeFunctionTable() { return action_obj.nativeFctTable ; }
 :}
 
 action code
 {:
+	public ConstantTable constTable = new ConstantTable();
+	public TypeTable typeTable = new TypeTable();
+	public FunctionTable fctTable = new FunctionTable();
+	public NativeFunctionTable nativeFctTable = new NativeFunctionTable();
+
 	// Le noeud courant dans lequel on est rendu
-	public static SyntaxTree currentNode = null;
+	private SyntaxTree currentNode = null;
 	
 	//Les informations de la fonction que l'on traite
-	public static FunctionInfo functInfo = null;
+	private FunctionInfo functInfo = null;
 :}
 
     
@@ -108,7 +113,7 @@ type ::=
 		| LIST OF type:t {: RESULT = new ListType(t); :}
 		| IDENTIFIER:t 
 		{:
-			Type type = parser.typeTable.get(t);
+			Type type = typeTable.get(t);
 			
 			if(type == null)
 			{
@@ -123,7 +128,7 @@ type ::=
 constDecl ::= 
 		IDENTIFIER:id EQ expr:i SEMIC
 		{:
-			if(parser.constTable.containsKey(id))
+			if(constTable.containsKey(id))
 			{
 				Main.printError("Constant already declared : " + id, 1);
 			}
@@ -132,17 +137,17 @@ constDecl ::=
 				if(i instanceof ConstantLeaf)
 				{				
 					Constant c = ((ConstantLeaf)i).getConstant();
-					parser.constTable.put(id, c);
+					constTable.put(id, c);
 				}
 				else if(i instanceof ListNode)
 				{
 					ListConstant c = new ListConstant((ListNode)i, (ListType)i.getType());
-					parser.constTable.put(id, c);
+					constTable.put(id, c);
 				}
 				else if(i instanceof TupleNode)
 				{
 					TupleConstant c = new TupleConstant((TupleNode)i, (TupleType)i.getType());
-					parser.constTable.put(id, c);
+					constTable.put(id, c);
 				}
 				else
 				{
@@ -219,10 +224,10 @@ struct ::= IDENTIFIER:id EQ STRUCT
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
 		    currentNode = sTree;
-		    parser.typeTable.put(id,new StructType(id));
+		    typeTable.put(id,new StructType(id));
 		:}LBRACE structDecls RBRACE 
 		{:
-			StructType st = (StructType)parser.typeTable.get(id);
+			StructType st = (StructType)typeTable.get(id);
 			st.setEnvironment(currentNode.getFirstEnvironment());
 		:}
 		;
@@ -245,7 +250,7 @@ funct ::=
 		 block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			parser.fctTable.put(id, functInfo);
+			fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
@@ -259,7 +264,7 @@ funct ::=
 		block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			parser.fctTable.put(id, functInfo);
+			fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
 				Main.printError("Function " + id + " must return a value\n", 1);
@@ -279,7 +284,7 @@ procedure ::=
 		block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			parser.fctTable.put(id, functInfo);
+			fctTable.put(id, functInfo);
 		:}
 		|PROCEDURE IDENTIFIER:id LPAR RPAR  
 		{: 
@@ -290,7 +295,7 @@ procedure ::=
 		block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			parser.fctTable.put(id, functInfo);
+			fctTable.put(id, functInfo);
 		:}
 		;
 
@@ -602,19 +607,19 @@ expr ::=
 functCall ::= 
  		IDENTIFIER:id LPAR RPAR
     	{:
-    		FunctionInfo info = parser.fctTable.get(id);
+    		FunctionInfo info = fctTable.get(id);
     		if(info != null)
     		{
     			RESULT = new FunctionCall( new FunctionRef(id, info), null);
     		}
 			else
 			{
-				NativeFunctionInfo nfi = parser.nativeFctTable.get(id);
+				NativeFunctionInfo nfi = nativeFctTable.get(id);
 				if(nfi == null)
 					Main.printError("Fonction "+id+" not found", 1);
 				else
 				{
-					if(!parser.nativeFctTable.isCallPermitted(id, null, null))
+					if(!nativeFctTable.isCallPermitted(id, null, null))
 					{
 						Main.printError("Function "+id+" undefined or wrong call", 1);
 					}
@@ -627,19 +632,19 @@ functCall ::=
     	:}
 		| IDENTIFIER:id LPAR expr:e RPAR
     	{:
-    		FunctionInfo info = parser.fctTable.get(id);
+    		FunctionInfo info = fctTable.get(id);
     		if(info != null)
     		{
     			RESULT = new FunctionCall( new FunctionRef(id, info), e);
     		}
 			else
 			{
-				NativeFunctionInfo nfi = parser.nativeFctTable.get(id);
+				NativeFunctionInfo nfi = nativeFctTable.get(id);
 				if(nfi == null)
 					Main.printError("Fonction "+id+" not found", 1);
 				else
 				{
-					if(!parser.nativeFctTable.isCallPermitted(id, e, null))
+					if(!nativeFctTable.isCallPermitted(id, e, null))
 					{
 						Main.printError("Function "+id+" undefined or wrong call", 1);
 					}
@@ -654,7 +659,7 @@ functCall ::=
 variable ::=
     	IDENTIFIER:id 
     	{:    		
-    		Constant c = parser.constTable.get(id);
+    		Constant c = constTable.get(id);
     		
     		if(c == null)
     		{

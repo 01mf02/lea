@@ -17,28 +17,11 @@ public class Main {
 	public static int main(String[] args) {
 		System.out.println("Léa compiler initialized.");
 
-		FileReader file = null;
-		try {
-			file = new FileReader(args[0]);
-		} catch (FileNotFoundException e) {
-			System.err.println("File not found!");
-		}
+		LeaParser parser = parseFile(args[0]);
 
-		lexer = new LeaLexer(file);
-		LeaParser parser = new LeaParser(lexer);
-
-		try {
-			parser.parse();
-		} catch (Exception e) {
-			System.out.println("Exception caught during parsing ...");
-			e.printStackTrace();
-			return -1;
-		}
-
-		FunctionTable fctTable = parser.fctTable;
-		ConstantTable constTable = parser.constTable;
-		TypeTable typeTable = parser.typeTable;
-
+		FunctionTable fctTable = parser.getFunctionTable();
+		ConstantTable constTable = parser.getConstantTable();
+		TypeTable typeTable = parser.getTypeTable();
 
 		System.out.println("Constant table:");
 		System.out.println(constTable);
@@ -49,7 +32,6 @@ public class Main {
 		System.out.println("Function table:");
 		System.out.println(fctTable);
 
-
 		fctTable.saveDotToDir("data");
 
 		if (!hasCompileErrors) {
@@ -57,6 +39,30 @@ public class Main {
 		}
 
 		return 0;
+	}
+
+	public static LeaParser parseFile(String filename) {
+		FileReader file = null;
+		try {
+			file = new FileReader(filename);
+		} catch (FileNotFoundException e) {
+			System.err.println("File '" + filename + "' not found!");
+		}
+
+		lexer = new LeaLexer(file);
+		LeaParser parser = new LeaParser(lexer);
+
+		try {
+			System.out.println("Starting parsing ...");
+			parser.parse();
+		} catch (Exception e) {
+			System.out.println("Exception caught during parsing ...");
+			e.printStackTrace();
+			return null;
+		}
+
+		System.out.println("Parsing completed!");
+		return parser;
 	}
 
 	public static void printError(String message, int level) {
