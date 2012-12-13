@@ -30,6 +30,69 @@ action code
 	
 	//Les informations de la fonction que l'on traite
 	private FunctionInfo functInfo = null;
+
+
+	private BoolExp constructBoolExp(Expression e1, Expression e2, EnumTagExp op) {
+		switch (op) {
+			case AND:
+			case OR:
+				if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
+					Main.printError("The types on each side for operator " + op + " must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+				break;
+
+			case LT:
+			case LE:
+			case GT:
+			case GE:
+				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType()))))
+					Main.printError("The types on each side for operator " + op + " must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+				break;
+
+			case EQ:
+			case DIFF:
+				if(!e1.getType().equals(e2.getType())) 
+					Main.printError("The types on each side for operator " + op + " must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+				break;
+
+			default:
+				Main.printError("Unrecognized operator!");
+				break;
+		}
+				
+		return new BoolExp(e1, e2, op);
+	}
+
+	private NumberExp constructNumberExp(Expression e1, Expression e2, EnumTagExp op) {
+		switch (op) {
+			case PLUS:
+				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType())) && !(e1.getType().equals(new StringType()))))
+					Main.printError("The types on each side for operator + must be integer, real or string. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+				break;
+
+			case MINUS:
+			case MULT:
+			case DIV:
+				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType()))))
+					Main.printError("The types on each side for operator " + op + " must be an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+				break;
+
+			case MINUS_U:
+				if(!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType())))
+					Main.printError("The type on the right side for operator - must be an integer or a real", 1);
+				break;
+			
+			case MOD:
+				if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType()))
+					Main.printError("The types on each side for operator % must be integer. Got : " + e1.getType() + " X " +  e2.getType(), 1);
+				break;
+
+			default:
+				Main.printError("Unrecognized operator!");
+				break;
+		}
+
+		return new NumberExp(e1, e2, op);
+	}
 :}
 
     
@@ -456,104 +519,22 @@ listDecl ::=
 		 ;
 
 expr ::=
-		expr:e1 AND expr:e2 
-		{:
-			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-				Main.printError("The types on each side for operator && must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.AND); 
-		:} 
-		|expr:e1 OR expr:e2
-		{:
-			if(!e1.getType().equals(new BoolType()) || !e2.getType().equals(new BoolType()))
-				Main.printError("The types on each side for operator || must be boolean. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.OR); 
-		:}
-		|expr:e1 LT expr:e2 
-		{:
-			if(!e1.getType().equals(new IntType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
-				Main.printError("The types on each side for operator < must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.LT); 
-		:} 
-		|expr:e1 GT expr:e2
-		{:
-			if(!e1.getType().equals(new IntType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
-				Main.printError("The types on each side for operator <= must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.GT); 
-		:} 
-		|expr:e1 LE expr:e2 
-		{:
-			if(!e1.getType().equals(new IntType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())))
-				Main.printError("The types on each side for operator > must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.LE); 
-		:} 
-		|expr:e1 GE expr:e2 
-		{:
-			if(!e1.getType().equals(new IntType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) )
-				Main.printError("The types on each side for operator >= must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.GE); 
-		:}  
-		|expr:e1 EQ expr:e2 
-		{: 
-			if(!e1.getType().equals(e2.getType())) 
-				Main.printError("The types on each side for operator = must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new BoolExp(e1, e2, EnumTagExp.EQ); 
-		:} 
-		|expr:e1 DIFF expr:e2 
-		{: 
-			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType()))) 
-				Main.printError("The types on each side for operator != must be the same type. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-			
-			RESULT = new BoolExp(e1, e2, EnumTagExp.DIFF); 
-		:} 
-		|expr:e1 PLUS expr:e2 
-		{: 
-			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType()) || e1.getType().equals(new StringType()))) 
-				Main.printError("The types on each side for operator + must be integer, real or string. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-				
-			RESULT = new NumberExp(e1, e2, EnumTagExp.PLUS); 
-		:} 
-		|expr:e1 MINUS expr:e2
-		{: 
-			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) ) 
-				Main.printError("The types on each side for operator - must be integer or real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-			
-			RESULT = new NumberExp(e1, e2, EnumTagExp.MINUS); 
-		:} 
-		|MINUS expr:e
-		{: 
-			if(!e.getType().equals(new IntType())) 
-				Main.printError("The type on the right side must be an integer or a real", 1);
-			
-			RESULT = new NumberExp(e, null, EnumTagExp.MINUS_U); 	
-		:} %prec MINUS_U 
-		|expr:e1 MULT expr:e2
-		{: 
-			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) ) 
-				Main.printError("The types on each side for operator * must be the same type and an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-			
-			RESULT = new NumberExp(e1, e2, EnumTagExp.MULT); 
-		:} 
-		|expr:e1 DIV expr:e2
-		{: 
-			if(!e1.getType().equals(e2.getType()) || !(e1.getType().equals(new IntType()) || e1.getType().equals(new FloatType())) ) 
-				Main.printError("The types on each side for operator / must be the same type and an integer or a real. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-			
-			RESULT = new NumberExp(e1, e2, EnumTagExp.DIV); 
-		:} 
-		|expr:e1 MODULO expr:e2
-		{: 
-			if(!e1.getType().equals(e2.getType()) || !e1.getType().equals(new IntType())) 
-				Main.printError("The types on each side for operator % must be integer. Got : " + e1.getType() + " X " +  e2.getType(), 1);
-			
-			RESULT = new NumberExp(e1, e2, EnumTagExp.MOD); 
-		:} 
+		 expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.AND ); :} 
+		|expr:e1 OR   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.OR  ); :} 
+		|expr:e1 LT   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.LT  ); :} 
+		|expr:e1 GT   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.GT  ); :} 
+		|expr:e1 LE   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.LE  ); :} 
+		|expr:e1 GE   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.GE  ); :} 
+		|expr:e1 EQ   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.EQ  ); :} 
+		|expr:e1 DIFF expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.DIFF); :} 
+
+		|expr:e1 PLUS   expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.PLUS ); :}
+		|expr:e1 MINUS  expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.MINUS); :}
+		|expr:e1 MULT   expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.MULT ); :}
+		|expr:e1 DIV    expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.DIV  ); :}
+		|expr:e1 MODULO expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.MOD  ); :}
+		|MINUS expr:e {: RESULT = constructNumberExp(e, null, EnumTagExp.MINUS_U); :} %prec MINUS_U
+
 		| expr:e1 COMMA expr:e2 
 		{: 	
 			RESULT = new TupleNode(e1, e2);

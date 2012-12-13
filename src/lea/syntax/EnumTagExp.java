@@ -8,7 +8,7 @@ public enum EnumTagExp
 	GT (">"), 
 	LE ("<="), 
 	GE (">="), 
-	EQ ("=="), 
+	EQ ("="), 
 	DIFF ("!=") , 
 	PLUS ("+"), 
 	MINUS ("-"), 
@@ -16,16 +16,15 @@ public enum EnumTagExp
 	MOD ("%"), 
 	MULT ("*"), 
 	DIV ("/");
-	
-	
-    private final String tag;
 
-    EnumTagExp(String s){
-            tag = s;
-    }
+	private final String tag;
 
-    public String toString(){
-            return tag;
-    }
+	EnumTagExp(String s) {
+		tag = s;
+	}
+
+	public String toString() {
+		return tag;
+	}
 }
 
