@@ -55,7 +55,7 @@ action code
 				break;
 
 			default:
-				Main.printError("Unrecognized operator!");
+				Main.printError("Unrecognized operator!",1);
 				break;
 		}
 				
@@ -87,7 +87,7 @@ action code
 				break;
 
 			default:
-				Main.printError("Unrecognized operator!");
+				Main.printError("Unrecognized operator!",1);
 				break;
 		}
 
