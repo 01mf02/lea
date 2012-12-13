@@ -32,9 +32,14 @@ public class NativeFunctionInfo
 		{
 			for(int i = 0; i < accessibleFrom.size(); i++)
 			{
-				if(accessibleFrom.get(i).toString() == t.toString())
-				{
+				if(t instanceof ListType && accessibleFrom.get(i) instanceof ListType)
 					return true;
+				else
+				{
+					if(accessibleFrom.get(i).equals(t))
+					{
+						return true;
+					}
 				}
 			}
 		}

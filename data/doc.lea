@@ -4,32 +4,39 @@ SHAKESPEARE = "To be or not to be ...";
 FIBONACCI = [1, 2, 3, 5, 8];
 TUPLE = (MEANING, PI, SHAKESPEARE, FIBONACCI);
 
-// tuple consisting of day, month and year
-date = (int, int, int);
+date = struct
+{
+	year:int;
+	month:int;
+	day:int;
+}
 
 person = struct
 {
 	name : string;
 	birthday : date;
-};
+}
 
 // singly-linked list
 person_list = struct
 {
 	elem : person;
 	next : person_list;
-};
+}
 
 
 procedure print_int_list(l : list of int)
 {
-	for i in [0 ... l.length()]
+	i:int := l.length();
+	writeln(l[i - 1].toString().length().toString());
+	
+	/*for i in [0 .. l.length()]
 	{
 		writeln(l[i].toString());
-	}
+	}*/
 }
 
-function main(list of string) : int
+function main(l : list of string) : int
 {
 	writeln("Hello World!");
 

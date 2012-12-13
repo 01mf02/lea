@@ -69,22 +69,25 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 		LinkedList<Type> args = new LinkedList<Type>();
 
 		SyntaxTree tmp = e;
-
-		if (tmp.getLeft() == null && tmp.getRight() == null)
-			args.add(tmp.getType());
-		else {
-			while ((tmp.getLeft() != null) || (tmp.getRight() != null)) {
-				if (tmp.getRight() != null) {
-					if (tmp.getRight().getLeft() == null
-							&& tmp.getRight().getRight() == null)
-						args.add(0, tmp.getRight().getType());
+		
+		if(tmp != null)
+		{
+			if (tmp.getLeft() == null && tmp.getRight() == null)
+				args.add(tmp.getType());
+			else {
+				while ((tmp.getLeft() != null) || (tmp.getRight() != null)) {
+					if (tmp.getRight() != null) {
+						if (tmp.getRight().getLeft() == null
+								&& tmp.getRight().getRight() == null)
+							args.add(0, tmp.getRight().getType());
+					}
+					if (tmp.getLeft() != null) {
+						if (tmp.getLeft().getLeft() == null
+								&& tmp.getLeft().getRight() == null)
+							args.add(0, tmp.getLeft().getType());
+					}
+					tmp = tmp.getLeft();
 				}
-				if (tmp.getLeft() != null) {
-					if (tmp.getLeft().getLeft() == null
-							&& tmp.getLeft().getRight() == null)
-						args.add(0, tmp.getLeft().getType());
-				}
-				tmp = tmp.getLeft();
 			}
 		}
 

@@ -16,23 +16,27 @@ public class Main {
 
 			LeaParser parser = parseFile(args[i]);
 
-			FunctionTable fctTable = parser.getFunctionTable();
-			ConstantTable constTable = parser.getConstantTable();
-			TypeTable typeTable = parser.getTypeTable();
-
-			System.out.println("Constant table:");
-			System.out.println(constTable);
-
-			System.out.println("Type table:");
-			System.out.println(typeTable);
-
-			/*System.out.println("Function table:");
-			System.out.println(fctTable);*/
-
-			//fctTable.saveDotToDir("data");
-
-			if (!parser.hasCompileErrors()) {
-				Generator generator = new Generator(constTable, typeTable, fctTable);
+			if(parser != null)
+			{
+				FunctionTable fctTable = parser.getFunctionTable();
+				ConstantTable constTable = parser.getConstantTable();
+				TypeTable typeTable = parser.getTypeTable();
+	
+				System.out.println("Constant table:");
+				System.out.println(constTable);
+	
+				System.out.println("Type table:");
+				System.out.println(typeTable);
+	
+				/*System.out.println("Function table:");
+				System.out.println(fctTable);*/
+	
+				//fctTable.saveDotToDir("data");
+	
+				if (!parser.hasCompileErrors()) 
+				{
+					Generator generator = new Generator(constTable, typeTable, fctTable);
+				}
 			}
 		}
 

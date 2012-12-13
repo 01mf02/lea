@@ -39,16 +39,20 @@ public class FunctionRef extends Expression
 	{
 		if(info != null)
 			return info.getOutputType();
-		else
+		else if(nfi != null)
 			return nfi.getOutputType();
+		
+		return new UnknownType();
 	}
 	
 	public String toString()
 	{
 		if(info != null)
 			return "FunctionRef("+name+", " + info.toString()+")";
-		else
+		else if(nfi != null)
 			return "FunctionRef("+name+", " + nfi.toString()+")";
+		
+		return "FunctionRef("+name+", INVALID)";
 	}
 	
 	public String toDotString()
