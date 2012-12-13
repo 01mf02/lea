@@ -11,25 +11,29 @@ public class Main {
 	public static int main(String[] args) {
 		System.out.println("Léa compiler initialized.");
 
-		LeaParser parser = parseFile(args[0]);
+		for (int i = 0; i < args.length; i++) {
+			System.out.println("Reading file " + args[i] + " ...");
 
-		FunctionTable fctTable = parser.getFunctionTable();
-		ConstantTable constTable = parser.getConstantTable();
-		TypeTable typeTable = parser.getTypeTable();
+			LeaParser parser = parseFile(args[i]);
 
-		System.out.println("Constant table:");
-		System.out.println(constTable);
+			FunctionTable fctTable = parser.getFunctionTable();
+			ConstantTable constTable = parser.getConstantTable();
+			TypeTable typeTable = parser.getTypeTable();
 
-		System.out.println("Type table:");
-		System.out.println(typeTable);
+			System.out.println("Constant table:");
+			System.out.println(constTable);
 
-		System.out.println("Function table:");
-		System.out.println(fctTable);
+			System.out.println("Type table:");
+			System.out.println(typeTable);
 
-		fctTable.saveDotToDir("data");
+			/*System.out.println("Function table:");
+			System.out.println(fctTable);*/
 
-		if (!parser.hasCompileErrors()) {
-			Generator generator = new Generator(constTable, typeTable, fctTable);
+			//fctTable.saveDotToDir("data");
+
+			if (!parser.hasCompileErrors()) {
+				Generator generator = new Generator(constTable, typeTable, fctTable);
+			}
 		}
 
 		return 0;

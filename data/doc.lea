@@ -1,0 +1,40 @@
+MEANING = 42;
+PI = 3.14;
+SHAKESPEARE = "To be or not to be ...";
+FIBONACCI = [1, 2, 3, 5, 8];
+TUPLE = (MEANING, PI, SHAKESPEARE, FIBONACCI);
+
+// tuple consisting of day, month and year
+date = (int, int, int);
+
+person = struct
+{
+	name : string;
+	birthday : date;
+};
+
+// singly-linked list
+person_list = struct
+{
+	elem : person;
+	next : person_list;
+};
+
+
+procedure print_int_list(l : list of int)
+{
+	for i in [0 ... l.length()]
+	{
+		writeln(l[i].toString());
+	}
+}
+
+function main(list of string) : int
+{
+	writeln("Hello World!");
+
+	writeln("Fibonacci numbers:");
+	print_int_list(FIBONACCI);
+
+	return 0;
+}
