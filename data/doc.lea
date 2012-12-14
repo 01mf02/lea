@@ -39,7 +39,13 @@ procedure print_int_list(l : list of int)
 function main(l : list of string) : int
 {
 	writeln("Hello World!");
-
+	
+	t:enum(BLEU, BLANC, ROUGE);
+	a:enum(MAUVE, VERT);
+	
+	t := BLEU;
+	a := VERT;
+	
 	writeln("Fibonacci numbers:");
 	print_int_list(FIBONACCI);
 

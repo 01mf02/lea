@@ -125,6 +125,7 @@ EndComment = "*/"
 	"bool"		{  return symbol(LeaSymbol.BOOL); }
 	
 	/* ----------------------- Autres types ------------------------------*/
+	"enum"  	{  return symbol(LeaSymbol.ENUM); }
 	"struct"  	{  return symbol(LeaSymbol.STRUCT); }
 	"list"		{  return symbol(LeaSymbol.LIST); }
 	"of"		{  return symbol(LeaSymbol.OF); }

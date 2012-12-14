@@ -40,6 +40,8 @@ action code
 	public FunctionTable fctTable = new FunctionTable();
 	public NativeFunctionTable nativeFctTable = new NativeFunctionTable();
 
+	private int enumID = 0;
+	
 	// Le noeud courant dans lequel on est rendu
 	private SyntaxTree currentNode = null;
 	
@@ -114,7 +116,7 @@ action code
 :}
 
     
-terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, STRING, CHAR, BOOL,COMMA;
+terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, ENUM, STRING, CHAR, BOOL,COMMA;
 terminal IF, ELSE, CASE,IN;
 terminal WHILE, REPEAT,FOR;
 terminal AFF, SLOT, TO;
@@ -124,9 +126,11 @@ terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
 
 terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALSEEXP;
 
-non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl,erreur;
+non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl, erreur;
 non terminal Instruction decl;
-non terminal Type type,tupleType;
+non terminal Type type,tupleType, enumDecl;
+non terminal LinkedList<String> enumElems;
+non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
 non terminal ArgumentInfo functDecl;
 non terminal SyntaxTree block;
@@ -192,6 +196,7 @@ type ::=
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
 		| LIST OF type:t {: RESULT = new ListType(t); :}
+		| enumDecl:e {: RESULT = e; :}
 		| IDENTIFIER:t 
 		{:
 			Type type = typeTable.get(t);
@@ -233,16 +238,40 @@ constDecl ::=
 				else
 				{
 					parser.printError("Constant can't be set: " + id, 1);
-				}
-				
-			//TODO
-				
+				}				
 			}
 		:}
 		;	
 
+enumDecl ::= ENUM LPAR enumElems:e RPAR {: RESULT = new EnumType(e);   :}
+		;
 		
-		
+enumElems ::= enumElems:l COMMA enumElem:e
+		{:			
+			l.add(e);
+			RESULT = l;
+		:}
+		| enumElem:e
+		{: 
+			LinkedList<String> l = new LinkedList<String>();
+							
+			l.add(e);
+			RESULT = l;  
+		:};
+
+enumElem ::= IDENTIFIER:id
+		{:		
+			if(constTable.containsKey(id))
+				parser.printError("Enum element can't be set because of an already existing constant/enum : " + id, 1);
+			else
+			{
+				enumID++;
+				constTable.put(id, new EnumConstant(String.valueOf(enumID), id));
+			}
+			
+			RESULT = id;
+		:};
+
 block ::=
 		LBRACE
 		{:
@@ -280,7 +309,21 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 				RESULT = new Assignment(new VariableLeaf(id, t), e); 
 			}
 			
-			if(!t.equals(e.getType()))
+			if(t instanceof EnumType && e instanceof ConstantLeaf)
+			{
+				EnumType et = (EnumType)t;
+				ConstantLeaf cl = (ConstantLeaf)e;
+				Constant cons = cl.getConstant();
+				
+				EnumConstant c = null;
+				
+				if(cons instanceof EnumConstant)
+					c = (EnumConstant)cons;
+				
+				if(c == null || !et.containsEnum(c.getName()))
+					parser.printError("Enum mismatch. Expecting : " + t.toString(), 1);
+			}
+			else if(!t.equals(e.getType()))
 				parser.printError("Type mismatch. Expecting : "  + t.toString() + ". Got : "  + e.getType().toString(), 1);
 		:} 
 		;
@@ -413,7 +456,21 @@ instr ::=
 		{: 			
 			if(v.getType() != null && e.getType() != null)
 			{
-				if(!v.getType().equals(e.getType()))
+				if(v.getType() instanceof EnumType && e instanceof ConstantLeaf)
+				{
+					EnumType et = (EnumType)v.getType();
+					ConstantLeaf cl = (ConstantLeaf)e;
+					Constant cons = cl.getConstant();
+					
+					EnumConstant c = null;
+					
+					if(cons instanceof EnumConstant)
+						c = (EnumConstant)cons;
+					
+					if(c == null || !et.containsEnum(c.getName()))
+						parser.printError("Enum mismatch. Expecting : " + v.getType().toString(), 1);
+				}
+				else if(!v.getType().equals(e.getType()))
 				{
 					parser.printError("Type mismatch. Expecting : "  + v.getType().toString() + ". Got : "  + e.getType().toString(), 1);
 				}					
