@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import generated.*;
 import lea.generator.*;
-import lea.syntax.*;
 
 public class Main {
 	
@@ -14,7 +13,7 @@ public class Main {
 		System.out.println("Léa compiler initialized.");
 
 		for (int i = 0; i < args.length; i++) {
-			System.out.println("Reading file " + args[i] + " ...");
+			System.out.println("\n\nReading file " + args[i] + " ...");
 
 			LeaParser parser = parseFile(args[i]);
 
@@ -24,21 +23,24 @@ public class Main {
 				ConstantTable constTable = parser.getConstantTable();
 				TypeTable typeTable = parser.getTypeTable();
 	
-				System.out.println("Constant table:");
+				System.out.println("\nConstant table:");
 				System.out.println(constTable);
 	
 				System.out.println("Type table:");
 				System.out.println(typeTable);
 	
-				/*System.out.println("Function table:");
-				System.out.println(fctTable);*/
+				System.out.println("Function table:");
+				System.out.println(fctTable);
 	
 				//fctTable.saveDotToDir("data");
 	
 				if (!parser.hasCompileErrors()) 
 				{
-					Generator generator = new Generator(args[0], constTable, typeTable, fctTable);
+					
+					Generator generator = new Generator(args[i], constTable, typeTable, fctTable);
 					generator.generate();
+	
+					
 				}
 			}
 		}

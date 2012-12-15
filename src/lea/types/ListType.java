@@ -29,8 +29,8 @@ public class ListType extends Type
 	public String toString()
 	{
 		if(this.getLeft() != null)
-			return "list of " + this.getLeft().toString();
+			return "List<" + this.getLeft().toString() +">";
 		
-		return "list";
+		return "List";
 	}
 }
