@@ -1,5 +1,6 @@
 MEANING = 12;
 PI = 3.14159265358979;
+LETTER = 'b';
 SHAKESPEARE = "To be or not to be ...";
 LIST_OF_INT = [1,2,3,4,5,6];
 TUPLE_OF_THREE = 34, SHAKESPEARE, PI;
@@ -17,7 +18,6 @@ fiche2 = struct {
 
 procedure types()
 {
-
 	i : int;
 	i := MEANING;
 	
@@ -26,65 +26,52 @@ procedure types()
 
 	s : string;
 	s := SHAKESPEARE;
-	return;
+	
+	c : char;
+	c := LETTER;
+	
+	tup:(int,char,string,float);
+	tup := i,c,s,f;
+	type();
+	return ;
 }
 
 procedure deif()
 {
-	gh:int;
-	
-	listee:list of list of list of fiche;
-	lyst:list of list of fiche;
-	
-	lyst := listee[1];
-	
-	luistie:list of fiche;
-	luistie := lyst[gh];
-	
-	polist:fiche;
-	
-	polist.nom := "Raoul";
-	polist.age := 22;
-	polist.sexe := True;
-	
-	luistie[1] := polist;
-
-	
-	gh := 1;
-	if(gh > 2)
-	{
-		gh := 1;
-	}
+	rgb: (int, int, int);
+	couleur: enum (rouge, vert, bleu, cyan, magenta, jaune);
+	couleur:= rouge;
+	 
+	case couleur of
+	rouge:
+	    rgb := (255, 0, 0);
+	vert:
+	    rgb := (0, 255, 0);
+	bleu:
+	    rgb := (0, 0, 255);
+	cyan:
+	    rgb := (0, 255, 255);
+	    On doit le garder pour les tests
+	    }
 	types();
 }
 
 function ret() : int
 {
-	gh:int;
-	gh := 1;
-	repeat
-	{
-		if(gh > 2)
-		{
-			gh := 1;
-		}
-	}
-	while(true)
-	return gh;
+	return 23;
 }
 
 //This is way too complex
 function wooTooComplexFunction(arg:int,arg0:string) : int
-{
-	ret();	//Absorbing return type
-	
-	if(ret() + arg > 2)
+{	
+	if(ret() + arg > 2 || (True && False) || arg0 = "gre" || 6%5 != 1 || !True || 4 >= 2 || 4 <= 2 || 4 < 2)
 	{
 		it:int := 0;
 		while(arg - it > 0)
 		{
-			dre:float := 0.0 ;
-			dre := PI * dre;
+			dre:float := 1.0 ;
+			dre :=  -PI * dre - dre + dre / dre ;
+			
 			
 			str:string;
 			str := arg0 + "chocolat";

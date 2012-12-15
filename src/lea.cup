@@ -139,6 +139,7 @@ non terminal Expression expr;
 non terminal ListNode listDecl;
 non terminal String BOOLEXP;
 non terminal Expression variable,functCall;
+non terminal EnumExp enumCases;
 
 precedence left COMMA;
 precedence right ELSE;
@@ -445,13 +446,35 @@ functDecl ::=  IDENTIFIER:id COLON type:t
 			RESULT = new ArgumentInfo(id, t); 
 		:} 
 		;
-		
+
+
+enumCases ::=
+		enumCases:e IDENTIFIER:id  COLON instr:s
+		{:
+			RESULT = new EnumExp(id,s,e);
+		:}
+		|IDENTIFIER:id  COLON instr:s
+		{:
+			RESULT = new EnumExp(id,s,null);
+		:}
+		;
 		
 instr ::= 
 		IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
 		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
-		| REPEAT TO CASE
-		| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE
+		/*PROBLEME DE SHIFT/REDUCE si on enleve le RBRACE*/
+		| CASE variable:v OF enumCases:d RBRACE
+		{:
+			if(v.getType() instanceof EnumType)
+			{
+				RESULT = new Case(v,d);
+			}
+			else
+			{
+				parser.printError("Type mismatch. Expecting type enum for CASE OF ", 1);
+			}
+		:}
+		/*| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE*/
 		| variable:v AFF expr:e SEMIC 
 		{: 			
 			if(v.getType() != null && e.getType() != null)
@@ -659,7 +682,7 @@ expr ::=
 			:}
 		;
 
-//Jcrois inutile
+
 functCall ::= 
  		IDENTIFIER:id LPAR RPAR
     	{:
@@ -693,6 +716,7 @@ functCall ::=
     		}
 			else
 			{
+				
 				NativeFunctionInfo nfi = nativeFctTable.get(id);
 				if(nfi == null)
 					parser.printError("Fonction "+id+" not found", 1);
@@ -786,18 +810,7 @@ variable ::=
 	
     
   /**Liste de TODO
-  gestion des commentaires accent
   function call comme du monde (peut �tre utilis� comme instruction aussi)
+  Appeler dans la fonction recursion
+  Case BRACE
   */
-  
-  
-  /*
-  NOTES POUR PHIL (de Mic)
-  Pour ce qui est des FunctionCall, je pense qu'il serait bien de les extraire de variable et d'en faire un cas a part parce que sinon
-  on se complique trop la vie je pense...tu verras a ca! En gros writeln("toto") marche, mais pas encore le maListe.toString() ni read()
-  Faut faire les boucles aussi, y'en manque pas mal a faire sur ce cote la! Pour les fonctions du systeme (writeln, read, toString, etc)
-  J'ai fait une table de NativeFunctionTable et elle est testee, elle marche tres bien!
-  
-  */
-   
-    
