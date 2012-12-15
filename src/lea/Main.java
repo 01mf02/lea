@@ -2,13 +2,15 @@ package lea;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+
 import generated.*;
 import lea.generator.*;
 import lea.syntax.*;
 
 public class Main {
 	
-	public static int main(String[] args) {
+	public static int main(String[] args) throws IOException {
 		System.out.println("Léa compiler initialized.");
 
 		for (int i = 0; i < args.length; i++) {
@@ -35,7 +37,8 @@ public class Main {
 	
 				if (!parser.hasCompileErrors()) 
 				{
-					Generator generator = new Generator(constTable, typeTable, fctTable);
+					Generator generator = new Generator(args[0], constTable, typeTable, fctTable);
+					generator.generate();
 				}
 			}
 		}

@@ -23,27 +23,26 @@ public class ConstanteGenerator {
 		String str = "";
 		
 		
-		
 		for (Map.Entry<String, Constant> entry : cstTable.entrySet()) {
 			/*int, String, float*/
 			if ((entry.getValue().getType().toString() == "int")||
 				(entry.getValue().getType().toString() == "float")||
 				(entry.getValue().getType().toString() =="String"))
 			{
-				str += "public final " + ng.generateName(entry.getKey()) + " " 
-					   + entry.getValue().getType() + " = " + entry.getValue().toString() + ";\n";
+				str += "\tpublic final " + entry.getValue().getType() + " " + ng.generateName(entry.getKey())
+					    + " = " + entry.getValue().toString() + ";\n";
 			}
 			/*List*/
 			else if (entry.getValue().getType().toString() == "List")
 			{
-				str += "public final " + ng.generateName(entry.getKey()) + " <" + entry.getValue().getType().getType() + ">"
+				str += "\tpublic final " + ng.generateName(entry.getKey()) + " <" + entry.getValue().getType().getType() + ">"
 						   + entry.getValue().getType() + " = " + entry.getValue().toString() + ";\n";
 			}
 			/*tuple*/
 			
 			
 			
-			fw.generate(entry.getValue().getType().toString());
+			//fw.generate();
 		}
 
 		
