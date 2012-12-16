@@ -8,9 +8,10 @@ import generated.*;
 import lea.generator.*;
 
 public class Main {
+	public static int numID = 0;
 	
 	public static int main(String[] args) throws IOException {
-		System.out.println("Léa compiler initialized.");
+		System.out.println("Lea compiler initialized.");
 
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("\n\nReading file " + args[i] + " ...");
@@ -32,7 +33,7 @@ public class Main {
 				System.out.println("Function table:");
 				System.out.println(fctTable);
 	
-				//fctTable.saveDotToDir("data");
+				fctTable.saveDotToDir("data");
 	
 				if (!parser.hasCompileErrors()) 
 				{

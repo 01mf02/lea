@@ -27,6 +27,7 @@ procedure print_int_list(l : list of int)
 	c:(int, bool, int);
 
 	i:int := l.length();
+
 	writeln(l[i - 1].toString().length().toString());
 	
 	/*for i in [0 .. l.length()]

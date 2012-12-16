@@ -801,7 +801,7 @@ variable ::=
 					else
 					{
 						parser.printError("Variable, constant or type " + id + " not found", 1);
-						RESULT = new VariableLeaf(id + " NOT FOUND", null);
+						RESULT = new VariableLeaf(id + " NOT FOUND", new UnknownType());
 					}
 				}
     		}
@@ -855,6 +855,7 @@ variable ::=
     		if(!isOk)
     		{
     			parser.printError("Accessor to the list impossible, wrong type", 1);
+    			RESULT = new ListAccessor(new VariableLeaf("wrong type", new UnknownType()), null);
     		}
     	:}
 		;

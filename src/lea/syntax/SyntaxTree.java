@@ -12,6 +12,7 @@ import lea.types.*;
 
 public class SyntaxTree 
 {
+    private int id;   // used in toDot
     private SyntaxTree left;
     private SyntaxTree right;
     private EnvironmentStack env;	    // current environment
@@ -29,7 +30,7 @@ public class SyntaxTree
     	this.right=right;
     	this.env= new EnvironmentStack();
     	this.type=t;
-    	//System.out.print(toString()+"\n"); 
+    	this.id=Main.numID++; 
     	
     	env.push(new Environment());
     }
@@ -143,7 +144,7 @@ public class SyntaxTree
 	}
     
     public void toDot(StringBuffer str) {
-	str.append(" [label=\""+this.toDotString());
+	str.append(id + " [label=\""+this.toDotString());
 	
 		if (getType()!=null){
 		    str.append(" (");
@@ -154,10 +155,12 @@ public class SyntaxTree
 		if (left != null)
 		{
 		    left.toDot(str);
+		    str.append(id+" -> "+left.id+";\n");
 		}
 		if (right != null)
 		{
 		    right.toDot(str);
+		    str.append(id+" -> "+right.id+";\n");
 		}
     }
     
