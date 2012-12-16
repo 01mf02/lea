@@ -64,7 +64,7 @@ public class SyntaxTree
     	return type;
     }
     
-    public void setEnvironment(EnvironmentStack e)
+    public void setEnvironmentStack(EnvironmentStack e)
     {
     	env = e;
     }
@@ -74,7 +74,7 @@ public class SyntaxTree
     	return env.lastElement();
     }
     
-    public EnvironmentStack getEnvironment()
+    public EnvironmentStack getEnvironmentStack()
     {
     	return env;
     }

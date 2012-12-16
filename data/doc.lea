@@ -4,12 +4,8 @@ SHAKESPEARE = "To be or not to be ...";
 FIBONACCI = [1, 2, 3, 5, 8];
 TUPLE = (MEANING, PI, SHAKESPEARE, FIBONACCI);
 
-date = struct
-{
-	year:int;
-	month:int;
-	day:int;
-}
+date = (int, int, int);
+date2 = date;
 
 person = struct
 {
@@ -24,9 +20,12 @@ person_list = struct
 	next : person_list;
 }
 
+complexPerson = (person, person_list);
 
 procedure print_int_list(l : list of int)
 {
+	c:(int, bool, int);
+
 	i:int := l.length();
 	writeln(l[i - 1].toString().length().toString());
 	
@@ -39,6 +38,7 @@ procedure print_int_list(l : list of int)
 function main(l : list of string) : int
 {
 	writeln("Hello World!");
+	i:int := 4;
 	
 	t:enum(BLEU, BLANC, ROUGE);
 	a:enum(MAUVE, VERT);

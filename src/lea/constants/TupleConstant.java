@@ -26,24 +26,33 @@ public class TupleConstant implements Constant
 				{
 					if (tmpL.getRight().getLeft() == null && tmpL.getRight().getRight() == null)
 					{
-						ConstantLeaf c = (ConstantLeaf)tmpL.getRight();
-						nodesValues.add(0, c.getValue());
+						if(tmpL.getRight() instanceof ConstantLeaf)
+						{
+							ConstantLeaf c = (ConstantLeaf)tmpL.getRight();
+							nodesValues.add(0, c.getValue());
+						}
 					}
 				}
 				if (tmpL.getLeft() != null) 
 				{
 					if (tmpL.getLeft().getLeft() == null && tmpL.getLeft().getRight() == null)
 					{
-						ConstantLeaf c = (ConstantLeaf)tmpL.getLeft();
-						nodesValues.add(0, c.getValue());
+						if(tmpL.getRight() instanceof ConstantLeaf)
+						{
+							ConstantLeaf c = (ConstantLeaf)tmpL.getLeft();
+							nodesValues.add(0, c.getValue());
+						}
 					}
 				}
 				tmpL = (Expression)tmpL.getLeft();
 			}
 		}	
 		
-		ConstantLeaf c = (ConstantLeaf)tmpR;
-		nodesValues.add(c.getValue());
+		if(tmpL.getRight() instanceof ConstantLeaf)
+		{
+			ConstantLeaf c = (ConstantLeaf)tmpR;
+			nodesValues.add(c.getValue());
+		}
 		
 		value = nodesValues;
 		tupleType = t;

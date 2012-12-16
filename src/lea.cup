@@ -82,7 +82,7 @@ action code
 		return new BoolExp(e1, e2, op);
 	}
 
-	private NumberExp constructNumberExp(Expression e1, Expression e2, EnumTagExp op) {
+	private Expression constructNumberExp(Expression e1, Expression e2, EnumTagExp op) {
 		switch (op) {
 			case PLUS:
 				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType())) && !(e1.getType().equals(new StringType()))))
@@ -110,7 +110,10 @@ action code
 				parser.printError("Unrecognized operator!",1);
 				break;
 		}
-
+		
+		if(e1.getType().equals(new StringType()))
+			return new StringExp(e1, e2, op);
+			
 		return new NumberExp(e1, e2, op);
 	}
 :}
@@ -128,7 +131,7 @@ terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALS
 
 non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl, erreur;
 non terminal Instruction decl;
-non terminal Type type,tupleType, enumDecl;
+non terminal Type type,tupleType, enumDecl, basicType, basicTupleType;
 non terminal LinkedList<String> enumElems;
 non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -183,32 +186,45 @@ erreur ::=
 		;		
 		
 		
+basicTupleType ::= 
+		basicTupleType:t1 COMMA basicType:t2 {: RESULT = new TupleType(t1, t2); :}
+		|basicType:t1 {: RESULT = t1; :}
+		;
+		
 tupleType ::= 
 		tupleType:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :}
 		|type:t1 {: RESULT = t1; :}
 		;
-		
-		
-type ::=
+
+basicType ::=		
 		INT {: RESULT = new IntType();  :}
 		| FLOAT {: RESULT = new FloatType();  :}
-		| LPAR tupleType:t RPAR {: RESULT = t;  :}
 		| CHAR   {: RESULT = new CharType(); :}
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
-		| LIST OF type:t {: RESULT = new ListType(t); :}
-		| enumDecl:e {: RESULT = e; :}
+		| LIST OF basicType:t {: RESULT = new ListType(t); :}
+		| enumDecl:e {: RESULT = e; :};
+		
+type ::=
+		LPAR tupleType:t RPAR {: RESULT = t;  :}
 		| IDENTIFIER:t 
 		{:
 			Type type = typeTable.get(t);
 			
 			if(type == null)
 			{
-				parser.printError("Type non trouvable : " + t, 1);
+				parser.printError("Type not found : " + t, 1);
 			}			
 			
 			RESULT = type;
 		:}
+		|INT {: RESULT = new IntType();  :}
+		| FLOAT {: RESULT = new FloatType();  :}
+		| CHAR   {: RESULT = new CharType(); :}
+		| STRING  {: RESULT = new StringType(); :}
+		| BOOL {: RESULT = new BoolType(); :}
+		| LIST OF type:t {: RESULT = new ListType(t); :}
+		| enumDecl:e {: RESULT = e; :}
 		;
 		
 
@@ -217,7 +233,7 @@ constDecl ::=
 		{:
 			if(constTable.containsKey(id))
 			{
-				parser.printError("Constant already declared : " + id, 1);
+				parser.printError("Type/Constant already declared : " + id, 1);
 			}
 			else
 			{
@@ -233,14 +249,34 @@ constDecl ::=
 				}
 				else if(i instanceof TupleNode)
 				{
-					TupleConstant c = new TupleConstant((TupleNode)i, (TupleType)i.getType());
-					constTable.put(id, c);
+					if(!(i.getLeft() instanceof TypeExp))
+					{
+						TupleConstant c = new TupleConstant((TupleNode)i, (TupleType)i.getType());
+						constTable.put(id, c);
+					}
+					else
+					{
+						TupleType t = (TupleType)i.getType();
+						typeTable.put(id, t);
+					}
+				}
+				else if(i instanceof TypeExp)
+				{
+					TypeExp exp = (TypeExp)i;
+					typeTable.put(id, exp.getType());
 				}
 				else
 				{
 					parser.printError("Constant can't be set: " + id, 1);
 				}				
 			}
+		:}
+		| IDENTIFIER:id EQ LPAR basicTupleType:t RPAR SEMIC
+		{:
+			if(typeTable.containsKey(id) || constTable.containsKey(id))
+				parser.printError("Type/constant already declared : " + id, 1);
+			else
+				typeTable.put(id, t);
 		:}
 		;	
 
@@ -278,7 +314,7 @@ block ::=
 		{:
 		    SyntaxTree sTree = new SyntaxTree(null, null);
 		    
-		    sTree.setEnvironment(currentNode.getEnvironment());
+		    sTree.setEnvironmentStack(currentNode.getEnvironmentStack());
 	    	sTree.pushEnvironment(new Environment());
 
 		    currentNode = sTree;
@@ -497,6 +533,10 @@ instr ::=
 				{
 					parser.printError("Type mismatch. Expecting : "  + v.getType().toString() + ". Got : "  + e.getType().toString(), 1);
 				}					
+				else if(v instanceof TypeExp)
+				{
+					parser.printError("Impossible to define a type", 1);
+				}
 					
 				if(v instanceof VariableLeaf)
 				{
@@ -615,9 +655,9 @@ listDecl ::=
 			 RESULT = new ListNode(e, null);
 		 :}
 		 ;
-
+		 
 expr ::=
-		 expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.AND ); :} 
+		expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.AND ); :} 
 		|expr:e1 OR   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.OR  ); :} 
 		|expr:e1 LT   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.LT  ); :} 
 		|expr:e1 GT   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.GT  ); :} 
@@ -658,6 +698,9 @@ expr ::=
 		|CHAREXP:c {: 
 			RESULT = new ConstantLeaf(new CharConstant(c));  
 			:}
+		|BOOLEXP:b {: 
+			RESULT = new ConstantLeaf(new BoolConstant(b)); 
+			:}
 		|variable:v 
 		{: 
 			if(v instanceof VariableLeaf)
@@ -677,9 +720,6 @@ expr ::=
 			
 			RESULT = v; 
 		:}
-		|BOOLEXP:b {: 
-			RESULT = new ConstantLeaf(new BoolConstant(b)); 
-			:}
 		;
 
 
@@ -741,7 +781,9 @@ variable ::=
     		
     		if(c == null)
     		{
-    			VariableInfo vi = currentNode.findInEnvironment(id);
+    			VariableInfo vi = null;
+    			if(currentNode != null)
+    				vi = currentNode.findInEnvironment(id);
     			
 				if(vi != null)
 				{
@@ -750,8 +792,17 @@ variable ::=
 				}
 				else
 				{
-					parser.printError("Variable or constant " + id + " not found", 1);
-					RESULT = new VariableLeaf(id + " NOT FOUND", null);
+					Type t = typeTable.get(id);
+					
+					if(t != null)
+					{
+						RESULT = new TypeExp(t);
+					}
+					else
+					{
+						parser.printError("Variable, constant or type " + id + " not found", 1);
+						RESULT = new VariableLeaf(id + " NOT FOUND", null);
+					}
 				}
     		}
     		else
@@ -810,7 +861,6 @@ variable ::=
 	
     
   /**Liste de TODO
-  function call comme du monde (peut �tre utilis� comme instruction aussi)
   Appeler dans la fonction recursion
   Case BRACE
   */
