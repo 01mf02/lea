@@ -48,9 +48,9 @@ public class FunctionRef extends Expression
 	public String toString()
 	{
 		if(info != null)
-			return "FunctionRef("+name+", " + info.toString()+")";
+			return "FunctionRef("+name+/*", " + info.toString()+*/")";
 		else if(nfi != null)
-			return "FunctionRef("+name+", " + nfi.toString()+")";
+			return "FunctionRef("+name+/*", " + nfi.toString()+*/")";
 		
 		return "FunctionRef("+name+", INVALID)";
 	}

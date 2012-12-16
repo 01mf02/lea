@@ -36,7 +36,7 @@ public class FunctionInfo
 		if(outputType != null)
 			str += " : "  + outputType.toString();
 		
-		str += " { " + sTree.toString() + " } ";
+		str += " { "+ sTree.toString() +" } ";
 		
 		return str;
 	}

@@ -22,12 +22,17 @@ person_list = struct
 
 complexPerson = (person, person_list);
 
+function recursive() : int
+{
+	return 1 + recursive();
+}
+
 procedure print_int_list(l : list of int)
 {
 	c:(int, bool, int);
 
 	i:int := l.length();
-
+	print_int_list(l);
 	writeln(l[i - 1].toString().length().toString());
 	
 	/*for i in [0 .. l.length()]

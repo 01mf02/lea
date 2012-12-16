@@ -407,11 +407,11 @@ funct ::=
 		functDecls:f RPAR COLON type:t
 		{:
 			functInfo = new FunctionInfo(f, t);
+			fctTable.put(id, functInfo);
 		:}
 		 block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
 				parser.printError("Function " + id + " must return a value\n", 1);
@@ -421,11 +421,11 @@ funct ::=
 			currentNode = new SyntaxTree(null, null); 
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
 			functInfo = new FunctionInfo(l, t);
+			fctTable.put(id, functInfo);
 		:} 
 		block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			fctTable.put(id, functInfo);
 			
 			if(!b.containsReturn())
 				parser.printError("Function " + id + " must return a value\n", 1);
@@ -441,22 +441,22 @@ procedure ::=
 		functDecls:f RPAR 
 		{:
 			functInfo = new FunctionInfo(f, null);
+			fctTable.put(id, functInfo);
 		:}
 		block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			fctTable.put(id, functInfo);
 		:}
 		|PROCEDURE IDENTIFIER:id LPAR RPAR  
 		{: 
 			currentNode = new SyntaxTree(null, null); 
 			LinkedList<ArgumentInfo> l = new LinkedList<ArgumentInfo>();
 			functInfo = new FunctionInfo(l, null);
+			fctTable.put(id, functInfo);
 		:} 
 		block:b
 		{:
 			functInfo.setSyntaxTree(b);
-			fctTable.put(id, functInfo);
 		:}
 		;
 
