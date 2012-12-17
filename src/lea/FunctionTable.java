@@ -29,12 +29,11 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 
 	public boolean isCallPermitted(String id, Expression e) {
 		boolean isPermitted = false;
-
+		
 		FunctionInfo nfi = this.get(id);
 		LinkedList<Type> args = new LinkedList<Type>();
-
 		SyntaxTree tmp = e;
-		
+
 		if(tmp != null)
 		{
 			if (tmp.getLeft() == null && tmp.getRight() == null)

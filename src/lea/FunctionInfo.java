@@ -33,10 +33,18 @@ public class FunctionInfo
 	public String toString()
 	{
 		String str = "(" + args.toString() + ")";
-		if(outputType != null)
-			str += " : "  + outputType.toString();
 		
-		str += " { "+ sTree.toString() +" } ";
+		if(outputType != null)
+		{
+			if(outputType != null)
+				str += " : "  + outputType.toString();
+		
+			str += " { "+ sTree.toString() +" } ";
+		}
+		else
+		{
+			//TODO?	
+		}
 		
 		return str;
 	}
