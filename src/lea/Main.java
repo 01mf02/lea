@@ -15,7 +15,7 @@ public class Main {
 
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("\n\nReading file " + args[i] + " ...");
-
+			
 			LeaParser parser = parseFile(args[i]);
 
 			if(parser != null)
@@ -33,7 +33,7 @@ public class Main {
 				System.out.println("Function table:");
 				System.out.println(fctTable);
 	
-				fctTable.saveDotToDir("data");
+				fctTable.saveDotToDir(args[i].replace(".lea",""));
 	
 				if (!parser.hasCompileErrors()) 
 				{
