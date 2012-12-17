@@ -27,10 +27,24 @@ public class CodeWriter {
 	public void saveFile(String filename) throws IOException {
 		FileWriter writer = new FileWriter(filename);
 		writer.write(result);
-		writer.close();		
+		writer.close();
 	}
 	
 	public String toString() {
 		return result;
+	}
+	
+	// Test CodeWriter.
+	public static void main(String[] args) {
+		System.out.println("CodeWriterTest");
+		CodeWriter w = new CodeWriter();
+		
+		w.writeLine("class Test {");
+		w.increaseIndentation();
+		w.writeLine("public static void main(String[] args) {}");
+		w.decreaseIndentation();
+		w.writeLine("}");
+		
+		System.out.println(w);
 	}
 }
