@@ -18,4 +18,9 @@ public class Case extends Instruction
 	{
 		return "Case";
 	}
+	
+	public String toJava()
+	{
+		return "switch";
+	}
 }

@@ -10,19 +10,17 @@ import lea.TypeTable;
 
 public class Generator {
 	
-	RestrictedWords restrictedWordList;
+	
 	ConstantGenerator cstGen;
 	FunctionGenerator fctGen;
 	FileWriter javaOutput;
 	String nameOfClass, nameOfFile = "";
 	TypeGenerator typeTable;
 	File nameDir;
-	SyntaxTreeGenerator varGen;
+	SyntaxTreeGenerator stGen;
 	
 	public Generator(String fileName, ConstantTable cstTable, TypeTable typeTable, FunctionTable fctTable) throws IOException
 	{
-		this.restrictedWordList = new RestrictedWords();
-		
 		this.nameOfClass = fileName.substring(5, fileName.length()-4);
 		
 		/*Format name*/
@@ -45,7 +43,8 @@ public class Generator {
 		/*FunctionTable translation*/
 		this.fctGen = new FunctionGenerator(fctTable);
 		
-		/**/this.varGen = new SyntaxTreeGenerator(fctTable);		
+		
+		/**/this.stGen = new SyntaxTreeGenerator(fctTable);		
 	}
 	
 	public void generate() throws IOException
@@ -55,7 +54,7 @@ public class Generator {
 		str += "public class " + this.nameOfClass + "{\n";
 		str += this.cstGen.generate() +"\n";
 		str += this.fctGen.generate() +"\n";
-		this.typeTable.generate();
+		str += this.typeTable.generate();
 		
 		str += "}";
 		

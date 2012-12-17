@@ -1,6 +1,6 @@
 package lea.syntax;
 
-public class ElseCondition extends SyntaxTree 
+public class ElseCondition extends Instruction 
 {
 	public ElseCondition(SyntaxTree a1, SyntaxTree a2)
 	{
@@ -15,5 +15,10 @@ public class ElseCondition extends SyntaxTree
 	public String toDotString()
 	{
 		return "Else";
+	}
+	
+	public String toJava()
+	{
+		return "else";
 	}
 }

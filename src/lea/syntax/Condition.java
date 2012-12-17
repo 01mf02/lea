@@ -16,4 +16,9 @@ public class Condition extends Instruction
 	{
 		return "If";
 	}
+	
+	public String toJava()
+	{
+		return "if";
+	}
 }

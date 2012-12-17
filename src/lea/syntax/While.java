@@ -16,4 +16,9 @@ public class While extends Instruction
 	{
 		return "While";
 	}
+	
+	public String toJava()
+	{
+		return "while";
+	}
 }

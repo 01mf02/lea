@@ -28,4 +28,9 @@ public class BoolExp extends Expression
 	{
 		return "BooleanExp("+expTag.toString()+")";
 	}
+
+	public EnumTagExp getTag()
+	{
+		return expTag;
+	}
 }
