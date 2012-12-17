@@ -114,7 +114,7 @@ EndComment = "*/"
 	":"		{  return symbol(LeaSymbol.COLON); }
 	":="	{  return symbol(LeaSymbol.AFF); }
 	"."		{  return symbol(LeaSymbol.SLOT); }
-	".."	{  return symbol(LeaSymbol.TO); }
+	//".."	{  return symbol(LeaSymbol.TO); }
 	
 	
 	/* ----------------------- Types elementaires ------------------------------*/
@@ -136,7 +136,7 @@ EndComment = "*/"
 	"case"		{  return symbol(LeaSymbol.CASE); }
 	"while"		{  return symbol(LeaSymbol.WHILE); }
 	"repeat"	{  return symbol(LeaSymbol.REPEAT); }
-	"for"		{  return symbol(LeaSymbol.FOR); }
+	//"for"		{  return symbol(LeaSymbol.FOR); }
 	
 	/* ----------------------- Constantes ------------------------------*/
 	{True}	{  return symbol(LeaSymbol.TRUEEXP); }
@@ -147,7 +147,7 @@ EndComment = "*/"
 	"function"	{  return symbol(LeaSymbol.FUNCTION); }
 	"procedure"	{  return symbol(LeaSymbol.PROCEDURE); }
 	"return" 	{  return symbol(LeaSymbol.RETURN); }
-	"in"  		{  return symbol(LeaSymbol.IN); }
+	//"in"  		{  return symbol(LeaSymbol.IN); }
 	
 	/* -------------------------------------------------
 		Variables, Entiers

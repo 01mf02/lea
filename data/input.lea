@@ -4,6 +4,7 @@ LETTER = 'b';
 SHAKESPEARE = "To be or not to be ...";
 LIST_OF_INT = [1,2,3,4,5,6];
 TUPLE_OF_THREE = 34, SHAKESPEARE, PI;
+color = (enum (rouge, vert, bleu, cyan, magenta, jaune));
 
 fiche = struct {
 	age:int;
@@ -32,27 +33,27 @@ procedure types()
 	
 	tup:(int,char,string,float);
 	tup := i,c,s,f;
-	type();
+	types();
 	return ;
 }
 
 procedure deif()
 {
 	rgb: (int, int, int);
-	couleur: enum (rouge, vert, bleu, cyan, magenta, jaune);
+	couleur: color;// enum (rouge, vert, bleu, cyan, magenta, jaune);
 	couleur:= rouge;
-	 
-	case couleur of
-	rouge:
-	    rgb := (255, 0, 0);
-	vert:
-	    rgb := (0, 255, 0);
-	bleu:
-	    rgb := (0, 0, 255);
-	cyan:
-	    rgb := (0, 255, 255);
-	    On doit le garder pour les tests
-	    }
+	case couleur
+	{
+		rouge:
+		    rgb := (255, 0, 0);
+		vert:
+		    rgb := (0, 255, 0);
+		bleu:
+		    rgb := (0, 0, 255);
+		cyan:
+		    rgb := (0, 255, 255);
+	}
+
 	types();
 }
 
