@@ -1,9 +1,10 @@
+THIS_IS_FALSE = True;
 MEANING = 42;
 PI = 3.14;
 FIRST_LETTER = 'A';
 SHAKESPEARE = "To be or not to be ...";
 FIBONACCI = [1, 2, 3, 5, 8];
-TUPLE = (MEANING, PI, FIRST_LETTER, SHAKESPEARE, FIBONACCI);
+TUPLE = (THIS_IS_FALSE, MEANING, PI, FIRST_LETTER, SHAKESPEARE, FIBONACCI);
 
 month = (enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC));
 date = (int, month, int);
@@ -27,9 +28,9 @@ procedure print_fibonacci(n1 : int, n2 : int, iter : int, count : int)
 	{
 		return;
 	}
-	n3 : int;
-	n3 := n1 + n2;
+
 	writeln(n1.toString());
+	n3 : int := n1 + n2;
 	print_fibonacci(n2, n3, iter+1, count);
 }
 
