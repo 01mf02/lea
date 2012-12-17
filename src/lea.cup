@@ -589,8 +589,6 @@ instr ::=
 		{: 
 			if(v instanceof FunctionCall)
 			{
-				//TODO : doit renvoyer un instruction
-				//NOTE DE MIC : C'est ce que je propose, l'instruction va "absorber" le type de retour de la fonction s'il y en a.
 				RESULT = new Instruction(v, null);
 			}
 			else
@@ -611,7 +609,6 @@ instr ::=
 				{
 					parser.printError("The return must be of type " + functInfo.getOutputType() +". Got : "+ e.getType() , 1);
 					
-					//TODO : a changer
 					RESULT = new  ReturnNode(null);
 				}
 			}
@@ -630,7 +627,6 @@ instr ::=
 				}	 
 				else
 				{
-				//TODO : a changer
 					RESULT = new  ReturnNode(null);
 					parser.printError("Procedure can't return value", 1);
 				}
@@ -642,7 +638,6 @@ instr ::=
 		 :}
 		| erreur 
 		{:
-			//Crée un objet global pour les erreurs?
 			RESULT = new Instruction(null,null);
 		:}
 		;
@@ -733,6 +728,10 @@ functCall ::=
     		FunctionInfo info = fctTable.get(id);
     		if(info != null)
     		{
+    			if(!info.getArgs().isEmpty())
+    			{
+    				parser.printError("Function "+id+" wrong call", 1);
+    			}
     			RESULT = new FunctionCall( new FunctionRef(id, info), null);
     		}
 			else
@@ -756,6 +755,11 @@ functCall ::=
     		FunctionInfo info = fctTable.get(id);
     		if(info != null)
     		{
+    			if(!fctTable.isCallPermitted(id, e))
+    			{
+    				parser.printError("Function "+id+" wrong call", 1);
+    			}
+    		
     			RESULT = new FunctionCall( new FunctionRef(id, info), e);
     		}
 			else
@@ -864,10 +868,3 @@ variable ::=
     	:}
 		;
 	
-    
-  /**Liste de TODO
-  Appeler dans la fonction recursion
-  Case BRACE
-  
-  
-  */

@@ -65,7 +65,7 @@ function ret() : int
 //This is way too complex
 function wooTooComplexFunction(arg:int,arg0:string) : int
 {	
-	if(ret() + arg > 2 || (True && False) || arg0 = "gre" || 6%5 != 1 || !True || 4 >= 2 || 4 <= 2 || 4 < 2)
+	if(ret() + arg > 2 || (True && False && false) || arg0 = "gre" || 6%5 != 1 || !True || 4 >= 2 || 4 <= 2 || 4 < 2)
 	{
 		it:int := 0;
 		while(arg - it > 0)
@@ -82,6 +82,16 @@ function wooTooComplexFunction(arg:int,arg0:string) : int
 	else
 	{
 		return 0;
+	}
+	
+	repeat
+	{}
+	while(true)
+	
+	
+	while(true)
+	{
+	
 	}
 	
 }

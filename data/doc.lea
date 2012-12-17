@@ -41,18 +41,26 @@ procedure print_int_list(l : list of int)
 	}*/
 }
 
-function erreur(l : list of string) : int
+function tresbien(l:list of int, it:int,ch:char,st:string) : int
 {	
 	i:int := 4;
 	writeln("Hello World!");
+	flop:string := i.toString();
+	
+	return 0+i+2314223 % 234;
+}
 
-
-	return 0;
+function vide() : (int, int, string)
+{
+	return 4,5,"toto";
 }
 
 function main(l : list of string) : int
 {
-	erreur();
+	tresbien([1,1,23,23,34,45], 23, 'a', "asdasd");
+	
+	vide();
+	
 	writeln("Hello World!");
 	i:int := 4;
 	
