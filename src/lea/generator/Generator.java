@@ -8,43 +8,35 @@ import lea.ConstantTable;
 import lea.FunctionTable;
 import lea.TypeTable;
 
-public class Generator {
-	
+public class Generator {	
 	
 	ConstantGenerator cstGen;
 	FunctionGenerator fctGen;
-	FileWriter javaOutput;
 	String nameOfClass, nameOfFile = "";
 	TypeGenerator typeTable;
 	File nameDir;
 	SyntaxTreeGenerator stGen;
 	
-	public Generator(String fileName, ConstantTable cstTable, TypeTable typeTable, FunctionTable fctTable) throws IOException
+	public Generator(File nameDir, String nameOfClass, ConstantTable cstTable, TypeTable typeTable, FunctionTable fctTable) throws IOException
 	{
-		this.nameOfClass = fileName.substring(5, fileName.length()-4);
+		this.nameOfClass = nameOfClass;
 		
 		/*Format name*/
 		this.nameOfFile = this.nameOfClass + ".java";
 		
-		/*Création du dossier qui contiendra tous les fichiers*/
-		this.nameDir = new File("data" + File.separator + this.nameOfClass);
-		this.nameDir.mkdir();
-		this.javaOutput = new FileWriter(this.nameDir + File.separator + this.nameOfFile);
+		this.nameDir = nameDir;
 		
-		/*ConstanteTable translation*/
+		/*ConstantTable translation*/
 		this.cstGen = new ConstantGenerator(cstTable);
 		
-		
 		/*TypeTable translation*/
-		this.typeTable = new TypeGenerator(this.nameDir, typeTable);
-		
-		
+		this.typeTable = new TypeGenerator(this.nameDir, typeTable);	
 		
 		/*FunctionTable translation*/
 		this.fctGen = new FunctionGenerator(fctTable);
 		
-		
-		/**/this.stGen = new SyntaxTreeGenerator(fctTable);		
+		/**/
+		this.stGen = new SyntaxTreeGenerator(fctTable);		
 	}
 	
 	public void generate() throws IOException
@@ -58,8 +50,8 @@ public class Generator {
 		
 		str += "}";
 		
-		this.javaOutput.write(str);
-
-		this.javaOutput.close();
+		FileWriter javaOutput = new FileWriter(this.nameDir + File.separator + this.nameOfFile);
+		javaOutput.write(str);
+		javaOutput.close();
 	}
 }

@@ -1,5 +1,6 @@
 package lea;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,16 +31,16 @@ public class Main {
 	
 				System.out.println("Function table:");
 				System.out.println(fctTable);
+				
+				File output_dir = new File(args[i].replace(".lea",""));
+				output_dir.mkdir();
 	
-				fctTable.saveDotToDir(args[i].replace(".lea",""));
+				fctTable.saveDotToDir(output_dir.getPath());
 	
 				if (!parser.hasCompileErrors()) 
 				{
-					
-					Generator generator = new Generator(args[i], constTable, typeTable, fctTable);
+					Generator generator = new Generator(output_dir, output_dir.getName(), constTable, typeTable, fctTable);
 					generator.generate();
-	
-					
 				}
 			}
 		}
