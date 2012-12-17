@@ -65,7 +65,7 @@ Documentation de travail :
 \begin_inset Newline newline
 \end_inset
 
-Creation d'un compilateur pour le langage Léa
+Création d'un compilateur pour le langage Léa
 \end_layout
 
 \begin_layout Author
@@ -73,8 +73,8 @@ Michael Färber
 \end_layout
 
 \begin_layout Abstract
-Nous avons crée un compilateur pour le langage Léa, qui est capable de créer
- du code Java donné des fichiers Léa.
+Nous avons créé un compilateur pour le langage Léa, qui est capable de créer
+ du code Java à partir des fichiers Léa.
 \end_layout
 
 \begin_layout Section
@@ -84,7 +84,7 @@ Cahier des charges précisé
 \begin_layout Standard
 Notre compilateur est capable de créer du code Java pour un fichier Léa
  donné.
- Un fichier Léa peut contenir des construits suivantes :
+ Un fichier Léa peut contenir les définitions suivantes :
 \end_layout
 
 \begin_layout Itemize
@@ -92,15 +92,15 @@ Définition des constantes.
 \end_layout
 
 \begin_layout Itemize
-Définitions des types.
+Définition des types.
 \end_layout
 
 \begin_layout Itemize
-Définitions des fonctions.
+Définition des fonctions.
 \end_layout
 
 \begin_layout Standard
-Partout dans le code Léa, on peut écrire des commentaires de facon suivante
+Partout dans le code Léa, on peut écrire des commentaires de façon suivante
  :
 \end_layout
 
@@ -150,7 +150,7 @@ Définition des constantes
 \end_layout
 
 \begin_layout Standard
-On peut définir des constantes sans donner leur types, de facon suivante
+On peut définir des constantes sans donner leur types, de façon suivante
  :
 \end_layout
 
@@ -161,12 +161,22 @@ status open
 
 \begin_layout Plain Layout
 
+THIS_IS_FALSE = True;
+\end_layout
+
+\begin_layout Plain Layout
+
 MEANING = 42;
 \end_layout
 
 \begin_layout Plain Layout
 
 PI = 3.14;
+\end_layout
+
+\begin_layout Plain Layout
+
+FIRST_LETTER = 'A';
 \end_layout
 
 \begin_layout Plain Layout
@@ -190,11 +200,11 @@ TUPLE = (MEANING, PI, SHAKESPEARE, FIBONACCI);
 \end_layout
 
 \begin_layout Subsection
-Définitions des types
+Définition des types
 \end_layout
 
 \begin_layout Standard
-On peut définir des nouveaux types de facon suivante :
+On peut définir des nouveaux types de façon suivante :
 \end_layout
 
 \begin_layout Standard
@@ -233,7 +243,7 @@ person = struct
 
 \begin_layout Plain Layout
 
-};
+}
 \end_layout
 
 \begin_layout Plain Layout
@@ -262,7 +272,7 @@ person_list = struct
 
 \begin_layout Plain Layout
 
-};
+}
 \end_layout
 
 \end_inset
@@ -270,6 +280,11 @@ person_list = struct
 Nous supportons l'utilisation des types suivants :
 \end_layout
 
+\begin_layout Itemize
+Types de base :
+\end_layout
+
+\begin_deeper
 \begin_layout Itemize
 \begin_inset listings
 inline true
@@ -327,9 +342,10 @@ string
 
 \end_inset
 
- : chaîne de lettres
+ : chaîne de caractères
 \end_layout
 
+\end_deeper
 \begin_layout Itemize
 \begin_inset listings
 inline true
@@ -376,7 +392,7 @@ struct { ELEM_1 : TYPE_1, ..., ELEM_N : TYPE_N }
 \end_layout
 
 \begin_layout Subsection
-Définitions des fonctions
+Définition des fonctions
 \end_layout
 
 \begin_layout Standard
@@ -406,8 +422,8 @@ function
 \end_inset
 
 ).
- Les fonctions peuvent prendre plusieurs arguments, qui sont rendu par valeur
- et pas par référence.
+ Les fonctions peuvent prendre plusieurs arguments, qui sont passés par
+ valeur.
 \end_layout
 
 \begin_layout Standard
@@ -424,6 +440,64 @@ status open
 
 \begin_layout Plain Layout
 
+procedure print_fibonacci(n1 : int, n2 : int, iter : int, count : int)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (iter >= count)
+\end_layout
+
+\begin_layout Plain Layout
+
+	{
+\end_layout
+
+\begin_layout Plain Layout
+
+		return;
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	writeln(n1.toString());
+\end_layout
+
+\begin_layout Plain Layout
+
+	n3 : int := n1 + n2;
+\end_layout
+
+\begin_layout Plain Layout
+
+	print_fibonacci(n2, n3, iter+1, count);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
 procedure print_int_list(l : list of int)
 \end_layout
 
@@ -434,8 +508,12 @@ procedure print_int_list(l : list of int)
 
 \begin_layout Plain Layout
 
-	for i in [0 ...
- l.length()]
+	i : int := 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+	while (i < l.length())
 \end_layout
 
 \begin_layout Plain Layout
@@ -446,6 +524,11 @@ procedure print_int_list(l : list of int)
 \begin_layout Plain Layout
 
 		writeln(l[i].toString());
+\end_layout
+
+\begin_layout Plain Layout
+
+		i := i+1;
 \end_layout
 
 \begin_layout Plain Layout
@@ -464,7 +547,7 @@ procedure print_int_list(l : list of int)
 
 \begin_layout Plain Layout
 
-function main(list of string) : int
+function main(args : list of string) : int
 \end_layout
 
 \begin_layout Plain Layout
@@ -508,12 +591,12 @@ function main(list of string) : int
 \end_inset
 
 Tous les fichiers Léa doivent contenir une fonction main, qui prend une
- liste de chaînes de lettre et qui retourne un entier.
- Cette fonction est appelé au début du programme, avec des arguments donné.
+ liste de chaînes de lettres et qui retourne un entier.
+ Cette fonction est appelée au début du programme, avec des arguments donnés.
 \end_layout
 
 \begin_layout Standard
-Nous supportons des instructions suivants :
+Nous supportons les instructions suivantes :
 \end_layout
 
 \begin_layout Itemize
@@ -598,22 +681,6 @@ status open
 
 \begin_layout Plain Layout
 
-for VAR in [INT_EXPRESSION ...
- INT_EXPRESSION] INSTRS
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-\begin_inset listings
-inline true
-status open
-
-\begin_layout Plain Layout
-
 while (BOOL_EXPRESSION) INSTRS
 \end_layout
 
@@ -635,6 +702,501 @@ repeat INSTRS while (BOOL_EXPRESSION);
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Dans les instructions, on peut avoir des expressions suivantes :
+\end_layout
+
+\begin_layout Itemize
+Toutes les constantes sont des expressions.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+EXPRESSION $ EXPRESSION
+\end_layout
+
+\end_inset
+
+, où 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+$
+\end_layout
+
+\end_inset
+
+ peut être :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+==
+\end_layout
+
+\end_inset
+
+: égalité
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+!=
+\end_layout
+
+\end_inset
+
+: inégalité
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+BOOL_EXPRESSION $ BOOL_EXPRESSION
+\end_layout
+
+\end_inset
+
+, où 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+$
+\end_layout
+
+\end_inset
+
+ peut être :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+&&
+\end_layout
+
+\end_inset
+
+: ET
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+||
+\end_layout
+
+\end_inset
+
+: OU
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+!
+\end_layout
+
+\end_inset
+
+: NON
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+NUMBER_EXPRESSION $ NUMBER_EXPRESSION
+\end_layout
+
+\end_inset
+
+, où 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+$
+\end_layout
+
+\end_inset
+
+ peut être :
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
++
+\end_layout
+
+\end_inset
+
+: addition
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+-
+\end_layout
+
+\end_inset
+
+: soustraction
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+*
+\end_layout
+
+\end_inset
+
+: multiplication
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+/
+\end_layout
+
+\end_inset
+
+: division
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+<
+\end_layout
+
+\end_inset
+
+: inférieur
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+>
+\end_layout
+
+\end_inset
+
+: supérieur
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+<=
+\end_layout
+
+\end_inset
+
+: inférieur ou égal
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+>=
+\end_layout
+
+\end_inset
+
+: supérieur ou égal
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+INT_EXPRESSION % INT_EXPRESSION
+\end_layout
+
+\end_inset
+
+ : modulo
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+- NUMBER_EXPRESSION
+\end_layout
+
+\end_inset
+
+ : négation
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+STRING_EXPRESSION + STRING_EXPRESSION
+\end_layout
+
+\end_inset
+
+ : concaténation
+\end_layout
+
+\begin_layout Standard
+Il y a des fonctions predéfinis :
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+writeln
+\end_layout
+
+\end_inset
+
+: Prend une chaîne de caractères et l'affiche sur l'écran, terminé avec
+ une nouvelle ligne.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+write
+\end_layout
+
+\end_inset
+
+: Prend une chaîne de caractères et l'affiche sur l'écran, pas terminé avec
+ une nouvelle ligne.
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+read
+\end_layout
+
+\end_inset
+
+: Attend l'entrée de l'utilisateur et la retourne comme chaîne de caractères.
+\end_layout
+
+\begin_layout Standard
+Pour les types de base, la fonction 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+toString
+\end_layout
+
+\end_inset
+
+ retourne une chaîne de caractères représentant la valeur.
+ Pour les listes, la fonction 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+length
+\end_layout
+
+\end_inset
+
+ retourne le nombre des objets dans la liste.
+\end_layout
+
+\begin_layout Section
+Utilisation
+\end_layout
+
+\begin_layout Standard
+Appeler 
+\begin_inset Quotes fld
+\end_inset
+
+ant
+\begin_inset Quotes frd
+\end_inset
+
+ exécute les tâches suivantes :
+\end_layout
+
+\begin_layout Itemize
+Créer des fichiers Java à partir des fichiers CUP/JFlex (src/lea.cup et src/lea.jf
+lex).
+\end_layout
+
+\begin_layout Itemize
+Compiler tous les fichiers Java (dans src/).
+\end_layout
+
+\begin_layout Itemize
+Exécuter le compilateur sur les fichiers Léa mentionnés dans build.xml (target
+ 
+\begin_inset Quotes fld
+\end_inset
+
+default
+\begin_inset Quotes frd
+\end_inset
+
+), écrivant les messages du compilateur dans data/output.txt.
+\end_layout
+
+\begin_layout Standard
+A partir de tout fichier Léa, le compilateur crée un nouveau répertoire
+ (portant le même nom comme le fichier Léa), où il place :
+\end_layout
+
+\begin_layout Itemize
+Fichiers Java contenant le code cible pour le fichier Léa.
+\end_layout
+
+\begin_layout Itemize
+Arbres de syntaxe abstraites pour toute fonction dans le fichier Léa, dans
+ le format DOT.
+\end_layout
+
+\begin_layout Standard
+Appeler 
+\begin_inset Quotes fld
+\end_inset
+
+ant clean
+\begin_inset Quotes frd
+\end_inset
+
+ efface tous fichiers qui sont créés par 
+\begin_inset Quotes fld
+\end_inset
+
+ant
+\begin_inset Quotes frd
+\end_inset
+
+, sauf les fichiers dans data/.
+\end_layout
+
+\begin_layout Section
+Architecture
+\end_layout
+
+\begin_layout Standard
+A faire !
 \end_layout
 
 \end_body
