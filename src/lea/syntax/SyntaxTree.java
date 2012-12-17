@@ -18,6 +18,8 @@ public class SyntaxTree
     private EnvironmentStack env;	    // current environment
     private Type type;
     
+    private static int numID = 0;
+    
     protected SyntaxTree()
     {
     	this.left = null;
@@ -30,7 +32,7 @@ public class SyntaxTree
     	this.right=right;
     	this.env= new EnvironmentStack();
     	this.type=t;
-    	this.id=Main.numID++; 
+    	this.id=numID++;
     	
     	env.push(new Environment());
     }

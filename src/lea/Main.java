@@ -8,8 +8,6 @@ import generated.*;
 import lea.generator.*;
 
 public class Main {
-	public static int numID = 0;
-	
 	public static int main(String[] args) throws IOException {
 		System.out.println("Lea compiler initialized.");
 
