@@ -5,7 +5,6 @@ FIBONACCI = [1, 2, 3, 5, 8];
 TUPLE = (MEANING, PI, SHAKESPEARE, FIBONACCI);
 
 date = (int, int, int);
-date2 = date;
 
 person = struct
 {
@@ -20,58 +19,35 @@ person_list = struct
 	next : person_list;
 }
 
-complexPerson = (person, person_list);
-
-function recursive() : int
+procedure fibonacci(n1 : int, n2 : int, iter : int)
 {
-	return 1 + recursive();
+	if (iter >= 10)
+	{
+		return;
+	}
+	n3 : int;
+	n3 := n1 + n2;
+	writeln(n3.toString());
+	fibonacci(n2, n3, iter+1);
 }
 
 procedure print_int_list(l : list of int)
 {
-	c:(int, bool, int);
-
-	i:int := l.length();
-	print_int_list(l);
-	writeln(l[i - 1].toString().length().toString());
-	
 	/*for i in [0 .. l.length()]
 	{
 		writeln(l[i].toString());
 	}*/
 }
 
-function tresbien(l:list of int, it:int,ch:char,st:string) : int
-{	
-	i:int := 4;
-	writeln("Hello World!");
-	flop:string := i.toString();
-	
-	return 0+i+2314223 % 234;
-}
-
-function vide() : (int, int, string)
-{
-	return 4,5,"toto";
-}
-
 function main(l : list of string) : int
 {
-	tresbien([1,1,23,23,34,45], 23, 'a', "asdasd");
-	
-	vide();
-	
 	writeln("Hello World!");
-	i:int := 4;
-	
-	t:enum(BLEU, BLANC, ROUGE);
-	a:enum(MAUVE, VERT);
-	
-	t := BLEU;
-	a := VERT;
-	
-	writeln("Fibonacci numbers:");
+
+	writeln("Fibonacci numbers as list:");
 	print_int_list(FIBONACCI);
+
+	writeln("Fibonacci numbers as function:");
+	print_fibonacci(1, 1, 0);
 
 	return 0;
 }
