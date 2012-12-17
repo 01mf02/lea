@@ -36,15 +36,10 @@ public class FunctionInfo
 		
 		if(outputType != null)
 		{
-			if(outputType != null)
-				str += " : "  + outputType.toString();
-		
-			str += " { "+ sTree.toString() +" } ";
+			str += " : "  + outputType.toString();
 		}
-		else
-		{
-			//TODO?	
-		}
+
+		str += " { "+ sTree.toString() +" } ";
 		
 		return str;
 	}

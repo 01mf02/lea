@@ -46,10 +46,9 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 					Expression ex = (Expression)tmp.getLeft();
 					Expression ex2 = (Expression)tmp.getRight();
 					
-					if(ex instanceof ListNode)
+					if(ex instanceof ListNode || ex instanceof NumberExp || ex instanceof BoolExp || ex instanceof StringExp)
 					{
-						ListNode l = (ListNode)ex;
-						args.add(0, l.getType());
+						args.add(0, ex.getType());
 						
 						tmp = tmp.getRight();
 						if(tmp != null)
@@ -58,10 +57,9 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 								args.add(1, tmp.getType());
 						}
 					}
-					else if(ex2 instanceof ListNode)
+					else if(ex2 instanceof ListNode || ex2 instanceof NumberExp || ex2 instanceof BoolExp || ex2 instanceof StringExp)
 					{
-						ListNode l = (ListNode)ex2;
-						args.add(0, l.getType());
+						args.add(0, ex2.getType());
 						
 						tmp = tmp.getLeft();
 						if(tmp != null)

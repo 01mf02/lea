@@ -68,6 +68,8 @@ public class InstructionGenerator extends SyntaxTreeGenerator{
 	public String leftRightTest(SyntaxTree st) throws IOException
 	{
 		String result = "";
+		if(st == null)
+			return result;
 		
 		if (st.getLeft() != null)
 		{

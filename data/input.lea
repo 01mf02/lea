@@ -59,6 +59,7 @@ procedure deif()
 
 function ret() : int
 {
+	g:int := ret();
 	return 23;
 }
 
