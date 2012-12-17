@@ -120,9 +120,9 @@ action code
 
     
 terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, ENUM, STRING, CHAR, BOOL,COMMA;
-terminal IF, ELSE, CASE,IN;
-terminal WHILE, REPEAT,FOR;
-terminal AFF, SLOT, TO;
+terminal IF, ELSE, CASE;
+terminal WHILE, REPEAT;
+terminal AFF, SLOT;
 terminal RETURN;
 terminal AND, OR, LT, GT, LE, GE, EQ, DIFF;
 terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
@@ -487,10 +487,16 @@ functDecl ::=  IDENTIFIER:id COLON type:t
 enumCases ::=
 		enumCases:e IDENTIFIER:id  COLON instr:s
 		{:
+			if(!constTable.containsKey(id))
+				parser.printError("Enum not found : " + id, 1);
+				
 			RESULT = new EnumExp(id,s,e);
 		:}
 		|IDENTIFIER:id  COLON instr:s
 		{:
+			if(!constTable.containsKey(id))
+				parser.printError("Enum not found : " + id, 1);
+				
 			RESULT = new EnumExp(id,s,null);
 		:}
 		;
@@ -498,8 +504,7 @@ enumCases ::=
 instr ::= 
 		IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
 		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
-		/*PROBLEME DE SHIFT/REDUCE si on enleve le RBRACE*/
-		| CASE variable:v OF enumCases:d RBRACE
+		| CASE variable:v LBRACE enumCases:d RBRACE
 		{:
 			if(v.getType() instanceof EnumType)
 			{
@@ -507,10 +512,9 @@ instr ::=
 			}
 			else
 			{
-				parser.printError("Type mismatch. Expecting type enum for CASE OF ", 1);
+				parser.printError("Type mismatch. Expecting type enum for CASE ", 1);
 			}
 		:}
-		/*| FOR IDENTIFIER:i IN LBRACKET TO RBRACKET LBRACE block:b RBRACE*/
 		| variable:v AFF expr:e SEMIC 
 		{: 			
 			if(v.getType() != null && e.getType() != null)
@@ -864,4 +868,6 @@ variable ::=
   /**Liste de TODO
   Appeler dans la fonction recursion
   Case BRACE
+  
+  
   */

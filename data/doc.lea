@@ -41,8 +41,18 @@ procedure print_int_list(l : list of int)
 	}*/
 }
 
+function erreur(l : list of string) : int
+{	
+	i:int := 4;
+	writeln("Hello World!");
+
+
+	return 0;
+}
+
 function main(l : list of string) : int
 {
+	erreur();
 	writeln("Hello World!");
 	i:int := 4;
 	
