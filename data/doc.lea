@@ -19,7 +19,7 @@ person_list = struct
 	next : person_list;
 }
 
-procedure fibonacci(n1 : int, n2 : int, iter : int)
+procedure print_fibonacci(n1 : int, n2 : int, iter : int)
 {
 	if (iter >= 10)
 	{
@@ -27,8 +27,8 @@ procedure fibonacci(n1 : int, n2 : int, iter : int)
 	}
 	n3 : int;
 	n3 := n1 + n2;
-	writeln(n3.toString());
-	fibonacci(n2, n3, iter+1);
+	writeln(n1.toString());
+	print_fibonacci(n2, n3, iter+1);
 }
 
 procedure print_int_list(l : list of int)
