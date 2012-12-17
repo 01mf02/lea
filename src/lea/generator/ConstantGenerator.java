@@ -20,9 +20,10 @@ public class ConstantGenerator {
 		String str = "";
 
 		for (Map.Entry<String, Constant> entry : cstTable.entrySet()) {
-			str += "\tpublic final " + entry.getValue().getType() + " "
-					+ ng.generateName(entry.getKey()) + " = "
+			str += "\tpublic final " + entry.getValue().getType().toString()
+					+ " " + ng.generateName(entry.getKey()) + " = "
 					+ entry.getValue().toString() + ";\n";
+
 		}
 
 		return str;

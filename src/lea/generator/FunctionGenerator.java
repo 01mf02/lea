@@ -1,5 +1,6 @@
 package lea.generator;
 
+import java.io.IOException;
 import java.util.Map.Entry;
 
 import lea.ArgumentInfo;
@@ -10,14 +11,14 @@ import lea.syntax.SyntaxTree;
 public class FunctionGenerator {
 
 	BlockGenerator bg;
-	String functionHead, functionInstruction, str;
+	String functionHead, functionBody, str;
 	NameGenerator ng;
 	String test;
 	
 
-	public FunctionGenerator(FunctionTable fctTable) {
+	public FunctionGenerator(FunctionTable fctTable) throws IOException {
 		this.functionHead = "";
-		this.functionInstruction = "";
+		this.functionBody = "";
 		this.str="";
 		this.test = "";
 		
@@ -34,8 +35,10 @@ public class FunctionGenerator {
 			
 			
 			
-			
-			
+			if (entry.getKey().equals("main"))
+				functionHead += "\tpublic static int main(String[] args";
+			else
+			{
 			/*Return type*/
 			if(entry.getValue().getOutputType() == null)
 				functionHead += "\n\tvoid " + ng.generateName(entry.getKey()) + "(";
@@ -56,24 +59,15 @@ public class FunctionGenerator {
 					functionHead += argI.getType() + " " + argI.getName() + ",";
 				i++;
 			}
+			}
 			
-			functionHead += "){";
+			functionHead += "){\n";
 			
-			
-			functionHead += "\n\t}\n";
 			
 			
 			/*Code*/
+			functionBody += new SyntaxTreeGenerator(fctTable).generate();
 			
-			
-
-
-			SyntaxTree st = entry.getValue().getSyntaxTree();
-			SyntaxTree node = st.getLeft();
-			while (node != null) {
-				// Traitement ou autre chose avec le left de st
-				node = node.getLeft();
-			}
 
 			
 		}
@@ -82,8 +76,10 @@ public class FunctionGenerator {
 	}
 
 	public String generate() {
-
-		return this.functionHead;
+		String result ="";
+		result += "\n\t" + this.functionHead + this.functionBody + "\n\t}\n";
+		
+		return result;
 	}
 
 }

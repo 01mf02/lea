@@ -16,4 +16,9 @@ public class Loop extends Instruction
 	{
 		return "Loop";
 	}
+	
+	public String toJava()
+	{
+		return "do";
+	}
 }

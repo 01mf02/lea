@@ -9,7 +9,7 @@ public class FunctionCall extends Expression
 	
 	public String toString()
 	{
-		return "Call"+super.toString();
+		return "FunctionCall"+super.toString();
 	}
 	
 	public String toDotString()

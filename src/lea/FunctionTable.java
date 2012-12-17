@@ -1,5 +1,6 @@
 package lea;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,7 +24,7 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 	public void saveDotToDir(String directory) {
 		for (Map.Entry<String, FunctionInfo> entry : entrySet())
 		{
-		    entry.getValue().getSyntaxTree().toDot(directory + "/" + entry.getKey());
+		    entry.getValue().getSyntaxTree().toDot(directory + File.separator + entry.getKey());
 		}
 	}
 
