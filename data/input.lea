@@ -1,6 +1,8 @@
 MEANING = 12;
 PI = 3.14159265358979;
 LETTER = 'b';
+TRUER = true;
+FALSER = false;
 SHAKESPEARE = "To be or not to be ...";
 LIST_OF_INT = [1,2,3,4,5,6];
 TUPLE_OF_THREE = 34, SHAKESPEARE, PI;

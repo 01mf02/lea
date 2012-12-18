@@ -139,7 +139,7 @@ EndComment = "*/"
 	//"for"		{  return symbol(LeaSymbol.FOR); }
 	
 	/* ----------------------- Constantes ------------------------------*/
-	{True}	{  return symbol(LeaSymbol.TRUEEXP); }
+	{True}	{ return symbol(LeaSymbol.TRUEEXP);		 }
 	{False}	{  return symbol(LeaSymbol.FALSEEXP); }
 	//"null"  {  return symbol(LeaSymbol.FALSE); }
 	

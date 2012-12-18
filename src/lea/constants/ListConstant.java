@@ -7,6 +7,7 @@ import lea.types.*;
 
 public class ListConstant implements Constant 
 {
+	//TODO changer list pour constant list
 	LinkedList<String> value = null;
 	ListType listType;
 	

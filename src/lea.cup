@@ -139,8 +139,8 @@ non terminal ArgumentInfo functDecl;
 non terminal Instruction block;
 non terminal Instruction instrs, instr;
 non terminal Expression expr;
+non terminal String boolExpr;
 non terminal ListNode listDecl;
-non terminal String BOOLEXP;
 non terminal Expression variable,functCall;
 non terminal EnumExp enumCases;
 
@@ -394,9 +394,9 @@ struct ::= IDENTIFIER:id EQ STRUCT
 		;
 
 
-BOOLEXP ::=
-		TRUEEXP:t {:RESULT = t; :}
-		|FALSEEXP:t {:RESULT = t; :};
+boolExpr ::=
+		TRUEEXP:t {: RESULT = "true"; :}
+		|FALSEEXP:t {:RESULT = "false"; :};
 
 
 funct ::=
@@ -697,7 +697,7 @@ expr ::=
 		|CHAREXP:c {: 
 			RESULT = new ConstantLeaf(new CharConstant(c));  
 			:}
-		|BOOLEXP:b {: 
+		|boolExpr:b {: 
 			RESULT = new ConstantLeaf(new BoolConstant(b)); 
 			:}
 		|variable:v 
