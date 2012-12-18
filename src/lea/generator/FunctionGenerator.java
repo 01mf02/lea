@@ -18,49 +18,39 @@ public class FunctionGenerator {
 
 	public void generate(CodeWriter cw) throws IOException {
 
-		String functionHead, functionBody;
 		NameGenerator ng;
-
-		functionHead = "";
-		functionBody = "";
 
 		ng = new NameGenerator();
 
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
-			if (entry.getKey().equals("main"))
-				functionHead += "\tpublic static int main(String[] args";
-			else {
-				/* Return type */
-				if (entry.getValue().getOutputType() == null)
-					functionHead += "\n\tvoid "
-							+ ng.generateName(entry.getKey()) + "(";
-				else
-					functionHead += "\n\t" + entry.getValue().getOutputType()
-							+ " " + ng.generateName(entry.getKey()) + "(";
 
-				/* Arguments */
-				int argNumber = entry.getValue().getArgs().size();
-				int i = 0;
+			String return_type = "";
+			if (entry.getValue().getOutputType() == null)
+				return_type = "void";
+			else
+				return_type = entry.getValue().getOutputType().toJava();
 
-				for (ArgumentInfo argI : entry.getValue().getArgs()) {
-					if (i == argNumber - 1) {
-						functionHead += argI.getType() + " " + argI.getName();
-					} else
-						functionHead += argI.getType() + " " + argI.getName()
-								+ ",";
-					i++;
-				}
-			}
-
-			functionHead += "){\n";
+			String arguments = "";
+			boolean first_argument = true;
 			
-			for (Entry<String, FunctionInfo> function : fctTable.entrySet()) {
-				Instruction root = function.getValue().getSyntaxTree();
-				root.toJava(cw);
+			for (ArgumentInfo argI : entry.getValue().getArgs()) {
+				if (first_argument)
+					first_argument = false;
+				else
+					arguments += ", ";
+
+				arguments += argI.getType() + " " + argI.getName();
 			}
+			
+			cw.writeLine("");
+			cw.writeLine(return_type + " " + ng.generateName(entry.getKey()) + "(" + arguments + ")");
+			
+			cw.openBlock();
+			// write function contents
+			Instruction function = entry.getValue().getSyntaxTree();
+			function.toJava(cw);
+			cw.closeBlock();
 		}
-		
-		cw.writeLine("\n\t" + functionHead + functionBody + "\n\t}\n");
 	}
 
 }

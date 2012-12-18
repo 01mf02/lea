@@ -43,10 +43,10 @@ public class Generator {
 		CodeWriter cw = new CodeWriter();
 		cw.writeLine("public class " + this.nameOfClass);
 		cw.openBlock();
-		this.cstGen.generate(cw) ;
+		this.cstGen.generate(cw);
+		this.fctGen.generate(cw);
 		cw.closeBlock();
 		
-		this.fctGen.generate(cw);
 		/*if (this.typeTable.generate() != null)
 				str += this.typeTable.generate();
 		

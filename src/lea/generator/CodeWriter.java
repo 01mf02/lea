@@ -17,13 +17,13 @@ public class CodeWriter {
 	}
 	
 	public void openBlock() {
-		result += "{\n";
+		writeLine("{");
 		increaseIndentation();
 	}
 	
 	public void closeBlock() {
-		result += "}\n";
 		decreaseIndentation();
+		writeLine("}");
 	}
 	
 	public void increaseIndentation() {
