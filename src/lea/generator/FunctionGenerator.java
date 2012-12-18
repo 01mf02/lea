@@ -23,10 +23,16 @@ public class FunctionGenerator {
 		ng = new NameGenerator();
 
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
-			
+
 			cw.writeLine("");
-			if (entry.getKey().equals("main"))
-				cw.writeLine("public static int main(String[] args)");
+			if (entry.getKey().equals("main")) {
+				if (entry.getValue().getOutputType() == null)
+					cw.writeLine("public static void main(String[] args)");
+				else
+					cw.writeLine("public static "
+							+ entry.getValue().getOutputType()
+							+ " main(String[] args)");
+			} 
 			else {
 				String return_type = "";
 				if (entry.getValue().getOutputType() == null)
@@ -45,10 +51,10 @@ public class FunctionGenerator {
 
 					arguments += argI.getType().toJava() + " " + argI.getName();
 				}
-				
-				
-				cw.writeLine(return_type + " " + ng.generateName(entry.getKey())
-						+ "(" + arguments + ")");
+
+				cw.writeLine("public " + return_type + " "
+						+ ng.generateName(entry.getKey()) + "(" + arguments
+						+ ")");
 			}
 
 			cw.openBlock();

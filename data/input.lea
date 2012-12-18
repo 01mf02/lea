@@ -36,7 +36,6 @@ procedure types()
 	tup:(int,char,string,float);
 	tup := i,c,s,f;
 	types();
-	return ;
 }
 
 procedure deif()

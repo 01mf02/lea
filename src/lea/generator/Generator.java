@@ -18,19 +18,15 @@ public class Generator {
 	public Generator(File nameDir, String nameOfClass, ConstantTable cstTable, TypeTable typeTable, FunctionTable fctTable) throws IOException
 	{
 		this.nameOfClass = nameOfClass;
-		
 		/*Format name*/
 		this.nameOfFile = this.nameOfClass + ".java";
-		
 		this.nameDir = nameDir;
 		
-		/*ConstantTable translation*/
+		
 		this.cstGen = new ConstantGenerator(cstTable);
 		
-		/*TypeTable translation*/
 		this.typeTable = new TypeGenerator(this.nameDir, typeTable);	
 		
-		/*FunctionTable translation*/
 		this.fctGen = new FunctionGenerator(fctTable);
 		
 	}

@@ -36,4 +36,9 @@ public class VariableLeaf extends Expression
 	{
 		return this.toString();
 	}
+	
+	public String toJava()
+	{
+		return objectType.toString()+ " " + name;
+	}
 }

@@ -1,7 +1,15 @@
 TEST = 1;
 LIST = [TEST, 2, 3];
 
-function main(l : list of string) : int
+
+procedure main(l : list of string) 
 {
+
+}
+
+function hello() : int
+{
+	writeln("Hello");
 	return 0;
 }
+
