@@ -1196,6 +1196,253 @@ Architecture
 \end_layout
 
 \begin_layout Standard
+Le programme est démarré avec la classe lea.Main, qui initialise le lexer
+ et le parser.
+ La vérification de types est fait par le parser.
+ Si le parser termine son travail sans erreurs, il retourne une table de
+ types, une table de constantes et une table de fonctions.
+ A partir de ça, la classe Main appelle le générateur de code Java, qui
+ génère le code cible Java.
+\end_layout
+
+\begin_layout Standard
+Nous avons implémenté :
+\end_layout
+
+\begin_layout Itemize
+Table de types : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Map<String, Type>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Table de constantes : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Map<String, Constant>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Table de fonctions : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Map<String, FunctionInfo>
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+La classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+FunctionInfo
+\end_layout
+
+\end_inset
+
+ sauvegarde un arbre de syntaxe abstrait, le type de sortie de la fonction,
+ et les arguments d'entrée comme liste de 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ArgumentInfo
+\end_layout
+
+\end_inset
+
+.
+ La classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ArgumentInfo
+\end_layout
+
+\end_inset
+
+ sauvegarde le nom et le type d'une variable d'entrée.
+\end_layout
+
+\begin_layout Itemize
+Environnement : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Map<String, VariableInfo>
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+La classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+VariableInfo
+\end_layout
+
+\end_inset
+
+ sauvegarde le type d'une variable et l'information si la variable était
+ déjà initialisé dans le programme.
+\end_layout
+
+\begin_layout Subsection
+Types
+\end_layout
+
+\begin_layout Standard
+Les types sont implémenté dans le paquet lea.types.
+ Dedans, il y a une classe de base Type, sur laquelle tous les autres classes
+ dans le paquet sont basés.
+ Ils sont les suivantes :
+\end_layout
+
+\begin_layout Itemize
+BoolType
+\end_layout
+
+\begin_layout Itemize
+CharType
+\end_layout
+
+\begin_layout Itemize
+EnumType
+\end_layout
+
+\begin_layout Itemize
+FloatType
+\end_layout
+
+\begin_layout Itemize
+IntType
+\end_layout
+
+\begin_layout Itemize
+ListType
+\end_layout
+
+\begin_layout Itemize
+StringType
+\end_layout
+
+\begin_layout Itemize
+StructType
+\end_layout
+
+\begin_layout Itemize
+TupleType
+\end_layout
+
+\begin_layout Itemize
+UnknownType
+\end_layout
+
+\begin_layout Subsection
+Constantes
+\end_layout
+
+\begin_layout Standard
+Similaire de notre implémentation de types, nous avons implémenté les constantes.
+ Ils sont contenus dans un paquet lea.constants, et la classe de base s'appelle
+ Constant.
+ Les classes dérivés sont :
+\end_layout
+
+\begin_layout Itemize
+BoolConstant
+\end_layout
+
+\begin_layout Itemize
+CharConstant
+\end_layout
+
+\begin_layout Itemize
+EnumConstant
+\end_layout
+
+\begin_layout Itemize
+FloatConstant
+\end_layout
+
+\begin_layout Itemize
+IntConstant
+\end_layout
+
+\begin_layout Itemize
+ListConstant
+\end_layout
+
+\begin_layout Itemize
+StringConstant
+\end_layout
+
+\begin_layout Itemize
+TupleConstant
+\end_layout
+
+\begin_layout Subsection
+Arbres de syntaxe abstraites
+\end_layout
+
+\begin_layout Standard
+Les arbres de syntaxe abstraites sont implémentés dans le paquet lea.syntax.
+ Là, nous trouvons la classe SyntaxTree, qui est la classe de base pour
+ toutes les autres classes dans le paquet.
+ Cette classe SyntaxTree contient l'environnement courant ...
+ TODO !
+\end_layout
+
+\begin_layout Subsection
+Traduction en code cible Java
+\end_layout
+
+\begin_layout Standard
 A faire !
 \end_layout
 
