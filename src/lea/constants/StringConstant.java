@@ -25,10 +25,10 @@ public class StringConstant implements Constant
     
     public String toString()
     {
-    	return getValue();
+    	return value;
     }
     
     public String toJava() {
-		return toString();
+		return "\"" + value + "\"";
 	}
 }

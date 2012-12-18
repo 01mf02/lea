@@ -18,12 +18,6 @@ public class ConstantGenerator {
 
 	public void generate(CodeWriter cw) throws IOException {
 		for (Map.Entry<String, Constant> entry : cstTable.entrySet()) {
-			if (entry.getValue().getType().toString() == "List")
-				cw.writeLine("public final " + entry.getValue().getType().toJava()
-						+ " " + ng.generateName(entry.getKey()) + " = new List"
-						+ entry.getValue().toString() + ";");
-			
-			
 			cw.writeLine("public final " + entry.getValue().getType().toString()
 					+ " " + ng.generateName(entry.getKey()) + " = "
 					+ entry.getValue().toString() + ";");
