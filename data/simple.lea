@@ -1,10 +1,7 @@
-MEANING = 12;
-PI = 3.14159265358979;
-LETTER = 'b';
-List_a = ['a', 'b', 'c'];
-LIST_OF_INT = [1,2,3,4,5,6];
+TEST = 1;
+LIST = [TEST, 2, 3];
 
-procedure main()
+function main(l : list of string) : int
 {
-	writeln("hello !");
+	return 0;
 }
