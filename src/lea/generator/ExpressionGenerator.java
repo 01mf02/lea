@@ -2,7 +2,6 @@ package lea.generator;
 
 import java.io.IOException;
 
-import lea.NativeFunctionTable;
 import lea.syntax.*;
 
 public class ExpressionGenerator extends SyntaxTreeGenerator{
@@ -19,7 +18,8 @@ public class ExpressionGenerator extends SyntaxTreeGenerator{
 
 			str += leftRightTest(exp.getLeft()) ;
 			str += exp.getTag();
-			str += leftRightTest(exp.getRight()) ;
+			if(exp.getRight() != null)
+				str += leftRightTest(exp.getRight()) ;
 		}
 		else if (exp instanceof ConstantLeaf)
 		{
@@ -30,13 +30,14 @@ public class ExpressionGenerator extends SyntaxTreeGenerator{
 		{
 			str += "\nFunctionCall \n";
 			str += leftRightTest(exp.getLeft());
-			str += leftRightTest(exp.getRight());
+			if(exp.getRight() != null)
+				str += leftRightTest(exp.getRight());
 		}
 		else if (exp instanceof FunctionRef)
 		{
 			str += "\nFunctionRef \n";
 			//str += ((FunctionRef) exp).getName() + "( " + ((FunctionRef) exp).getFunctionInfo();
-			str += "\n" + this.nativeFUnctionTable(((FunctionRef) exp).getName());
+			str += "\n" + this.nativeFUnctionTable(((FunctionRef) exp).getName()) + " " + exp.getLeft();
 		}
 		else if (exp instanceof ListAccessor)
 		{
@@ -47,13 +48,15 @@ public class ExpressionGenerator extends SyntaxTreeGenerator{
 		{
 			str += "\nListNode \n";
 			str += leftRightTest(exp.getLeft());
-			str += leftRightTest(exp.getRight());
+			if(exp.getRight() != null)
+				str += leftRightTest(exp.getRight());
 		}
 		else if (exp instanceof NumberExp)
 		{
 			str += "\nNumberExp \n";
 			str += leftRightTest(exp.getLeft());
-			str += leftRightTest(exp.getRight());
+			if(exp.getRight() != null)
+				str += leftRightTest(exp.getRight());
 		}
 		else if (exp instanceof StructAccessor)
 		{
@@ -73,7 +76,8 @@ public class ExpressionGenerator extends SyntaxTreeGenerator{
 		{
 			str += "\nStringExp \n";
 			str += leftRightTest(exp.getLeft());
-			str += leftRightTest(exp.getRight());
+			if(exp.getRight() != null)
+				str += leftRightTest(exp.getRight());
 		}
 		else str =  "Exp Unknown";
 	}
@@ -96,18 +100,14 @@ public class ExpressionGenerator extends SyntaxTreeGenerator{
 	public String nativeFUnctionTable(String name)
 	{
 		String result ="";
-		NativeFunctionTable nft = new NativeFunctionTable();
-		
-		//result += "\nname " + name + "\n";
-		//result += "\nTable :" + nft.toString() + "\n";
 
 		if (name.equals("write"))
 		{
-			result += "System.out.print";
+			result += "System.out.print(";
 		}
 		else if (name.equals("writeln"))
 		{
-			result += "System.out.println";
+			result += "System.out.println(";
 		}
 		else if (name.equals("toString"))
 		{

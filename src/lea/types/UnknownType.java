@@ -24,4 +24,9 @@ public class UnknownType extends Type
 	public String toString() {
 		return "unknown";
 	}
+	
+	@Override
+	public String toJava() {
+		return "unknown";
+	}
 }

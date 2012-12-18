@@ -61,4 +61,9 @@ public class EnumType extends Type
 	{
 		return "enum ("+enumElems.toString()+")";
 	}
+	
+	public String toJava()
+	{
+		return "char";
+	}
 }

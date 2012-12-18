@@ -41,17 +41,22 @@ public class Generator {
 	
 	public void generate() throws IOException
 	{
-		String str = "";
+		CodeWriter w = new CodeWriter();
+		w.writeLine("public class " + this.nameOfClass);
+		w.openBlock();
+		this.cstGen.generate(w) ;
+		w.closeBlock();
 		
-		str += "public class " + this.nameOfClass + "{\n";
-		str += this.cstGen.generate() +"\n";
-		str += this.fctGen.generate() +"\n";
-		str += this.typeTable.generate();
+		w.saveFile(this.nameDir + File.separator + this.nameOfFile);
+		
+		/*str += this.fctGen.generate() +"\n";
+		if (this.typeTable.generate() != null)
+				str += this.typeTable.generate();
 		
 		str += "}";
 		
 		FileWriter javaOutput = new FileWriter(this.nameDir + File.separator + this.nameOfFile);
 		javaOutput.write(str);
-		javaOutput.close();
+		javaOutput.close();*/
 	}
 }

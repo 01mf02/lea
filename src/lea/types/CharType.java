@@ -20,4 +20,9 @@ public class CharType extends Type
 	{
 		return "char";
 	}
+	
+	public String toJava()
+	{
+		return "char";
+	}
 }
