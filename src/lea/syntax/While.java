@@ -1,10 +1,17 @@
 package lea.syntax;
 
+import lea.generator.CodeWriter;
+
 public class While extends Instruction 
 {
-	public While(SyntaxTree a1, SyntaxTree a2)
+	Expression while_condition;
+	Instruction while_instruction;
+	
+	public While(Expression a1, Instruction a2)
 	{
 		super(a1, a2);
+		while_condition = a1;
+		while_instruction = a2;
 	}
 	
 	public String toString()
@@ -17,8 +24,11 @@ public class While extends Instruction
 		return "While";
 	}
 	
-	public String toJava()
+	public void toJava(CodeWriter w)
 	{
-		return "while";
+		w.writeLine("while (" + while_condition.toJava() + ")");
+		w.openBlock();
+		while_instruction.toJava(w);
+		w.closeBlock();
 	}
 }

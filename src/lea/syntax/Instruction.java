@@ -1,5 +1,7 @@
 package lea.syntax;
 
+import lea.generator.CodeWriter;
+
 public class Instruction extends SyntaxTree 
 {
 	public Instruction(SyntaxTree a1, SyntaxTree a2)
@@ -15,5 +17,10 @@ public class Instruction extends SyntaxTree
 	public String toDotString()
 	{
 		return "Instr";
+	}
+	
+	public void toJava(CodeWriter w)
+	{
+		w.writeLine("unhandled_instruction();");
 	}
 }

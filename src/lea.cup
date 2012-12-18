@@ -136,7 +136,7 @@ non terminal LinkedList<String> enumElems;
 non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
 non terminal ArgumentInfo functDecl;
-non terminal SyntaxTree block;
+non terminal Instruction block;
 non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal ListNode listDecl;

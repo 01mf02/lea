@@ -30,6 +30,11 @@ public class Expression extends SyntaxTree
 		return "Expression"+super.toString();
 	}
 	
+	public String toJava()
+	{
+		return "unhandled_expression";
+	}
+	
 	public String toDotString()
 	{
 		return "Expression";
