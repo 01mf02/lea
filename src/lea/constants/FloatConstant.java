@@ -27,10 +27,7 @@ public class FloatConstant implements Constant
     
     public String toString()
     {
-	    DecimalFormat decimalFormat = (DecimalFormat)DecimalFormat.getInstance();
-	    decimalFormat.applyPattern("# ##0.00###########");
-	    
-	    return decimalFormat.format(value);
+	    return Float.toString(value);
     }
     
     public String toJava() {

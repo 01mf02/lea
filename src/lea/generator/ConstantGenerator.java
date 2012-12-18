@@ -18,9 +18,9 @@ public class ConstantGenerator {
 
 	public void generate(CodeWriter cw) throws IOException {
 		for (Map.Entry<String, Constant> entry : cstTable.entrySet()) {
-			cw.writeLine("public final " + entry.getValue().getType().toString()
+			cw.writeLine("public final " + entry.getValue().getType().toJava()
 					+ " " + ng.generateName(entry.getKey()) + " = "
-					+ entry.getValue().toString() + ";");
+					+ entry.getValue().toJava() + ";");
 
 		}
 	}
