@@ -12,7 +12,6 @@ public class SyntaxTreeGenerator {
 
 	SyntaxTree node;
 	Environment env;
-	FileWriterT fwt;
 	String str;
 
 	public SyntaxTreeGenerator() {
@@ -21,13 +20,13 @@ public class SyntaxTreeGenerator {
 
 	public SyntaxTreeGenerator(FunctionTable fctTable) throws IOException {
 
-		this.fwt = new FileWriterT();
+		
 
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
 			node = entry.getValue().getSyntaxTree();
 			str += treeTranslator(node);
 		}
-		fwt.generate(str);
+
 
 	}
 
