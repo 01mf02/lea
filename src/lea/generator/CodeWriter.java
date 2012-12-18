@@ -16,6 +16,16 @@ public class CodeWriter {
 		result += "\n";
 	}
 	
+	public void openBlock() {
+		result += "{\n";
+		increaseIndentation();
+	}
+	
+	public void closeBlock() {
+		result += "}\n";
+		decreaseIndentation();
+	}
+	
 	public void increaseIndentation() {
 		indentation++;
 	}
