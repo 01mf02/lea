@@ -34,4 +34,8 @@ public class EnumConstant implements Constant
     {
     	return getValue();
     }
+    
+    public String toJava() {
+		return toString();
+	}
 }

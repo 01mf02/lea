@@ -72,4 +72,8 @@ public class TupleConstant implements Constant
     {
     	return value.toString();
     }
+    
+    public String toJava() {
+		return toString();
+	}
 }

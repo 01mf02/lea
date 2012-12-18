@@ -29,4 +29,12 @@ public class BoolConstant implements Constant
     	else
     		return "FALSE";
     }
+    
+    public String toJava()
+    {
+    	if (value)
+    		return "True";
+    	else
+    		return "False";
+    }
 }

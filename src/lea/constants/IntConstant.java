@@ -27,4 +27,8 @@ public class IntConstant implements Constant
     {
     	return Integer.toString(value);
     }
+    
+    public String toJava() {
+		return toString();
+	}
 }

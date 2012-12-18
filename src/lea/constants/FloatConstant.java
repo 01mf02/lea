@@ -32,4 +32,8 @@ public class FloatConstant implements Constant
 	    
 	    return decimalFormat.format(value);
     }
+    
+    public String toJava() {
+		return toString();
+	}
 }
