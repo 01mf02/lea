@@ -1,0 +1,10 @@
+MEANING = 12;
+PI = 3.14159265358979;
+LETTER = 'b';
+List_a = ['a', 'b', 'c'];
+LIST_OF_INT = [1,2,3,4,5,6];
+
+procedure main()
+{
+	writeln("hello !");
+}
