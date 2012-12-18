@@ -14,7 +14,6 @@ public class Generator {
 	String nameOfClass, nameOfFile = "";
 	TypeGenerator typeTable;
 	File nameDir;
-	SyntaxTreeGenerator stGen;
 	
 	public Generator(File nameDir, String nameOfClass, ConstantTable cstTable, TypeTable typeTable, FunctionTable fctTable) throws IOException
 	{
@@ -35,7 +34,6 @@ public class Generator {
 		this.fctGen = new FunctionGenerator(fctTable);
 		
 		/**/
-		this.stGen = new SyntaxTreeGenerator(fctTable);		
 	}
 	
 	public void generate() throws IOException
