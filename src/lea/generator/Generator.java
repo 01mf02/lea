@@ -33,7 +33,6 @@ public class Generator {
 		/*FunctionTable translation*/
 		this.fctGen = new FunctionGenerator(fctTable);
 		
-		/**/
 	}
 	
 	public void generate() throws IOException
@@ -44,15 +43,6 @@ public class Generator {
 		this.cstGen.generate(cw);
 		this.fctGen.generate(cw);
 		cw.closeBlock();
-		
-		/*if (this.typeTable.generate() != null)
-				str += this.typeTable.generate();
-		
-		str += "}";
-		
-		FileWriter javaOutput = new FileWriter(this.nameDir + File.separator + this.nameOfFile);
-		javaOutput.write(str);
-		javaOutput.close();*/
 		
 		cw.saveFile(this.nameDir + File.separator + this.nameOfFile);
 

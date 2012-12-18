@@ -23,28 +23,34 @@ public class FunctionGenerator {
 		ng = new NameGenerator();
 
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
-
-			String return_type = "";
-			if (entry.getValue().getOutputType() == null)
-				return_type = "void";
-			else
-				return_type = entry.getValue().getOutputType().toJava();
-
-			String arguments = "";
-			boolean first_argument = true;
-			
-			for (ArgumentInfo argI : entry.getValue().getArgs()) {
-				if (first_argument)
-					first_argument = false;
-				else
-					arguments += ", ";
-
-				arguments += argI.getType() + " " + argI.getName();
-			}
 			
 			cw.writeLine("");
-			cw.writeLine(return_type + " " + ng.generateName(entry.getKey()) + "(" + arguments + ")");
-			
+			if (entry.getKey().equals("main"))
+				cw.writeLine("public static int main(String[] args)");
+			else {
+				String return_type = "";
+				if (entry.getValue().getOutputType() == null)
+					return_type = "void";
+				else
+					return_type = entry.getValue().getOutputType().toJava();
+
+				String arguments = "";
+				boolean first_argument = true;
+
+				for (ArgumentInfo argI : entry.getValue().getArgs()) {
+					if (first_argument)
+						first_argument = false;
+					else
+						arguments += ", ";
+
+					arguments += argI.getType() + " " + argI.getName();
+				}
+				
+				
+				cw.writeLine(return_type + " " + ng.generateName(entry.getKey())
+						+ "(" + arguments + ")");
+			}
+
 			cw.openBlock();
 			// write function contents
 			Instruction function = entry.getValue().getSyntaxTree();
@@ -52,5 +58,4 @@ public class FunctionGenerator {
 			cw.closeBlock();
 		}
 	}
-
 }
