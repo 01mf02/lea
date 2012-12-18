@@ -3,6 +3,8 @@ import lea.types.*;
 
 public class BoolExp extends Expression 
 {
+	Expression bool_left, bool_right;
+	
 	protected BoolExp()
 	{
 		
@@ -17,6 +19,11 @@ public class BoolExp extends Expression
 	public String toString()
 	{
 		return "BooleanExp("+expTag.toString()+")"+super.toString();
+	}
+	
+	public String toJava()
+	{
+		return bool_left.toJava() + " " + expTag.toString() + " " + bool_right.toJava();
 	}
 	
 	public Type getType()

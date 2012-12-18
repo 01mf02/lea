@@ -9,25 +9,32 @@ import lea.FunctionTable;
 
 public class FunctionGenerator {
 
-	BlockGenerator bg;
-	String functionHead, functionBody, str;
-	NameGenerator ng;
-	String test;
-	
+	FunctionTable fctTable;	
 
-	public FunctionGenerator(FunctionTable fctTable) throws IOException {
-		this.functionHead = "";
-		this.functionBody = "";
-		this.str="";
-		this.test = "";
+	public FunctionGenerator(FunctionTable fctTable) {
+		this.fctTable = fctTable;
+	}
+
+	public void generate(CodeWriter cw) throws IOException {
+
+		BlockGenerator bg;
+		String functionHead, functionBody, str;
+		NameGenerator ng;
+		String test;
+
 		
-		this.bg = new BlockGenerator();
-		this.ng = new NameGenerator();
+		functionHead = "";
+		functionBody = "";
+		str="";
+		test = "";
+		
+		bg = new BlockGenerator();
+		ng = new NameGenerator();
 		
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet())
 		{
 
-			this.test += entry.getKey() + " " + entry.getValue().toString() + "\n\n\n";
+			test += entry.getKey() + " " + entry.getValue().toString() + "\n\n\n";
 			
 			if (entry.getKey().equals("main"))
 				functionHead += "\tpublic static int main(String[] args";
@@ -61,19 +68,9 @@ public class FunctionGenerator {
 			
 			/*Code*/
 			functionBody += new SyntaxTreeGenerator(fctTable).generate();
-			
-
-			
 		}
 		
-		
-	}
-
-	public String generate() {
-		String result ="";
-		result += "\n\t" + this.functionHead + this.functionBody + "\n\t}\n";
-		
-		return result;
+		cw.writeLine("\n\t" + functionHead + functionBody + "\n\t}\n");
 	}
 
 }

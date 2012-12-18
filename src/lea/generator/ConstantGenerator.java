@@ -16,9 +16,7 @@ public class ConstantGenerator {
 		this.ng = new NameGenerator();
 	}
 
-	public String generate(CodeWriter cw) throws IOException {
-		String str = "";
-
+	public void generate(CodeWriter cw) throws IOException {
 		for (Map.Entry<String, Constant> entry : cstTable.entrySet()) {
 			if (entry.getValue().getType().toString() == "List")
 				cw.writeLine("public final " + entry.getValue().getType().toJava()
@@ -31,7 +29,5 @@ public class ConstantGenerator {
 					+ entry.getValue().toString() + ";");
 
 		}
-
-		return str;
 	}
 }

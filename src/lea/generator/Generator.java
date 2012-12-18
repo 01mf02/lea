@@ -1,7 +1,6 @@
 package lea.generator;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import lea.ConstantTable;
@@ -41,16 +40,14 @@ public class Generator {
 	
 	public void generate() throws IOException
 	{
-		CodeWriter w = new CodeWriter();
-		w.writeLine("public class " + this.nameOfClass);
-		w.openBlock();
-		this.cstGen.generate(w) ;
-		w.closeBlock();
+		CodeWriter cw = new CodeWriter();
+		cw.writeLine("public class " + this.nameOfClass);
+		cw.openBlock();
+		this.cstGen.generate(cw) ;
+		cw.closeBlock();
 		
-		w.saveFile(this.nameDir + File.separator + this.nameOfFile);
-		
-		/*str += this.fctGen.generate() +"\n";
-		if (this.typeTable.generate() != null)
+		this.fctGen.generate(cw);
+		/*if (this.typeTable.generate() != null)
 				str += this.typeTable.generate();
 		
 		str += "}";
@@ -58,5 +55,8 @@ public class Generator {
 		FileWriter javaOutput = new FileWriter(this.nameDir + File.separator + this.nameOfFile);
 		javaOutput.write(str);
 		javaOutput.close();*/
+		
+		cw.saveFile(this.nameDir + File.separator + this.nameOfFile);
+
 	}
 }
