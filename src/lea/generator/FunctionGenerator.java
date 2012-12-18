@@ -43,7 +43,7 @@ public class FunctionGenerator {
 					else
 						arguments += ", ";
 
-					arguments += argI.getType() + " " + argI.getName();
+					arguments += argI.getType().toJava() + " " + argI.getName();
 				}
 				
 				
