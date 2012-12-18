@@ -9,14 +9,14 @@ public class FunctionInfo
 {
 	private LinkedList<ArgumentInfo> args;
 	private Type outputType;
-	private SyntaxTree sTree;
+	private Instruction sTree;
 	
 	public FunctionInfo()
 	{
 		this(new LinkedList<ArgumentInfo>(), null, null);
 	}
 	
-	public FunctionInfo(LinkedList<ArgumentInfo> lArgs, Type outputT, SyntaxTree s)
+	public FunctionInfo(LinkedList<ArgumentInfo> lArgs, Type outputT, Instruction s)
 	{
 		args = lArgs;
 		outputType = outputT;
@@ -54,7 +54,7 @@ public class FunctionInfo
 		outputType = t;
 	}
 	
-	public void setSyntaxTree(SyntaxTree s)
+	public void setSyntaxTree(Instruction s)
 	{
 		sTree = s;
 	}
@@ -69,7 +69,7 @@ public class FunctionInfo
 		return outputType;
 	}
 	
-	public SyntaxTree getSyntaxTree()
+	public Instruction getSyntaxTree()
 	{
 		return sTree;
 	}
