@@ -27,18 +27,13 @@ public class ListType extends Type
 	}
 	
 	public String toString()
-	{
-		if(this.getLeft() != null)
-			return "List<" + this.getLeft().toString() +">";
-		
+	{		
 		return "List";
 	}
 	
 	public String toJava()
 	{
-		if(this.getLeft() != null)
-			return "List<" + this.getLeft().toString() +">";
-		
-		return "List";
+		return this.left.getType() + "[]";
+
 	}
 }

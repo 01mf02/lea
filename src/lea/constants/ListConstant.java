@@ -59,6 +59,10 @@ public class ListConstant implements Constant
     }
     
     public String toJava() {
-		return toString();
+    	String l = "{";
+    	for (int i = 0; i <value.size()-1; i++)
+    		l += value.get(i) + ", ";
+    	l += value.get(value.size()-1) + "}";
+		return l;
 	}
 }
