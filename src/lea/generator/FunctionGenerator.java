@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import lea.ArgumentInfo;
 import lea.FunctionInfo;
 import lea.FunctionTable;
-import lea.syntax.SyntaxTree;
 
 public class FunctionGenerator {
 
@@ -27,13 +26,8 @@ public class FunctionGenerator {
 		
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet())
 		{
-			
-			
+
 			this.test += entry.getKey() + " " + entry.getValue().toString() + "\n\n\n";
-			
-			
-			
-			
 			
 			if (entry.getKey().equals("main"))
 				functionHead += "\tpublic static int main(String[] args";

@@ -20,4 +20,9 @@ public class StringType extends Type
 	{
 		return "String";
 	}
+	
+	public String toJava()
+	{
+		return "String";
+	}
 }

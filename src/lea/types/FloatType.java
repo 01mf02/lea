@@ -19,5 +19,10 @@ public class FloatType extends Type
 	public String toString()
 	{
 		return "float";
+	}	
+	
+	public String toJava()
+	{
+		return "float";
 	}
 }

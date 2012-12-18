@@ -9,15 +9,15 @@ public class InstructionGenerator extends SyntaxTreeGenerator{
 
 	public InstructionGenerator(Instruction inst) throws IOException {
 		str += "";
-		str += "\n ** Classe : " + inst.getClass().getSimpleName();
+		//str += "\n ** Classe : " + inst.getClass().getSimpleName();
 
 		if (inst instanceof Assignment) {
-			str += "\t Assignment \n";
+			//str += "\t Assignment \n";
 			//str += "\n****code " + ((Assignment) inst).getLeft().toString() + " \n\t" 
 			       //+ new VariableGenerator(inst.getLeft()).generate();
 		} 
 		else if (inst instanceof Case) {
-			str += "\t Case \n";
+			//str += "\t Case \n";
 			str += "\n****code " + inst.getLeft() + " = " + inst.getRight();
 		}
 		else if (inst instanceof ElseCondition) {
@@ -35,25 +35,25 @@ public class InstructionGenerator extends SyntaxTreeGenerator{
 			str += "\n****code " + inst.getLeft() + " = " + inst.getRight();
 		} 
 		else if (inst instanceof Repeat) {
-			str += "\t Repeat \n";
+			//str += "\t Repeat \n";
 			str += "\n****code " + inst.getLeft() + " = " + inst.getRight();
 		} 
 		else if (inst instanceof ReturnNode) {
-			str += "\t ReturnNode \n";
+			//str += "\t ReturnNode \n";
 		} 
 		else if (inst instanceof Succ) {
-			str += "\t Succ \n";
+			//str += "\t Succ \n";
 			str += new SyntaxTreeGenerator().treeTranslator(inst.getLeft());
 			if (new SyntaxTreeGenerator().treeTranslator(inst.getRight()) != null)
 			str += " \n---------- " + new SyntaxTreeGenerator().treeTranslator(inst.getRight());
 		} 
 		else if (inst instanceof While) {
-			str += "\t While \n";
+			//str += "\t While \n";
 			str += "\n****code " + inst.getLeft() + " = " + inst.getRight();
 		} 
 		else if (inst instanceof Instruction)
 		{
-			str += "\t inst \n";
+			//str += "\t inst \n";
 			str += leftRightTest(inst.getLeft());
 		}
 		else

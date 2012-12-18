@@ -20,4 +20,9 @@ public class BoolType extends Type
 	{
 		return "boolean";
 	}
+	
+	public String toJava()
+	{
+		return "boolean";
+	}
 }
