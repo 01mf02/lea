@@ -1120,75 +1120,27 @@ length
 \end_layout
 
 \begin_layout Section
-Utilisation
+Problèmes envisagés
 \end_layout
 
 \begin_layout Standard
-Appeler 
-\begin_inset Quotes fld
-\end_inset
-
-ant
-\begin_inset Quotes frd
-\end_inset
-
- exécute les tâches suivantes :
-\end_layout
-
-\begin_layout Itemize
-Créer des fichiers Java à partir des fichiers CUP/JFlex (src/lea.cup et src/lea.jf
-lex).
-\end_layout
-
-\begin_layout Itemize
-Compiler tous les fichiers Java (dans src/).
-\end_layout
-
-\begin_layout Itemize
-Exécuter le compilateur sur les fichiers Léa mentionnés dans build.xml (target
- 
-\begin_inset Quotes fld
-\end_inset
-
-default
-\begin_inset Quotes frd
-\end_inset
-
-), écrivant les messages du compilateur dans data/output.txt.
+Le plus grand problème pendant l'implémentation était la coordination du
+ développement des parts différents.
+ Tandis que la coordination entre syntacticien et sémanticien marchait bien
+ grâce à leur relation proche (même origine, mêmes cours, même résidence,
+ ...), la coordination avec le développeur était plus difficile, parce-que
+ on ne se pouvait pas voir assez souvent pour discuter le travail.
+ Aussi, elle pouvait seulement commencer son travail après grands parts
+ de la partie des autres étaient finis --- à cause de ça, il fallait faire
+ beaucoup de travail à la fin du projet pour elle, engendrent assez souvent
+ des conflits avec leurs examens et autres projets.
 \end_layout
 
 \begin_layout Standard
-A partir de tout fichier Léa, le compilateur crée un nouveau répertoire
- (portant le même nom comme le fichier Léa), où il place :
-\end_layout
-
-\begin_layout Itemize
-Fichiers Java contenant le code cible pour le fichier Léa.
-\end_layout
-
-\begin_layout Itemize
-Arbres de syntaxe abstraites pour toute fonction dans le fichier Léa, dans
- le format DOT.
-\end_layout
-
-\begin_layout Standard
-Appeler 
-\begin_inset Quotes fld
-\end_inset
-
-ant clean
-\begin_inset Quotes frd
-\end_inset
-
- efface tous fichiers qui sont créés par 
-\begin_inset Quotes fld
-\end_inset
-
-ant
-\begin_inset Quotes frd
-\end_inset
-
-, sauf les fichiers dans data/.
+Ceci dit, c'était un problème que je n'ai pas défini la architecture du
+ projet assez détaillé.
+ Ça entraînait des malentendus, qui prenaient quelque temps à résoudre et
+ qui mettaient les nerfs à rude épreuve sans raison.
 \end_layout
 
 \begin_layout Section
@@ -1332,6 +1284,20 @@ VariableInfo
  déjà initialisé dans le programme.
 \end_layout
 
+\begin_layout Itemize
+Pile d'environnement :
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ TODO.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsection
 Types
 \end_layout
@@ -1344,43 +1310,44 @@ Les types sont implémenté dans le paquet lea.types.
 \end_layout
 
 \begin_layout Itemize
-BoolType
+BoolType : booléen
 \end_layout
 
 \begin_layout Itemize
-CharType
+CharType : caractère
 \end_layout
 
 \begin_layout Itemize
-EnumType
+EnumType : énumération
 \end_layout
 
 \begin_layout Itemize
-FloatType
+FloatType : nombre flottant
 \end_layout
 
 \begin_layout Itemize
-IntType
+IntType : nombre entier
 \end_layout
 
 \begin_layout Itemize
-ListType
+ListType : liste, sauvegarde aussi le type d'éléments dans la liste
 \end_layout
 
 \begin_layout Itemize
-StringType
+StringType : chaîne de caractères
 \end_layout
 
 \begin_layout Itemize
-StructType
+StructType : structure, sauvegarde un ensemble de variables contenus
 \end_layout
 
 \begin_layout Itemize
-TupleType
+TupleType : uplet, sauvegarde une liste de types contenus
 \end_layout
 
 \begin_layout Itemize
-UnknownType
+UnknownType : utilisé par le parser quand il ne peut pas déterminer le type
+ d'une expression
 \end_layout
 
 \begin_layout Subsection
@@ -1426,6 +1393,14 @@ StringConstant
 TupleConstant
 \end_layout
 
+\begin_layout Standard
+Les classes sont utilisés à la déclaration des constantes, mais il y a aussi
+ des classes qui sont utilisés dans les fonctions ; ils sont BoolConstant,
+ CharConstant, FloatConstant, IntConstant et StringConstant.
+ Les classes ListConstant et TupleConstant ne sont pas utilisés dans les
+ fonctions --- au lieu de cela, on utilise ListNode et TupleNode là.
+\end_layout
+
 \begin_layout Subsection
 Arbres de syntaxe abstraites
 \end_layout
@@ -1434,8 +1409,196 @@ Arbres de syntaxe abstraites
 Les arbres de syntaxe abstraites sont implémentés dans le paquet lea.syntax.
  Là, nous trouvons la classe SyntaxTree, qui est la classe de base pour
  toutes les autres classes dans le paquet.
- Cette classe SyntaxTree contient l'environnement courant ...
- TODO !
+ Cette classe SyntaxTree contient l'environnement courant et des pointeurs
+ à un fils gauche et un fils droite, qui permettent de traverser l'arbre
+ de syntaxe d'une façon très simple.
+\end_layout
+
+\begin_layout Standard
+Nous différencions deux types de nœuds dans l'AST ; des expressions et des
+ instructions.
+ Les expressions sont implémenté dans la classe Expression, qui permet de
+ déterminer le type de l'expression.
+ Il y a plusieurs classes hérités de Expression :
+\end_layout
+
+\begin_layout Itemize
+BoolExp : expressions qui sont de type booléen, comme a != b ou True ||
+ False
+\end_layout
+
+\begin_layout Itemize
+ConstantLeaf : constante
+\end_layout
+
+\begin_layout Itemize
+EnumExp : ???
+\end_layout
+
+\begin_layout Itemize
+FunctionCall : appel de fonction
+\end_layout
+
+\begin_layout Itemize
+FunctionRef : ???
+\end_layout
+
+\begin_layout Itemize
+ListAccessor : expression de genre 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+liste[i]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+ListNode : expression de genre 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+[1, 2, 3, 4, 5]
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+NumberExp : expressions qui sont de type numérique, entier ou flottant,
+ comme 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+2.0*3.14
+\end_layout
+
+\end_inset
+
+ ou 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+5%3
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+StringExp : concaténation des chaînes de caractères, comme 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+"Hello" + " world!"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+StructAccessor : expression de genre 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+structure.element
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+TupleNode : expression de genre 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+(1, 'b', C)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+TypeExp : ???
+\end_layout
+
+\begin_layout Itemize
+VariableLeaf : variable
+\end_layout
+
+\begin_layout Standard
+Les instruction sont implémenté dans la classe Instruction.
+ Les classes hérités sont :
+\end_layout
+
+\begin_layout Itemize
+Assignment : affectation
+\end_layout
+
+\begin_layout Itemize
+Case
+\end_layout
+
+\begin_layout Itemize
+Condition
+\end_layout
+
+\begin_layout Itemize
+ElseCondition
+\end_layout
+
+\begin_layout Itemize
+Loop : 
+\end_layout
+
+\begin_layout Itemize
+Repeat
+\end_layout
+
+\begin_layout Itemize
+ReturnNode
+\end_layout
+
+\begin_layout Itemize
+Succ : succession de deux instructions
+\end_layout
+
+\begin_layout Itemize
+While
 \end_layout
 
 \begin_layout Subsection
@@ -1444,6 +1607,78 @@ Traduction en code cible Java
 
 \begin_layout Standard
 A faire !
+\end_layout
+
+\begin_layout Section
+Utilisation
+\end_layout
+
+\begin_layout Standard
+Appeler 
+\begin_inset Quotes fld
+\end_inset
+
+ant
+\begin_inset Quotes frd
+\end_inset
+
+ exécute les tâches suivantes :
+\end_layout
+
+\begin_layout Itemize
+Créer des fichiers Java à partir des fichiers CUP/JFlex (src/lea.cup et src/lea.jf
+lex).
+\end_layout
+
+\begin_layout Itemize
+Compiler tous les fichiers Java (dans src/).
+\end_layout
+
+\begin_layout Itemize
+Exécuter le compilateur sur les fichiers Léa mentionnés dans build.xml (target
+ 
+\begin_inset Quotes fld
+\end_inset
+
+default
+\begin_inset Quotes frd
+\end_inset
+
+), écrivant les messages du compilateur dans data/output.txt.
+\end_layout
+
+\begin_layout Standard
+A partir de tout fichier Léa, le compilateur crée un nouveau répertoire
+ (portant le même nom comme le fichier Léa), où il place :
+\end_layout
+
+\begin_layout Itemize
+Fichiers Java contenant le code cible pour le fichier Léa.
+\end_layout
+
+\begin_layout Itemize
+Arbres de syntaxe abstraites pour toute fonction dans le fichier Léa, dans
+ le format DOT.
+\end_layout
+
+\begin_layout Standard
+Appeler 
+\begin_inset Quotes fld
+\end_inset
+
+ant clean
+\begin_inset Quotes frd
+\end_inset
+
+ efface tous fichiers qui sont créés par 
+\begin_inset Quotes fld
+\end_inset
+
+ant
+\begin_inset Quotes frd
+\end_inset
+
+, sauf les fichiers dans data/.
 \end_layout
 
 \end_body
