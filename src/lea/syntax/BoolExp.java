@@ -14,6 +14,8 @@ public class BoolExp extends Expression
 	{
 		super(a1, a2);
 		expTag = tag;
+		bool_left = a1;
+		bool_right = a2;
 	}
 	
 	public String toString()
@@ -23,7 +25,7 @@ public class BoolExp extends Expression
 	
 	public String toJava()
 	{
-		return bool_left.toJava() + " " + expTag.toString() + " " + bool_right.toJava();
+		return "(" + bool_left.toJava() + " " + expTag.toString() + " " + bool_right.toJava() + ")";
 	}
 	
 	public Type getType()

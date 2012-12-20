@@ -22,46 +22,58 @@ public class FunctionGenerator {
 
 		ng = new NameGenerator();
 
-		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
+		if (fctTable.containsKey("main")) {
 
-			cw.writeLine("");
-			if (entry.getKey().equals("main")) {
-				if (entry.getValue().getOutputType() == null)
+			for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
+
+				cw.writeLine("");
+
+				if (entry.getKey().equals("main")) {
 					cw.writeLine("public static void main(String[] args)");
-				else
-					cw.writeLine("public static "
-							+ entry.getValue().getOutputType()
-							+ " main(String[] args)");
-			} 
-			else {
+					cw.openBlock();
+					if (entry.getValue().getOutputType() == null)
+						cw.writeLine("lea_main();");
+					else
+						cw.writeLine("int return_code = lea_main()");
+					cw.closeBlock();
+				}
+
 				String return_type = "";
 				if (entry.getValue().getOutputType() == null)
 					return_type = "void";
 				else
 					return_type = entry.getValue().getOutputType().toJava();
 
-				String arguments = "";
-				boolean first_argument = true;
-
-				for (ArgumentInfo argI : entry.getValue().getArgs()) {
-					if (first_argument)
-						first_argument = false;
-					else
-						arguments += ", ";
-
-					arguments += argI.getType().toJava() + " " + argI.getName();
-				}
-
+				cw.writeLine("");
 				cw.writeLine("public " + return_type + " "
-						+ ng.generateName(entry.getKey()) + "(" + arguments
-						+ ")");
-			}
+						+ ng.generateName(entry.getKey()) + "("
+						+ argsGenerator(entry.getValue()) + ")");
 
-			cw.openBlock();
-			// write function contents
-			Instruction function = entry.getValue().getSyntaxTree();
-			function.toJava(cw);
-			cw.closeBlock();
+				cw.openBlock();
+				// write function contents
+				Instruction function = entry.getValue().getSyntaxTree();
+				function.toJava(cw);
+				cw.closeBlock();
+			}
 		}
+		else
+			System.err.println("main function not found; aborting build.");
 	}
+
+	public String argsGenerator(FunctionInfo entry) {
+		String arguments = "";
+		boolean first_argument = true;
+
+		for (ArgumentInfo argI : entry.getArgs()) {
+			if (first_argument)
+				first_argument = false;
+			else
+				arguments += ", ";
+
+			arguments += argI.getType().toJava() + " " + argI.getName();
+		}
+
+		return arguments;
+	}
+
 }

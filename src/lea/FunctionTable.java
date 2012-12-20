@@ -21,6 +21,14 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 		return str;
 	}
 	
+	public boolean findFunction(String id) {
+		for (Map.Entry<String, FunctionInfo> entry : entrySet()) {
+			if(entry.equals(id))
+				return true;
+		}
+		return false;
+	}
+	
 	public void saveDotToDir(String directory) {
 		for (Map.Entry<String, FunctionInfo> entry : entrySet())
 		{

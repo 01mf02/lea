@@ -1,6 +1,7 @@
 package lea.syntax;
 
 import lea.*;
+import lea.generator.CodeWriter;
 import lea.types.*;
 
 public class FunctionRef extends Expression 
@@ -58,5 +59,10 @@ public class FunctionRef extends Expression
 	public String toDotString()
 	{
 		return this.toString();
+	}
+	
+	public void toJava(CodeWriter w)
+	{
+		w.writeLine("FunctionRef");
 	}
 }
