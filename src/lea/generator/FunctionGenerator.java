@@ -28,7 +28,8 @@ public class FunctionGenerator {
 
 				cw.writeLine("");
 
-				if (entry.getKey().equals("main")) {
+				if (entry.getKey().equals("main")) {    //Au cas où il y a des arguments dans le lea_main à récupérer. 
+														//On traite ici pour ne pas devoir reparcourir le tableau...
 					cw.writeLine("public static void main(String[] args)");
 					cw.openBlock();
 					if (entry.getValue().getOutputType() == null)
@@ -45,7 +46,7 @@ public class FunctionGenerator {
 					return_type = entry.getValue().getOutputType().toJava();
 
 				cw.writeLine("");
-				cw.writeLine("public " + return_type + " "
+				cw.writeLine("public static " + return_type + " "
 						+ ng.generateName(entry.getKey()) + "("
 						+ argsGenerator(entry.getValue()) + ")");
 

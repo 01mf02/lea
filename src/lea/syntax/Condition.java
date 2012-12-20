@@ -27,7 +27,7 @@ public class Condition extends Instruction
 	
 	public void toJava(CodeWriter w)
 	{
-		w.writeLine("if (" + left.toJava());
+		w.writeLine("if (" + left.toJava() + ")");
 		w.openBlock();
 		right.toJava(w);
 		w.closeBlock();

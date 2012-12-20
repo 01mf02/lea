@@ -69,9 +69,8 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 		LinkedList<Type> args = new LinkedList<Type>();
 
 		SyntaxTree tmp = e;
-		
-		if(tmp != null)
-		{
+
+		if (tmp != null) {
 			if (tmp.getLeft() == null && tmp.getRight() == null)
 				args.add(tmp.getType());
 			else {
@@ -114,6 +113,33 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 		}
 
 		return isPermitted;
+	}
+
+	public boolean isInNativeTable(String id) {
+		for (Map.Entry<String, NativeFunctionInfo> entry : entrySet()) {
+			if (entry.getKey().equals(id))
+				return true;
+		}
+		return false;
+	}
+
+	public String toJava(String id) {
+		String result = "";
+
+		for (Map.Entry<String, NativeFunctionInfo> entry : entrySet()) {
+			if(id.equals("length"))
+				return entry.getValue().getArgs() + "length";
+			else if(id.equals("read"))
+					return "read"; 	// NE PAS OUBLIER D'IMPORTER CE QU'IL FAUT !
+			else if(id.equals("write"))
+					return "System.out.print";
+			else if(id.equals("writeln"))
+					return "System.out.println";
+			else return null;
+
+		}
+
+		return result;
 	}
 
 	public String toString() {

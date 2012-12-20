@@ -1,12 +1,13 @@
 TEST = 1;
 LIST = [TEST, 2, 3];
+CH = "Je suis la plus belle";
 
 
-
-
-function hello() : int
+procedure main() 
 {
-	writeln("Hello");
-	return 0;
+	writeln("HAKUNA MATATA");
+	writeln(CH);
 }
+
+
 

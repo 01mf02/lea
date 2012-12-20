@@ -61,8 +61,13 @@ public class FunctionRef extends Expression
 		return this.toString();
 	}
 	
-	public void toJava(CodeWriter w)
+	public String toJava()
 	{
-		w.writeLine("FunctionRef");
+		NativeFunctionTable nft = new NativeFunctionTable();
+		String result = nft.toJava(name);
+		
+		if(result != null)
+			return result + "(" ;
+		return "";
 	}
 }

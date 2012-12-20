@@ -25,7 +25,7 @@ public class BoolExp extends Expression
 	
 	public String toJava()
 	{
-		return "(" + bool_left.toJava() + " " + expTag.toString() + " " + bool_right.toJava() + ")";
+		return  bool_left.toJava() + " " + expTag.toString() + " " + bool_right.toJava();
 	}
 	
 	public Type getType()
