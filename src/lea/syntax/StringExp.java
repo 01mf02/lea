@@ -28,6 +28,6 @@ public class StringExp extends Expression
 	
 	public String toJava()
 	{
-		return left.toJava() + right.toJava();
+		return left.toJava() + " " + expTag + " " + right.toJava();
 	}
 }

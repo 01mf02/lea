@@ -31,9 +31,9 @@ public class FunctionCall extends Expression {
 
 	public String toJava() {
 		if (exp != null)
-			return fRef.toJava() + exp.toJava() + ");";
+			return fRef.toJava() + exp.toJava() + ")";
 		else
-			return fRef.toJava() + ");";
+			return fRef.toJava() + ")";
 
 	}
 }

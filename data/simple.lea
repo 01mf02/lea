@@ -14,8 +14,18 @@ procedure main()
 	writeln("HAKUNA MATATA");
 
 	abc :string;
-
-
+	abc := CH + " Hey !";
+	
+	writeln(abc);
+	
 	i : int;
 	i:= ret();
+
+	while(i>4)
+	{
+		writeln("Hi !");
+		i:=i-1;
+	}
+
+
 }
