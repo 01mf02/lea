@@ -123,4 +123,18 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 		}
 		return isPermitted;
 	}
+	
+	public String toJava(String id)
+	{
+		String result ="Hey ";
+
+
+		for (Map.Entry<String, FunctionInfo> entry : entrySet()) {
+			result += "Val" + entry.getKey() + " " + entry.getValue().toString() + "\n\n";
+		}
+
+
+		return result + "CACA !!!!";
+
+	}
 }

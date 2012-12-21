@@ -2,6 +2,8 @@ package lea.syntax;
 
 public class NumberExp extends Expression 
 {
+	Expression left, right;
+	
 	protected NumberExp()
 	{
 		
@@ -11,6 +13,8 @@ public class NumberExp extends Expression
 	{
 		super(a1, a2);
 		expTag = tag;
+		left = a1;
+		right = a2;
 	}
 	
 	public String toString()
@@ -21,5 +25,11 @@ public class NumberExp extends Expression
 	public String toDotString()
 	{
 		return "NumberExp("+expTag.toString()+")";
+	}
+	
+	public String toJava()
+	{
+
+		return left.toJava() + " " + expTag + " " + right.toJava();
 	}
 }

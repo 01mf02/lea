@@ -29,7 +29,6 @@ public class Instruction extends SyntaxTree
 		{
 			((FunctionCall) left).toJava(w);
 		}
-		
 		else
 			w.writeLine("unhandled_instruction();");
 	}

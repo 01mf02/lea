@@ -86,11 +86,6 @@ function wooTooComplexFunction(arg:int,arg0:string) : int
 		return 0;
 	}
 	
-	repeat
-	{}
-	while(true)
-	
-	
 	while(true)
 	{
 	

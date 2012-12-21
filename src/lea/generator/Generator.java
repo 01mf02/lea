@@ -25,7 +25,7 @@ public class Generator {
 		
 		this.cstGen = new ConstantGenerator(cstTable);
 		
-		this.typeTable = new TypeGenerator(this.nameDir, typeTable);	
+		this.typeTable = new TypeGenerator(typeTable);	
 		
 		this.fctGen = new FunctionGenerator(fctTable);
 		
@@ -37,6 +37,7 @@ public class Generator {
 		cw.writeLine("public class " + this.nameOfClass);
 		cw.openBlock();
 		this.cstGen.generate(cw);
+		this.typeTable.generate(cw);
 		this.fctGen.generate(cw);
 		cw.closeBlock();
 		

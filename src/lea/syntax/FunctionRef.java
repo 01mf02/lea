@@ -1,73 +1,78 @@
 package lea.syntax;
 
 import lea.*;
-import lea.generator.CodeWriter;
+import lea.generator.NameGenerator;
 import lea.types.*;
 
-public class FunctionRef extends Expression 
-{
+public class FunctionRef extends Expression {
 	private String name;
 	private FunctionInfo info;
 	private NativeFunctionInfo nfi;
-	
-	public FunctionRef(String n, FunctionInfo fi)
-	{
+	NameGenerator ng = new NameGenerator();
+
+	public FunctionRef(String n, FunctionInfo fi) {
 		name = n;
 		info = fi;
 	}
-	
-	public FunctionRef(String n, NativeFunctionInfo fi)
-	{
+
+	public FunctionRef(String n, NativeFunctionInfo fi) {
 		name = n;
 		nfi = fi;
 	}
-	public String getName()
-	{
+
+	public String getName() {
 		return name;
 	}
-	
-	public FunctionInfo getFunctionInfo()
-	{
+
+	public FunctionInfo getFunctionInfo() {
 		return info;
 	}
-	
-	public NativeFunctionInfo getNativeFunctionInfo()
-	{
+
+	public NativeFunctionInfo getNativeFunctionInfo() {
 		return nfi;
 	}
-	
-	public Type getType()
-	{
-		if(info != null)
+
+	public Type getType() {
+		if (info != null)
 			return info.getOutputType();
-		else if(nfi != null)
+		else if (nfi != null)
 			return nfi.getOutputType();
-		
+
 		return new UnknownType();
 	}
-	
-	public String toString()
-	{
-		if(info != null)
-			return "FunctionRef("+name+/*", " + info.toString()+*/")";
-		else if(nfi != null)
-			return "FunctionRef("+name+/*", " + nfi.toString()+*/")";
-		
-		return "FunctionRef("+name+", INVALID)";
+
+	public String toString() {
+		if (info != null)
+			return "FunctionRef(" + name + /* ", " + info.toString()+ */")";
+		else if (nfi != null)
+			return "FunctionRef(" + name + /* ", " + nfi.toString()+ */")";
+
+		return "FunctionRef(" + name + ", INVALID)";
 	}
-	
-	public String toDotString()
-	{
+
+	public String toDotString() {
 		return this.toString();
 	}
-	
-	public String toJava()
-	{
-		NativeFunctionTable nft = new NativeFunctionTable();
-		String result = nft.toJava(name);
+
+	public String toJava() {
+		String result = "";
+		if (nfi != null) {
+			NativeFunctionTable nft = new NativeFunctionTable();
+			result += nft.toJava(name);
+
+			if (result != null)
+				return result + "(";
+		}
+		else 
+			if (info != null) {
+				if (info.getArgs().size() == 0)
+					return result + ng.generateName(name) + "(";
+				else
+					return result + ng.generateName(name) + "(";
+			}
 		
-		if(result != null)
-			return result + "(" ;
-		return "";
+
+		return "FunctionRef Unknown !";
+
 	}
 }

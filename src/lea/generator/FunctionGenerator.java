@@ -28,8 +28,7 @@ public class FunctionGenerator {
 
 				cw.writeLine("");
 
-				if (entry.getKey().equals("main")) {    //Au cas où il y a des arguments dans le lea_main à récupérer. 
-														//On traite ici pour ne pas devoir reparcourir le tableau...
+				if (entry.getKey().equals("main")) {
 					cw.writeLine("public static void main(String[] args)");
 					cw.openBlock();
 					if (entry.getValue().getOutputType() == null)

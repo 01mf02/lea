@@ -31,7 +31,7 @@
     classpath=".:${bin.dir}:${lib.dir}/java-cup-11a-runtime.jar"
     output="data/output.txt">
       <arg value="data/simple.lea"/>
-      <arg value="data/doc.lea"/>
+  	  <arg value="data/doc.lea"/>
       <arg value="data/input.lea"/>
     </java>
     

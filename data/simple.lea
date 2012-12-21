@@ -3,11 +3,19 @@ LIST = [TEST, 2, 3];
 CH = "Je suis la plus belle";
 
 
+
+function ret() : int
+{
+	return 23;
+}
+
 procedure main() 
 {
 	writeln("HAKUNA MATATA");
-	writeln(CH);
+
+	abc :string;
+
+
+	i : int;
+	i:= ret();
 }
-
-
-
