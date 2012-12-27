@@ -73,8 +73,8 @@ Michael Färber
 \end_layout
 
 \begin_layout Abstract
-Nous avons créé un compilateur pour le langage Léa, qui est capable de créer
- du code Java à partir des fichiers Léa.
+Nous avons créé un compilateur pour le langage Léa, qui crée du code Java
+ à partir des fichiers Léa.
 \end_layout
 
 \begin_layout Section
@@ -752,7 +752,7 @@ status open
 
 \end_inset
 
-: égalité
+ : égalité
 \end_layout
 
 \begin_layout Itemize
@@ -767,7 +767,7 @@ status open
 
 \end_inset
 
-: inégalité
+ : inégalité
 \end_layout
 
 \end_deeper
@@ -811,7 +811,7 @@ status open
 
 \end_inset
 
-: ET
+ : ET
 \end_layout
 
 \begin_layout Itemize
@@ -826,7 +826,7 @@ status open
 
 \end_inset
 
-: OU
+ : OU
 \end_layout
 
 \begin_layout Itemize
@@ -841,7 +841,7 @@ status open
 
 \end_inset
 
-: NON
+ : NON
 \end_layout
 
 \end_deeper
@@ -885,7 +885,7 @@ status open
 
 \end_inset
 
-: addition
+ : addition
 \end_layout
 
 \begin_layout Itemize
@@ -900,7 +900,7 @@ status open
 
 \end_inset
 
-: soustraction
+ : soustraction
 \end_layout
 
 \begin_layout Itemize
@@ -915,7 +915,7 @@ status open
 
 \end_inset
 
-: multiplication
+ : multiplication
 \end_layout
 
 \begin_layout Itemize
@@ -930,7 +930,7 @@ status open
 
 \end_inset
 
-: division
+ : division
 \end_layout
 
 \begin_layout Itemize
@@ -945,7 +945,7 @@ status open
 
 \end_inset
 
-: inférieur
+ : inférieur
 \end_layout
 
 \begin_layout Itemize
@@ -960,7 +960,7 @@ status open
 
 \end_inset
 
-: supérieur
+ : supérieur
 \end_layout
 
 \begin_layout Itemize
@@ -975,7 +975,7 @@ status open
 
 \end_inset
 
-: inférieur ou égal
+ : inférieur ou égal
 \end_layout
 
 \begin_layout Itemize
@@ -990,7 +990,7 @@ status open
 
 \end_inset
 
-: supérieur ou égal
+ : supérieur ou égal
 \end_layout
 
 \end_deeper
@@ -1055,7 +1055,7 @@ writeln
 
 \end_inset
 
-: Prend une chaîne de caractères et l'affiche sur l'écran, terminé avec
+ : Prend une chaîne de caractères et l'affiche sur l'écran, terminé avec
  une nouvelle ligne.
 \end_layout
 
@@ -1071,8 +1071,8 @@ write
 
 \end_inset
 
-: Prend une chaîne de caractères et l'affiche sur l'écran, pas terminé avec
- une nouvelle ligne.
+ : Prend une chaîne de caractères et l'affiche sur l'écran, pas terminé
+ avec une nouvelle ligne.
 \end_layout
 
 \begin_layout Itemize
@@ -1087,7 +1087,7 @@ read
 
 \end_inset
 
-: Attend l'entrée de l'utilisateur et la retourne comme chaîne de caractères.
+ : Attend l'entrée de l'utilisateur et la retourne comme chaîne de caractères.
 \end_layout
 
 \begin_layout Standard
@@ -1148,13 +1148,35 @@ Architecture
 \end_layout
 
 \begin_layout Standard
-Le programme est démarré avec la classe lea.Main, qui initialise le lexer
- et le parser.
+Le programme est démarré avec la classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+lea.Main
+\end_layout
+
+\end_inset
+
+, qui initialise le lexer et le parser.
  La vérification de types est fait par le parser.
  Si le parser termine son travail sans erreurs, il retourne une table de
  types, une table de constantes et une table de fonctions.
- A partir de ça, la classe Main appelle le générateur de code Java, qui
- génère le code cible Java.
+ A partir de ça, la classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Main
+\end_layout
+
+\end_inset
+
+ appelle le générateur de code Java, qui génère le code cible Java.
 \end_layout
 
 \begin_layout Standard
@@ -1285,12 +1307,14 @@ VariableInfo
 \end_layout
 
 \begin_layout Itemize
-Pile d'environnement :
-\begin_inset Note Note
+Pile d'environnement : 
+\begin_inset listings
+inline true
 status open
 
 \begin_layout Plain Layout
- TODO.
+
+Stack<Environment>
 \end_layout
 
 \end_inset
@@ -1310,44 +1334,154 @@ Les types sont implémenté dans le paquet lea.types.
 \end_layout
 
 \begin_layout Itemize
-BoolType : booléen
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+BoolType
+\end_layout
+
+\end_inset
+
+ : booléen
 \end_layout
 
 \begin_layout Itemize
-CharType : caractère
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+CharType
+\end_layout
+
+\end_inset
+
+ : caractère
 \end_layout
 
 \begin_layout Itemize
-EnumType : énumération
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+EnumType
+\end_layout
+
+\end_inset
+
+ : énumération
 \end_layout
 
 \begin_layout Itemize
-FloatType : nombre flottant
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+FloatType
+\end_layout
+
+\end_inset
+
+ : nombre flottant
 \end_layout
 
 \begin_layout Itemize
-IntType : nombre entier
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+IntType
+\end_layout
+
+\end_inset
+
+ : nombre entier
 \end_layout
 
 \begin_layout Itemize
-ListType : liste, sauvegarde aussi le type d'éléments dans la liste
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ListType
+\end_layout
+
+\end_inset
+
+ : liste, sauvegarde aussi le type d'éléments dans la liste
 \end_layout
 
 \begin_layout Itemize
-StringType : chaîne de caractères
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+StringType
+\end_layout
+
+\end_inset
+
+ : chaîne de caractères
 \end_layout
 
 \begin_layout Itemize
-StructType : structure, sauvegarde un ensemble de variables contenus
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+StructType
+\end_layout
+
+\end_inset
+
+ : structure, sauvegarde un ensemble de variables contenus
 \end_layout
 
 \begin_layout Itemize
-TupleType : uplet, sauvegarde une liste de types contenus
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+TupleType
+\end_layout
+
+\end_inset
+
+ : uplet, sauvegarde une liste de types contenus
 \end_layout
 
 \begin_layout Itemize
-UnknownType : utilisé par le parser quand il ne peut pas déterminer le type
- d'une expression
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+UnknownType
+\end_layout
+
+\end_inset
+
+ : utilisé par le parser quand il ne peut pas déterminer le type d'une expressio
+n
 \end_layout
 
 \begin_layout Subsection
@@ -1362,43 +1496,238 @@ Similaire de notre implémentation de types, nous avons implémenté les constan
 \end_layout
 
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 BoolConstant
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 CharConstant
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 EnumConstant
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 FloatConstant
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 IntConstant
 \end_layout
 
+\end_inset
+
+
+\end_layout
+
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 ListConstant
 \end_layout
 
-\begin_layout Itemize
-StringConstant
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+StringConstant
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 TupleConstant
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 Les classes sont utilisés à la déclaration des constantes, mais il y a aussi
- des classes qui sont utilisés dans les fonctions ; ils sont BoolConstant,
- CharConstant, FloatConstant, IntConstant et StringConstant.
- Les classes ListConstant et TupleConstant ne sont pas utilisés dans les
- fonctions --- au lieu de cela, on utilise ListNode et TupleNode là.
+ des classes qui sont utilisés dans les fonctions ; ils sont 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+BoolConstant
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+CharConstant
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+FloatConstant
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+IntConstant
+\end_layout
+
+\end_inset
+
+ et 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+StringConstant
+\end_layout
+
+\end_inset
+
+.
+ Les classes 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ListConstant
+\end_layout
+
+\end_inset
+
+ et 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+TupleConstant
+\end_layout
+
+\end_inset
+
+ ne sont pas utilisés dans les fonctions --- au lieu de cela, on utilise
+ 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ListNode
+\end_layout
+
+\end_inset
+
+ et 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+TupleNode
+\end_layout
+
+\end_inset
+
+ là.
 \end_layout
 
 \begin_layout Subsection
@@ -1406,20 +1735,78 @@ Arbres de syntaxe abstraites
 \end_layout
 
 \begin_layout Standard
-Les arbres de syntaxe abstraites sont implémentés dans le paquet lea.syntax.
- Là, nous trouvons la classe SyntaxTree, qui est la classe de base pour
- toutes les autres classes dans le paquet.
- Cette classe SyntaxTree contient l'environnement courant et des pointeurs
- à un fils gauche et un fils droite, qui permettent de traverser l'arbre
- de syntaxe d'une façon très simple.
+Les arbres de syntaxe abstraites sont implémentés dans le paquet 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+lea.syntax
+\end_layout
+
+\end_inset
+
+.
+ Là, nous trouvons la classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+SyntaxTree
+\end_layout
+
+\end_inset
+
+, qui est la classe de base pour toutes les autres classes dans le paquet.
+ Cette classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+SyntaxTree
+\end_layout
+
+\end_inset
+
+ contient l'environnement courant et des pointeurs à un fils gauche et un
+ fils droite, qui permettent de traverser l'arbre de syntaxe d'une façon
+ très simple.
 \end_layout
 
 \begin_layout Standard
 Nous différencions deux types de nœuds dans l'AST ; des expressions et des
  instructions.
- Les expressions sont implémenté dans la classe Expression, qui permet de
- déterminer le type de l'expression.
- Il y a plusieurs classes hérités de Expression :
+ Les expressions sont implémenté dans la classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Expression
+\end_layout
+
+\end_inset
+
+, qui permet de déterminer le type de l'expression.
+ Il y a plusieurs classes hérités de 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Expression
+\end_layout
+
+\end_inset
+
+ :
 \end_layout
 
 \begin_layout Itemize
@@ -1561,7 +1948,19 @@ VariableLeaf : variable
 \end_layout
 
 \begin_layout Standard
-Les instruction sont implémenté dans la classe Instruction.
+Les instructions sont implémentés dans la classe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Instruction
+\end_layout
+
+\end_inset
+
+.
  Les classes hérités sont :
 \end_layout
 
@@ -1606,7 +2005,184 @@ Traduction en code cible Java
 \end_layout
 
 \begin_layout Standard
-A faire !
+Nous avons implémenté la traduction en code cible Java dans le paquet 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+lea.generator
+\end_layout
+
+\end_inset
+
+.
+ Là, la classe d'entrée s'appelle 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Generator
+\end_layout
+
+\end_inset
+
+, qui est responsable pour commencer la traduction et utilise des autres
+ classes :
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+ConstantGenerator
+\end_layout
+
+\end_inset
+
+ : génère des constantes
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+TypeGenerator
+\end_layout
+
+\end_inset
+
+ : écrit des classes Java pour chaque structure Léa
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+FunctionGenerator
+\end_layout
+
+\end_inset
+
+ : écrit des fonctions Java pour chaque fonction Léa
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+CodeWriter
+\end_layout
+
+\end_inset
+
+ : classe auxiliaire qui est responsable pour écrire du code dans une façon
+ bien-formaté
+\end_layout
+
+\begin_layout Standard
+Les classes utilisent souvent les fonctions 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+toJava()
+\end_layout
+
+\end_inset
+
+, implémentés par exemple dans les classes 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Instruction
+\end_layout
+
+\end_inset
+
+, 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Expression
+\end_layout
+
+\end_inset
+
+ et 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+Type
+\end_layout
+
+\end_inset
+
+.
+ Ces fonctions 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+toJava()
+\end_layout
+
+\end_inset
+
+ sont très souvent récursifs ; par exemple, la fonction 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+toJava()
+\end_layout
+
+\end_inset
+
+ d'une affectation appelle la fonction 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+toJava()
+\end_layout
+
+\end_inset
+
+ de son fils gauche et son fils droit, après concaténe les deux sorties
+ avec le signe '=' entre les deux pour générer une instruction Java.
 \end_layout
 
 \begin_layout Section
