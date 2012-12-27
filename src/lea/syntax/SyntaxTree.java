@@ -47,19 +47,9 @@ public class SyntaxTree
     	return left;
     }
     
-    public void setLeft(SyntaxTree left) 
-    {
-    	this.left = left;
-    }
-    
     public SyntaxTree getRight() 
     {
     	return right;
-    }
-    
-    public void setRight(SyntaxTree right) 
-    {
-    	this.right = right;
     }
     
     public Type getType() 
