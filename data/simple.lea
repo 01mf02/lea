@@ -4,9 +4,9 @@ CH = "Je suis la plus belle";
 
 
 
-function ret() : int
+function ret(a : int) : int
 {
-	return 23;
+	return a;
 }
 
 procedure main() 
@@ -14,12 +14,12 @@ procedure main()
 	writeln("HAKUNA MATATA");
 
 	abc :string;
-	abc := CH + " Hey !";
+	abc := CH + " Hey !" + "Oulala !";
 	
 	writeln(abc);
 	
 	i : int;
-	i:= ret();
+	i:= ret(10);
 
 	while(i>4)
 	{

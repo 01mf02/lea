@@ -7,7 +7,7 @@ import lea.syntax.*;
 
 public class TupleConstant implements Constant 
 {
-	LinkedList<String> value = null;
+	LinkedList<Object> value = null;
 	TupleType tupleType;
 	
 	public TupleConstant(TupleNode tn, TupleType t)
@@ -15,7 +15,7 @@ public class TupleConstant implements Constant
 		Expression tmpL = (Expression)tn.getLeft();
 		Expression tmpR = (Expression)tn.getRight();
 		
-		LinkedList<String> nodesValues = new LinkedList<String>();
+		LinkedList<Object> nodesValues = new LinkedList<Object>();
 
 		//Obtient tous les noeuds
 		if (tmpL.getLeft() != null || tmpL.getRight() != null)
@@ -29,7 +29,7 @@ public class TupleConstant implements Constant
 						if(tmpL.getRight() instanceof ConstantLeaf)
 						{
 							ConstantLeaf c = (ConstantLeaf)tmpL.getRight();
-							nodesValues.add(0, c.getValue());
+							nodesValues.add(0, c);
 						}
 					}
 				}
@@ -40,7 +40,7 @@ public class TupleConstant implements Constant
 						if(tmpL.getRight() instanceof ConstantLeaf)
 						{
 							ConstantLeaf c = (ConstantLeaf)tmpL.getLeft();
-							nodesValues.add(0, c.getValue());
+							nodesValues.add(0, c);
 						}
 					}
 				}
@@ -48,10 +48,10 @@ public class TupleConstant implements Constant
 			}
 		}	
 		
-		if(tmpL.getRight() instanceof ConstantLeaf)
+	//	if(tmpL.getRight() != null)
 		{
 			ConstantLeaf c = (ConstantLeaf)tmpR;
-			nodesValues.add(c.getValue());
+			nodesValues.add(0, c);
 		}
 		
 		value = nodesValues;
@@ -63,7 +63,7 @@ public class TupleConstant implements Constant
     	return tupleType;
     }
     
-    public LinkedList<String> getValue()
+    public LinkedList<Object> getValue()
     {
     	return value;
     }
@@ -73,7 +73,32 @@ public class TupleConstant implements Constant
     	return value.toString();
     }
     
+    public String listType()
+    {
+    	String result = "";
+    	Type type = tupleType;
+    	while (type.getLeft() != null)
+    	{
+    		result += "\n" + type;
+    		type = type.getLeft();
+    	}
+    	result += "\n" + type.getLeft() + "\n";
+    		
+    		
+    	return result;
+    }
+    
     public String toJava() {
-		return toString();
+    	int i;
+    	String result ="";
+    	int size = value.size();
+    	for(i = 0; i < size; i++)
+    	{
+    		Object val = value.get(i);
+    		result += ((ConstantLeaf) val).getType() + " var" + i + " = "  + ((ConstantLeaf) val).toJava() + "; ";
+    	}
+    	
+    	return result;
+		//return toString();
 	}
 }

@@ -33,8 +33,8 @@ public class BoolConstant implements Constant
     public String toJava()
     {
     	if (value)
-    		return "True";
+    		return "true";
     	else
-    		return "False";
+    		return "false";
     }
 }

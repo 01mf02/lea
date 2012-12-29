@@ -5,14 +5,18 @@ import lea.types.Type;
 
 public class TupleNode extends Expression 
 {
+	Expression left, right;
+	
 	public TupleNode(Expression a1, Expression a2)
 	{
 		super(a1, a2);
+		left = a1;
+		right = a2;
 	}
 	
 	public String toString()
 	{
-		return "Tuple"+super.toString();
+		return "Tuple" +super.toString();
 	}
 	
 	public Type getType() 
@@ -35,6 +39,16 @@ public class TupleNode extends Expression
 	public String toDotString()
 	{
 		return "Tuple";
+	}
+	
+	public String toJava()
+	{
+		String result ="";
+		
+		result += "HELLO !!!!   " + left.toJava() + " NEXT   " + right.toJava();
+		
+		
+		return result;
 	}
 
 }

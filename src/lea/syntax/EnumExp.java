@@ -1,9 +1,12 @@
 package lea.syntax;
+
 import lea.types.*;
 
 public class EnumExp extends SyntaxTree 
 {
 	protected String enumValue;
+	protected Instruction inst;
+	protected EnumExp enumExp;
 	
 	protected EnumExp()
 	{
@@ -14,6 +17,8 @@ public class EnumExp extends SyntaxTree
 	{
 		super(a1, a2);
 		enumValue = value;
+		inst = a1;
+		enumExp = a2;
 	}
 	
 	public String getString()
@@ -34,5 +39,15 @@ public class EnumExp extends SyntaxTree
 	public String toDotString()
 	{
 		return "EnumExp";
+	}
+	
+	public String toJava()
+	{
+		String result = "";
+		
+		result += "\tJe suis un enum !!!!!" + enumValue;
+		
+		
+		return result;
 	}
 }

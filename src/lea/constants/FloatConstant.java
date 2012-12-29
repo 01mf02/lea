@@ -1,7 +1,5 @@
 package lea.constants;
 
-import java.text.*;
-
 import lea.types.*;
 
 public class FloatConstant implements Constant 
@@ -31,6 +29,6 @@ public class FloatConstant implements Constant
     }
     
     public String toJava() {
-		return toString();
+		return "(float)" + " " + toString();
 	}
 }
