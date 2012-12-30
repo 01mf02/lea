@@ -7,7 +7,7 @@ public class Expression extends SyntaxTree
 	
 	protected Expression()
 	{
-		
+		super();
 	}
 	
 	public Expression(Expression a1, Expression a2)

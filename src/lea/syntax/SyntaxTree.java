@@ -12,7 +12,7 @@ import lea.types.*;
 
 public class SyntaxTree 
 {
-    private int id;   // used in toDot
+    protected int id;   // used in toDot
     private SyntaxTree left;
     private SyntaxTree right;
     private EnvironmentStack env;	    // current environment
@@ -24,6 +24,7 @@ public class SyntaxTree
     {
     	this.left = null;
     	this.right = null;
+    	this.id=numID++;
     }
     
     public SyntaxTree(SyntaxTree left, SyntaxTree right, Type t) 

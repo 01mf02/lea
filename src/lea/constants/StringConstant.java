@@ -20,7 +20,7 @@ public class StringConstant implements Constant
     
     public String getValue()
     {
-    	return "\"" + value + "\"";
+    	return "'" + value + "'";
     }
     
     public String toString()
