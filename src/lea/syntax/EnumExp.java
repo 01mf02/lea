@@ -1,5 +1,6 @@
 package lea.syntax;
 
+import lea.generator.CodeWriter;
 import lea.types.*;
 
 public class EnumExp extends SyntaxTree 
@@ -41,11 +42,23 @@ public class EnumExp extends SyntaxTree
 		return "EnumExp";
 	}
 	
+	public EnumExp getNext()
+	{
+		if (enumExp.getLeft() != null)
+			return enumExp;
+		else return null;
+	}
+	
+	public void instTranslator(CodeWriter cw)
+	{
+		inst.toJava(cw);
+	}
+	
 	public String toJava()
 	{
 		String result = "";
 		
-		result += "\tJe suis un enum !!!!!" + enumValue;
+		result += enumValue + " : " ;
 		
 		
 		return result;

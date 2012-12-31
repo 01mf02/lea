@@ -34,6 +34,8 @@ public class Generator {
 	public void generate() throws IOException
 	{
 		CodeWriter cw = new CodeWriter();
+		cw.writeLine("import java.util.*;");
+		cw.writeLine("");
 		cw.writeLine("public class " + this.nameOfClass);
 		cw.openBlock();
 		this.cstGen.generate(cw);

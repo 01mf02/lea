@@ -128,9 +128,9 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 
 		for (Map.Entry<String, NativeFunctionInfo> entry : entrySet()) {
 			if(id.equals("length"))
-				return entry.getValue().getArgs() + "length";
+				return "length;";
 			else if(id.equals("read"))
-					return "read"; 	// NE PAS OUBLIER D'IMPORTER CE QU'IL FAUT !
+					return "Scanner sc = new Scanner(System.in);\nString str = sc.nextLine();"; 	// NE PAS OUBLIER D'IMPORTER CE QU'IL FAUT !
 			else if(id.equals("write"))
 					return "System.out.print";
 			else if(id.equals("writeln"))

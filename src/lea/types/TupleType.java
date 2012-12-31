@@ -1,6 +1,7 @@
 package lea.types;
 
 import lea.constants.*;
+import lea.syntax.ConstantLeaf;
 
 public class TupleType extends Type {
 	public TupleType(Type t1, Type t2) {
@@ -45,11 +46,19 @@ public class TupleType extends Type {
 			str += ", " + this.getRight().getType().toString();
 
 		return str + ")";*/
-
 		return "tuple";
 	}
 
+	public String nameGen()
+	{
+		return "";
+	}
+	
 	public String toJava() {
-		return toString();
+		String result ="";
+		
+		result += new TupleConstant(left, right);
+
+		return result;
 	}
 }

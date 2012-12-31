@@ -4,12 +4,13 @@ import lea.generator.CodeWriter;
 
 public class Case extends Instruction 
 {
-	protected SyntaxTree left, right;
+	protected Expression left;
+	protected SyntaxTree right;
 	
 	public Case(SyntaxTree a1, SyntaxTree a2)
 	{
 		super(a1, a2);
-		left = a1;
+		left = (Expression) a1;
 		right = a2;
 	}
 	
@@ -26,7 +27,27 @@ public class Case extends Instruction
 	
 	public void toJava(CodeWriter cw)
 	{
+		cw.writeLine("switch (" + left.toJava() + ")");
+		cw.openBlock();
+		EnumExp inst1 =  (EnumExp)right;
+		while (inst1.getRight() != null)
+		{
+			cw.writeLine("case " + inst1.toJava());
+			cw.openBlock();
+			inst1.instTranslator(cw);
+			cw.writeLine("break;");
+			cw.closeBlock();
+			inst1 = (EnumExp) inst1.getRight();
+		}
+		cw.writeLine("case " + inst1.toJava());
+		cw.openBlock();
+		inst1.instTranslator(cw);
+		cw.writeLine("break;");
+		cw.closeBlock();
 		
-		cw.writeLine("\nLEFT !!!\n" + "Left type : " + left.getType() + "\n left to string : " + left.toString() + "\n get class : " + left.getClass());
+		cw.closeBlock();
+		cw.writeLine("");
+		
+		
 	}
 }

@@ -55,6 +55,13 @@ procedure deif()
 		    rgb := (0, 255, 255);
 	}
 
+	read();
+	
+	str : string;
+	str := "hello";
+	str.length();
+
+
 	types();
 }
 

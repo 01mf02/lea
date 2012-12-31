@@ -23,6 +23,8 @@ public class TypeGenerator {
 			cw.writeLine("");
 			cw.writeLine("public static class " + entry.getKey() + " () {");
 			cw.openBlock();
+			cw.writeLine(entry.getValue().toString());
+			cw.writeLine(entry.getValue().toJava());
 			if(entry.getValue().getLeft() != null)
 				cw.writeLine("LEFT " + entry.getValue().getLeft().toString());
 			if(entry.getValue().getRight() != null)

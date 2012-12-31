@@ -1,6 +1,7 @@
 package lea.syntax;
 
 import lea.generator.CodeWriter;
+import lea.types.TupleType;
 
 public class Assignment extends Instruction 
 {
@@ -23,7 +24,24 @@ public class Assignment extends Instruction
 		if (assignment_right != null)
 			w.writeLine(assignment_left.toJava() + " = " + assignment_right.toJava() + ";");
 		else
-			w.writeLine(assignment_left.getType() + " " + assignment_left.toJava() + ";");
+		{
+			if(assignment_left.getType() instanceof TupleType)
+				{
+				int i = 0;
+					String result = "class " + assignment_left.toJava() + "{";
+
+					TupleNode tp = new TupleNode(assignment_left);
+					result += tp.leftTreatment();
+
+					
+					
+					w.writeLine(result);
+					
+				}
+			else 
+				w.writeLine(assignment_left.getType() + " " + assignment_left.toJava() + ";");
+		}
+			
 	}
 	
 	public String toDotString()

@@ -58,7 +58,11 @@ public class TupleConstant implements Constant
 		tupleType = t;
 	}
     
-    public Type getType()
+    public TupleConstant(Type left, Type right) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Type getType()
     {
     	return tupleType;
     }

@@ -22,7 +22,12 @@ public class FunctionGenerator {
 
 		ng = new NameGenerator();
 
-		if (fctTable.containsKey("main")) {
+		if (!fctTable.containsKey("main")) {
+			System.err.println("main function not found; aborting build.");
+			return;
+		}
+		else
+		{
 
 			for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
 
@@ -55,9 +60,7 @@ public class FunctionGenerator {
 				function.toJava(cw);
 				cw.closeBlock();
 			}
-		}
-		else
-			System.err.println("main function not found; aborting build.");
+		}	
 	}
 
 	public String argsGenerator(FunctionInfo entry) {

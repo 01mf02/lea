@@ -14,6 +14,33 @@ public class TupleNode extends Expression
 		right = a2;
 	}
 	
+	public TupleNode(Expression assignment_left) {
+		// TODO Auto-generated constructor stub
+		left = assignment_left;
+	}
+	
+	public String leftTreatment()
+	{
+		String res = "";
+		Type l = left.getType();
+		res += typeTreatment(l);
+		return res;
+	}
+	
+	public String typeTreatment(Type l)
+	{
+		String res = "";
+		
+		while (l.getLeft() != null)
+		{
+			l = l.getLeft();
+			this.typeTreatment(l);	
+		}
+		res += l.getType() + ", ";
+		
+		return res;
+	}
+
 	public String toString()
 	{
 		return "Tuple" +super.toString();
@@ -43,11 +70,12 @@ public class TupleNode extends Expression
 	
 	public String toJava()
 	{
-		String result ="";
+		String result ="(";
 		
-		result += "HELLO !!!!   " + left.toJava() + " NEXT   " + right.toJava();
+		result += left.toJava() + ", ";
 		
-		
+		result += right.toJava() + ")";
+
 		return result;
 	}
 
