@@ -16,10 +16,6 @@ public class BoolConstant implements Constant {
 		return t;
 	}
 
-	public boolean getValue() {
-		return value;
-	}
-
 	public String toString() {
 		if (value)
 			return "TRUE";

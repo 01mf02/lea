@@ -16,10 +16,6 @@ public class CharConstant implements Constant {
 		return t;
 	}
 
-	public char getValue() {
-		return value;
-	}
-
 	public String toString() {
 		return Character.toString(value);
 	}

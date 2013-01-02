@@ -16,15 +16,12 @@ public class FloatConstant implements Constant {
 		return t;
 	}
 
-	public float getValue() {
-		return value;
-	}
-
 	public String toString() {
 		return Float.toString(value);
 	}
 
 	public String toJava() {
+		// TODO: why do we need (float) here?
 		return "(float)" + " " + toString();
 	}
 }

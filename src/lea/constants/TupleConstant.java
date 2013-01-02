@@ -61,10 +61,6 @@ public class TupleConstant implements Constant {
 		return tupleType;
 	}
 
-	public LinkedList<Object> getValue() {
-		return value;
-	}
-
 	public String toString() {
 		return value.toString();
 	}

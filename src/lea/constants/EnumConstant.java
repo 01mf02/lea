@@ -18,19 +18,15 @@ public class EnumConstant implements Constant {
 		return t;
 	}
 
-	public String getValue() {
-		return value;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public String toString() {
-		return getValue();
+		return value;
 	}
 
 	public String toJava() {
-		return toString();
+		return value;
 	}
 }

@@ -16,10 +16,6 @@ public class IntConstant implements Constant {
 		return t;
 	}
 
-	public int getValue() {
-		return value;
-	}
-
 	public String toString() {
 		return Integer.toString(value);
 	}

@@ -45,10 +45,6 @@ public class ListConstant implements Constant {
 		return listType;
 	}
 
-	public LinkedList<String> getValue() {
-		return value;
-	}
-
 	public String toString() {
 		return value.toString();
 	}
