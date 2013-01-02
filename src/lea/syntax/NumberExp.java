@@ -15,15 +15,19 @@ public class NumberExp extends Expression {
 	}
 
 	public String toString() {
-		return "NumberExp(" + expTag.toString() + ")" + super.toString();
+		return "NumberExp(" + expTag + ")" + super.toString();
 	}
 
 	public String toDotString() {
-		return "NumberExp(" + expTag.toString() + ")";
+		return "NumberExp(" + expTag + ")";
 	}
 
 	public String toJava() {
-
-		return left.toJava() + " " + expTag + " " + right.toJava();
+		if (right == null)
+			// unary operators, like MINUS_U
+			return expTag + " " + left.toJava();
+		else
+			// binary operators
+			return left.toJava() + " " + expTag + " " + right.toJava();
 	}
 }
