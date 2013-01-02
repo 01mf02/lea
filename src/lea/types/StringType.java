@@ -1,28 +1,24 @@
 package lea.types;
 
-import lea.constants.*;
+import lea.constants.Constant;
+import lea.constants.StringConstant;
 
-public class StringType extends Type 
-{
+public class StringType extends Type {
 	@Override
-	public boolean equals(Type t1) 
-	{
+	public boolean equals(Type t1) {
 		return t1 instanceof StringType;
 	}
 
 	@Override
-	public boolean equals(Constant c1) 
-	{
+	public boolean equals(Constant c1) {
 		return c1 instanceof StringConstant;
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		return "String";
 	}
-	
-	public String toJava()
-	{
+
+	public String toJava() {
 		return "String";
 	}
 }

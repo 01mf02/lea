@@ -1,22 +1,18 @@
 package lea.types;
 
-import lea.constants.*;
+import lea.constants.Constant;
 
-public class UnknownType extends Type 
-{
-	public UnknownType()
-	{
+public class UnknownType extends Type {
+	public UnknownType() {
 	}
 
 	@Override
-	public boolean equals(Type t1) 
-	{
+	public boolean equals(Type t1) {
 		return false;
 	}
 
 	@Override
-	public boolean equals(Constant c1) 
-	{
+	public boolean equals(Constant c1) {
 		return false;
 	}
 
@@ -24,7 +20,7 @@ public class UnknownType extends Type
 	public String toString() {
 		return "unknown";
 	}
-	
+
 	@Override
 	public String toJava() {
 		return "unknown";

@@ -1,28 +1,24 @@
 package lea.types;
 
-import lea.constants.*;
+import lea.constants.BoolConstant;
+import lea.constants.Constant;
 
-public class BoolType extends Type 
-{
+public class BoolType extends Type {
 	@Override
-	public boolean equals(Type t1) 
-	{
+	public boolean equals(Type t1) {
 		return t1 instanceof BoolType;
 	}
 
 	@Override
-	public boolean equals(Constant c1) 
-	{
+	public boolean equals(Constant c1) {
 		return c1 instanceof BoolConstant;
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		return "boolean";
 	}
-	
-	public String toJava()
-	{
+
+	public String toJava() {
 		return "boolean";
 	}
 }

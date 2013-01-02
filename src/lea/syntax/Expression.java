@@ -1,42 +1,35 @@
 package lea.syntax;
-import lea.types.*;
 
-public class Expression extends SyntaxTree 
-{
+import lea.types.Type;
+
+public class Expression extends SyntaxTree {
 	protected EnumTagExp expTag;
-	
-	protected Expression()
-	{
+
+	protected Expression() {
 		super();
 	}
-	
-	public Expression(Expression a1, Expression a2)
-	{
+
+	public Expression(Expression a1, Expression a2) {
 		super(a1, a2);
 	}
-	
-	public EnumTagExp getTag()
-	{
+
+	public EnumTagExp getTag() {
 		return expTag;
 	}
-	
-	public Type getType()
-	{
-		return this.getLeft().getType();		
+
+	public Type getType() {
+		return this.getLeft().getType();
 	}
-	
-	public String toString()
-	{
-		return "Expression"+super.toString();
+
+	public String toString() {
+		return "Expression" + super.toString();
 	}
-	
-	public String toJava()
-	{
+
+	public String toJava() {
 		return "unhandled_expression";
 	}
-	
-	public String toDotString()
-	{
+
+	public String toDotString() {
 		return "Expression";
 	}
 

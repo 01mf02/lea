@@ -1,12 +1,14 @@
 package lea;
 
+import generated.LeaLexer;
+import generated.LeaParser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import generated.*;
-import lea.generator.*;
+import lea.generator.Generator;
 
 public class Main {
 	public static int main(String[] args) throws IOException {
@@ -14,32 +16,32 @@ public class Main {
 
 		for (int i = 0; i < args.length; i++) {
 			System.out.println("\n\nReading file " + args[i] + " ...");
-			
+
 			LeaParser parser = parseFile(args[i]);
 
-			if(parser != null)
-			{
+			if (parser != null) {
 				FunctionTable fctTable = parser.getFunctionTable();
 				ConstantTable constTable = parser.getConstantTable();
 				TypeTable typeTable = parser.getTypeTable();
-	
+
 				System.out.println("\nConstant table:");
 				System.out.println(constTable);
-	
+
 				System.out.println("Type table:");
 				System.out.println(typeTable);
-	
+
 				System.out.println("Function table:");
 				System.out.println(fctTable);
-				
-				File output_dir = new File(args[i].replace(".lea",""));
+
+				File output_dir = new File(args[i].replace(".lea", ""));
 				output_dir.mkdir();
-	
+
 				fctTable.saveDotToDir(output_dir.getPath());
-	
-				if (!parser.hasCompileErrors()) 
-				{
-					Generator generator = new Generator(output_dir, output_dir.getName(), constTable, typeTable, fctTable);
+
+				if (!parser.hasCompileErrors()) {
+					Generator generator = new Generator(output_dir,
+							output_dir.getName(), constTable, typeTable,
+							fctTable);
 					generator.generate();
 				}
 			}

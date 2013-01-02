@@ -1,6 +1,7 @@
 package lea.types;
 
-import lea.constants.*;
+import lea.constants.Constant;
+import lea.constants.TupleConstant;
 
 public class TupleType extends Type {
 	public TupleType(Type t1, Type t2) {
@@ -38,24 +39,23 @@ public class TupleType extends Type {
 
 	public String toString() {
 
-		/*String str = "tuple(";
-		if (this.getLeft() != null)
-			str += this.getLeft().getType().toString();
-		if (this.getRight() != null)
-			str += ", " + this.getRight().getType().toString();
-
-		return str + ")";*/
+		/*
+		 * String str = "tuple("; if (this.getLeft() != null) str +=
+		 * this.getLeft().getType().toString(); if (this.getRight() != null) str
+		 * += ", " + this.getRight().getType().toString();
+		 * 
+		 * return str + ")";
+		 */
 		return "tuple";
 	}
 
-	public String nameGen()
-	{
+	public String nameGen() {
 		return "";
 	}
-	
+
 	public String toJava() {
-		String result ="";
-		
+		String result = "";
+
 		result += new TupleConstant(left, right);
 
 		return result;

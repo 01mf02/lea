@@ -1,8 +1,11 @@
 package lea.syntax;
 
-import lea.*;
+import lea.FunctionInfo;
+import lea.NativeFunctionInfo;
+import lea.NativeFunctionTable;
 import lea.generator.NameGenerator;
-import lea.types.*;
+import lea.types.Type;
+import lea.types.UnknownType;
 
 public class FunctionRef extends Expression {
 	private String name;
@@ -62,15 +65,12 @@ public class FunctionRef extends Expression {
 
 			if (result != null)
 				return result + "(";
+		} else if (info != null) {
+			if (info.getArgs().size() == 0)
+				return result + ng.generateName(name) + "(";
+			else
+				return result + ng.generateName(name) + "(";
 		}
-		else 
-			if (info != null) {
-				if (info.getArgs().size() == 0)
-					return result + ng.generateName(name) + "(";
-				else
-					return result + ng.generateName(name) + "(";
-			}
-		
 
 		return "FunctionRef Unknown !";
 

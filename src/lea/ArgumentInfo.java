@@ -1,29 +1,25 @@
 package lea;
-import lea.types.*;
 
-public class ArgumentInfo
-{
+import lea.types.Type;
+
+public class ArgumentInfo {
 	private String name;
 	private Type t;
-	
-	public ArgumentInfo(String argName, Type type)
-	{
+
+	public ArgumentInfo(String argName, Type type) {
 		name = argName;
 		t = type;
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return name;
 	}
-	
-	public Type getType()
-	{
+
+	public Type getType() {
 		return t;
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		return name + ":" + t.toString();
 	}
 }

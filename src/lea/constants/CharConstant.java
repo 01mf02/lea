@@ -23,7 +23,7 @@ public class CharConstant implements Constant {
 	public String toString() {
 		return Character.toString(value);
 	}
-	
+
 	public String toJava() {
 		return "'" + toString() + "'";
 	}

@@ -25,9 +25,7 @@ public class FunctionGenerator {
 		if (!fctTable.containsKey("main")) {
 			System.err.println("main function not found; aborting build.");
 			return;
-		}
-		else
-		{
+		} else {
 
 			for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
 
@@ -60,7 +58,7 @@ public class FunctionGenerator {
 				function.toJava(cw);
 				cw.closeBlock();
 			}
-		}	
+		}
 	}
 
 	public String argsGenerator(FunctionInfo entry) {

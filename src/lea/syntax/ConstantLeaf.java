@@ -1,43 +1,37 @@
 package lea.syntax;
-import lea.constants.*;
-import lea.types.*;
 
-public class ConstantLeaf extends Expression 
-{
+import lea.constants.Constant;
+import lea.types.Type;
+
+public class ConstantLeaf extends Expression {
 	private Constant constValue;
-	
-	public ConstantLeaf(Constant c)
-	{
+
+	public ConstantLeaf(Constant c) {
 		constValue = c;
 	}
-	
-	public String getValue()
-	{
+
+	public String getValue() {
 		return constValue.toString();
 	}
-	
-	public Type getType()
-	{
+
+	public Type getType() {
 		return constValue.getType();
 	}
-	
-	public Constant getConstant()
-	{
+
+	public Constant getConstant() {
 		return constValue;
 	}
-	
-	public String toString()
-	{
-		return "Const("+constValue.toString() + ":" + constValue.getType().toString()+")";
+
+	public String toString() {
+		return "Const(" + constValue.toString() + ":"
+				+ constValue.getType().toString() + ")";
 	}
-	
-	public String toJava()
-	{
+
+	public String toJava() {
 		return constValue.toJava();
 	}
-	
-	public String toDotString()
-	{
+
+	public String toDotString() {
 		return this.toString();
 	}
 }

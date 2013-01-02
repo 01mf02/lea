@@ -1,44 +1,38 @@
 package lea.syntax;
 
-import lea.types.*;
+import lea.types.Type;
+import lea.types.UnknownType;
 
-public class VariableLeaf extends Expression 
-{
+public class VariableLeaf extends Expression {
 	private String name;
 	private Type objectType;
-	
-	public VariableLeaf(String s, Type t)
-	{
+
+	public VariableLeaf(String s, Type t) {
 		name = s;
-		
-		if(t != null)
+
+		if (t != null)
 			objectType = t;
 		else
 			objectType = new UnknownType();
 	}
-	
-	public String getName()
-	{
+
+	public String getName() {
 		return name;
 	}
-	
-	public Type getType()
-	{
+
+	public Type getType() {
 		return objectType.getType();
 	}
-	
-	public String toString()
-	{
-		return "Variable("+name+":"+objectType.toString()+")";
+
+	public String toString() {
+		return "Variable(" + name + ":" + objectType.toString() + ")";
 	}
-	
-	public String toDotString()
-	{
+
+	public String toDotString() {
 		return this.toString();
 	}
-	
-	public String toJava()
-	{
+
+	public String toJava() {
 		return name;
 	}
 }
