@@ -9,7 +9,6 @@ import lea.TypeTable;
 
 public class Generator {
 
-	ConstantGenerator cstGen;
 	FunctionGenerator fctGen;
 	String nameOfClass, nameOfFile = "";
 	TypeGenerator typeTable;
@@ -21,8 +20,6 @@ public class Generator {
 		/* Format name */
 		this.nameOfFile = this.nameOfClass + ".java";
 		this.nameDir = nameDir;
-
-		this.cstGen = new ConstantGenerator(cstTable);
 
 		this.typeTable = new TypeGenerator(typeTable);
 
@@ -36,12 +33,16 @@ public class Generator {
 		cw.writeLine("");
 		cw.writeLine("public class " + this.nameOfClass);
 		cw.openBlock();
-		this.cstGen.generate(cw);
 		this.typeTable.generate(cw);
 		this.fctGen.generate(cw);
 		cw.closeBlock();
 
 		cw.saveFile(this.nameDir + File.separator + this.nameOfFile);
+	}
 
+	static public String generateName(String id) {
+		String str = "";
+		str += "lea_" + id;
+		return str;
 	}
 }

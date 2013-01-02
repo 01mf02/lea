@@ -18,50 +18,49 @@ public class FunctionGenerator {
 
 	public void generate(CodeWriter cw) throws IOException {
 
-		NameGenerator ng;
-
-		ng = new NameGenerator();
-
 		if (!fctTable.containsKey("main")) {
 			System.err.println("main function not found; aborting build.");
 			return;
-		} else {
+		}
 
-			for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
+		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
 
-				cw.writeLine("");
+			cw.writeLine("");
 
-				if (entry.getKey().equals("main")) {
-					cw.writeLine("public static void main(String[] args)");
-					cw.openBlock();
-					if (entry.getValue().getOutputType() == null)
-						cw.writeLine("lea_main();");
-					else
-						cw.writeLine("int return_code = lea_main()");
-					cw.closeBlock();
-				}
-
-				String return_type = "";
-				if (entry.getValue().getOutputType() == null)
-					return_type = "void";
-				else
-					return_type = entry.getValue().getOutputType().toJava();
-
-				cw.writeLine("");
-				cw.writeLine("public static " + return_type + " "
-						+ ng.generateName(entry.getKey()) + "("
-						+ argsGenerator(entry.getValue()) + ")");
-
+			if (entry.getKey().equals("main")) {
+				cw.writeLine("public static void main(String[] args)");
 				cw.openBlock();
-				// write function contents
-				Instruction function = entry.getValue().getSyntaxTree();
-				function.toJava(cw);
+
+				// TODO: verify input and output arguments properly!
+				if (entry.getValue().getOutputType() == null)
+					cw.writeLine("lea_main();");
+				else {
+					cw.writeLine("int return_code = lea_main();");
+					cw.writeLine("System.exit(return_code);");
+				}
 				cw.closeBlock();
 			}
+
+			String return_type = "";
+			if (entry.getValue().getOutputType() == null)
+				return_type = "void";
+			else
+				return_type = entry.getValue().getOutputType().toJava();
+
+			cw.writeLine("");
+			cw.writeLine("public static " + return_type + " "
+					+ Generator.generateName(entry.getKey()) + "("
+					+ generateArguments(entry.getValue()) + ")");
+
+			cw.openBlock();
+			// write function contents
+			Instruction function = entry.getValue().getSyntaxTree();
+			function.toJava(cw);
+			cw.closeBlock();
 		}
 	}
 
-	public String argsGenerator(FunctionInfo entry) {
+	public String generateArguments(FunctionInfo entry) {
 		String arguments = "";
 		boolean first_argument = true;
 
@@ -76,5 +75,4 @@ public class FunctionGenerator {
 
 		return arguments;
 	}
-
 }

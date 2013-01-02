@@ -3,7 +3,7 @@ package lea.syntax;
 import lea.FunctionInfo;
 import lea.NativeFunctionInfo;
 import lea.NativeFunctionTable;
-import lea.generator.NameGenerator;
+import lea.generator.Generator;
 import lea.types.Type;
 import lea.types.UnknownType;
 
@@ -11,7 +11,6 @@ public class FunctionRef extends Expression {
 	private String name;
 	private FunctionInfo info;
 	private NativeFunctionInfo nfi;
-	NameGenerator ng = new NameGenerator();
 
 	public FunctionRef(String n, FunctionInfo fi) {
 		name = n;
@@ -67,9 +66,9 @@ public class FunctionRef extends Expression {
 				return result + "(";
 		} else if (info != null) {
 			if (info.getArgs().size() == 0)
-				return result + ng.generateName(name) + "(";
+				return result + Generator.generateName(name) + "(";
 			else
-				return result + ng.generateName(name) + "(";
+				return result + Generator.generateName(name) + "(";
 		}
 
 		return "FunctionRef Unknown !";
