@@ -17,7 +17,7 @@ public class StringConstant implements Constant {
 	}
 
 	public String toString() {
-		return value;
+		return "'" + value + "'";
 	}
 
 	public String toJava() {

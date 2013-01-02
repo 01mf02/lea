@@ -13,7 +13,7 @@ import lea.types.Type;
 // decorated with attributes 
 
 public class SyntaxTree {
-	protected int id; // used in toDot
+	private int id; // used in toDot
 	private SyntaxTree left;
 	private SyntaxTree right;
 	private EnvironmentStack env; // current environment
