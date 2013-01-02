@@ -80,7 +80,7 @@ function wooTooComplexFunction(arg:int,arg0:string) : int
 		while(arg - it > 0)
 		{
 			dre:float := 1.0 ;
-			dre :=  -PI * dre - dre + dre / dre ;
+			dre := -PI * dre - dre + dre / dre ;
 			
 			
 			str:string;
