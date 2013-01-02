@@ -1,7 +1,6 @@
 package lea.types;
 
 import lea.constants.*;
-import lea.syntax.ConstantLeaf;
 
 public class TupleType extends Type {
 	public TupleType(Type t1, Type t2) {

@@ -124,22 +124,16 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 	}
 
 	public String toJava(String id) {
-		String result = "";
-
-		for (Map.Entry<String, NativeFunctionInfo> entry : entrySet()) {
-			if(id.equals("length"))
-				return "length;";
-			else if(id.equals("read"))
-					return "Scanner sc = new Scanner(System.in);\nString str = sc.nextLine();"; 	// NE PAS OUBLIER D'IMPORTER CE QU'IL FAUT !
-			else if(id.equals("write"))
-					return "System.out.print";
-			else if(id.equals("writeln"))
-					return "System.out.println";
-			else return null;
-
-		}
-
-		return result;
+		if (id.equals("length"))
+			return "length;";
+		else if (id.equals("read"))
+			return "Scanner sc = new Scanner(System.in);\nString str = sc.nextLine();";
+		else if (id.equals("write"))
+			return "System.out.print";
+		else if (id.equals("writeln"))
+			return "System.out.println";
+		else
+			return null;
 	}
 
 	public String toString() {

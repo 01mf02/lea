@@ -27,8 +27,7 @@ public class Assignment extends Instruction
 		{
 			if(assignment_left.getType() instanceof TupleType)
 				{
-				int i = 0;
-					String result = "class " + assignment_left.toJava() + "{";
+				String result = "class " + assignment_left.toJava() + "{";
 
 					TupleNode tp = new TupleNode(assignment_left);
 					result += tp.leftTreatment();
