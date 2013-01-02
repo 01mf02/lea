@@ -7,12 +7,11 @@ public class Condition extends Instruction
 	Expression left;
 	Instruction right;
 	
-	public Condition(SyntaxTree a1, SyntaxTree a2)
+	public Condition(Expression a1, Instruction a2)
 	{
 		super(a1, a2);
-		System.out.println(a1.getClass());
-		left = (Expression) a1;
-		right = (Instruction) a2;
+		left = a1;
+		right = a2;
 	}
 	
 	public String toString()
