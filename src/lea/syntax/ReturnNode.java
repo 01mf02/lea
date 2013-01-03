@@ -15,7 +15,11 @@ public class ReturnNode extends Instruction {
 	}
 
 	public void toJava(CodeWriter cw) {
-		cw.writeLine("return " + return_expr.toJava() + ";");
+		
+		if(return_expr != null)
+			cw.writeLine("return " + return_expr.toJava() + ";");
+		else
+			cw.writeLine("return;");
 	}
 
 	public String toDotString() {

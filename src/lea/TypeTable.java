@@ -3,7 +3,7 @@ package lea;
 import java.util.Map;
 import java.util.TreeMap;
 
-import lea.types.Type;
+import lea.types.*;
 
 public class TypeTable extends TreeMap<String, Type> {
 	private static final long serialVersionUID = 8433001374480555698L;
@@ -16,5 +16,20 @@ public class TypeTable extends TreeMap<String, Type> {
 		}
 
 		return str;
+	}
+	
+	public Type getEnumType(String name)
+	{
+		for (Map.Entry<String, Type> entry : entrySet()) 
+		{
+			if(entry.getValue() instanceof EnumType)
+			{
+				EnumType et = (EnumType)entry.getValue();
+				if(et.containsEnum(name))
+					return et;
+			}
+		}
+		
+		return null;
 	}
 }

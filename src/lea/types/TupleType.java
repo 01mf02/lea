@@ -56,7 +56,8 @@ public class TupleType extends Type {
 	public String toJava() {
 		String result = "";
 
-		result += new TupleConstant(left, right);
+		//TODO: MODIFIER CETTE LIGNE, CE N'EST PAS VALIDE!!! (Note de MHB)
+		//result += new TupleConstant(left, right);
 
 		return result;
 	}

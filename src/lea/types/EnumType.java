@@ -45,6 +45,7 @@ public class EnumType extends Type {
 
 	@Override
 	public boolean equals(Constant c1) {
+		System.out.println("haaaaa");
 		return false;
 	}
 

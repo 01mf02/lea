@@ -17,6 +17,11 @@ public class EnumConstant implements Constant {
 	public Type getType() {
 		return t;
 	}
+	
+	public void setType(Type type)
+	{
+		t = type;
+	}
 
 	public String getName() {
 		return name;

@@ -69,7 +69,6 @@ InputCharacter = [^\r\n]
 WhiteSpace	= {LineTerminator} | [ \t\f]
 Integer		= [0-9]+
 Float		= [0-9]*"."[0-9]+
-String		= \"[^\"]*\"
 Char		= \'[^\']\'
 True		= (TRUE)|(true)|(True)
 False		= (FALSE)|(false)|(False)
@@ -166,6 +165,7 @@ EndComment = "*/"
 
 <IN_STRING> 
 {
+  "\\\""						{ str.append( yytext() ); }
   {EndString}                   { yybegin(YYINITIAL);
 									return symbol(LeaSymbol.STRINGEXP, str.toString());
                                 }

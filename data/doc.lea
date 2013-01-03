@@ -2,12 +2,14 @@ THIS_IS_FALSE = True;
 MEANING = 42;
 PI = 3.14;
 FIRST_LETTER = 'A';
-SHAKESPEARE = "To be or not to be ...";
+SHAKESPEARE = "To be or \"not\" to be ...";
 FIBONACCI = [1, 2, 3, 5, 8];
 TUPLE = (THIS_IS_FALSE, MEANING, PI, FIRST_LETTER, SHAKESPEARE, FIBONACCI);
 
-month = (enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC));
-date = (int, month, int);
+simple_enum = enum(CAN, US, FR);
+other_enum = enum(JAP, CN, AUS);
+
+date = (int, int /*enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC)*/, int);
 
 person = struct
 {
@@ -50,11 +52,11 @@ function create_logicians() : person_list
 	turing : person_list;
 	
 	goedel.elem.name := "Kurt Goedel";
-	goedel.elem.birthday := (28, APR, 1906);
+	//goedel.elem.birthday := (28, APR, 1906);
 	goedel.next := turing;
 
 	turing.elem.name := "Alan Turing";
-	turing.elem.birthday := (23, JUN, 1912);
+	//turing.elem.birthday := (23, JUN, 1912);
 
 	return goedel;
 }
@@ -69,7 +71,13 @@ function main(l : list of string) : int
 	writeln("Fibonacci numbers as function:");
 	print_fibonacci(1, 1, 0, 10);
 
-	logicians : person_list := create_logicians();
-
+	ta:(simple_enum, other_enum) := (FR, AUS);
+	
+	t:simple_enum := FR;
+	if(t = FR)
+	{
+		logicians : person_list := create_logicians();
+	}
+	
 	return 0;
 }
