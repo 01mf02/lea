@@ -1,5 +1,6 @@
 package lea.syntax;
 
+import lea.generator.Generator;
 import lea.types.Type;
 import lea.types.UnknownType;
 
@@ -33,6 +34,6 @@ public class VariableLeaf extends Expression {
 	}
 
 	public String toJava() {
-		return name;
+		return Generator.generateName(name);
 	}
 }
