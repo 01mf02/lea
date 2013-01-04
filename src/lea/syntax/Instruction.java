@@ -9,7 +9,6 @@ public class Instruction extends SyntaxTree {
 		super(a1, a2);
 		left = a1;
 		right = a2;
-
 	}
 
 	public String toString() {
@@ -21,9 +20,13 @@ public class Instruction extends SyntaxTree {
 	}
 
 	public void toJava(CodeWriter w) {
-		if (left instanceof FunctionCall) {
+		if (left == null && right == null) {
+			// empty instruction, as in { /* here */ }
+			// don't print anything
+		} else if (left instanceof FunctionCall) {
 			((FunctionCall) left).toJava(w);
-		} else
+		} else {
 			w.writeLine("unhandled_instruction();");
+		}
 	}
 }
