@@ -1,6 +1,7 @@
 package lea.syntax;
 
 import lea.generator.CodeWriter;
+import lea.types.StructType;
 import lea.types.TupleType;
 
 public class Assignment extends Instruction {
@@ -36,12 +37,7 @@ public class Assignment extends Instruction {
 		else {
 			if (assignment_left.getType() instanceof TupleType) {
 				w.writeLine("Object[] " + assignment_left.toJava() + assignment_left.getType().toString() + ";");
-
 			} 
-			if (assignment_left.getType() instanceof TupleType) {
-				w.writeLine("Object[] " + assignment_left.toJava() + assignment_left.getType().toString() + ";");
-
-			}
 			else
 				w.writeLine(assignment_left.getType() + " "
 						+ assignment_left.toJava() + ";");
