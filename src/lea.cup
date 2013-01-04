@@ -203,7 +203,7 @@ basicType ::=
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
 		| LIST OF basicType:t {: RESULT = new ListType(t); :}
-		| enumDecl:e {: RESULT = e; :};
+		| enumDecl:e {:  RESULT = e; :};
 		
 type ::=
 		LPAR tupleType:t RPAR {: RESULT = t;  :}
@@ -287,7 +287,13 @@ constDecl ::=
 		:}
 		;	
 
-enumDecl ::= ENUM LPAR enumElems:e RPAR {: RESULT = new EnumType(e);   :}
+enumDecl ::= ENUM LPAR enumElems:e RPAR 
+		{:
+			EnumType t = new EnumType(e); 
+			typeTable.put("__ENUM_"+enumID, t);
+			
+			RESULT = t;
+		:}
 		;
 		
 enumElems ::= enumElems:l COMMA enumElem:e
@@ -566,7 +572,7 @@ instr ::=
 				parser.printError("Loop test expression must be a boolean", 1);
 			}
 		:}
-		| REPEAT block:b WHILE LPAR expr:e RPAR 
+		| REPEAT block:b WHILE LPAR expr:e RPAR SEMIC
 		{:
 			if(e.getType() instanceof BoolType)
 			{

@@ -75,15 +75,15 @@ public class TupleConstant implements Constant {
 
 	public String toJava() {
 		int i;
-		String result = "";
+		String result = "new Object[] {";
 		int size = value.size();
 		for (i = 0; i < size; i++) {
 			Object val = value.get(i);
-			result += ((ConstantLeaf) val).getType() + " var" + i + " = "
-					+ ((ConstantLeaf) val).toJava() + "; ";
+			result += ((ConstantLeaf) val).toJava() + ", ";
 		}
+		
+		result = result.substring(0, result.length() - 2) + "}";
 
 		return result;
-		// return toString();
 	}
 }

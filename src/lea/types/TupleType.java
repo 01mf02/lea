@@ -38,15 +38,7 @@ public class TupleType extends Type {
 	}
 
 	public String toString() {
-
-		/*
-		 * String str = "tuple("; if (this.getLeft() != null) str +=
-		 * this.getLeft().getType().toString(); if (this.getRight() != null) str
-		 * += ", " + this.getRight().getType().toString();
-		 * 
-		 * return str + ")";
-		 */
-		return "tuple";
+		return " = new Object[10]";
 	}
 
 	public String nameGen() {
@@ -54,11 +46,7 @@ public class TupleType extends Type {
 	}
 
 	public String toJava() {
-		String result = "";
-
-		//TODO: MODIFIER CETTE LIGNE, CE N'EST PAS VALIDE!!! (Note de MHB)
-		//result += new TupleConstant(left, right);
-
+		String result = "Object[]";
 		return result;
 	}
 }

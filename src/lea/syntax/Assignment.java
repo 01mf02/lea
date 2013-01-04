@@ -18,16 +18,24 @@ public class Assignment extends Instruction {
 
 	public void toJava(CodeWriter w) {
 		if (assignment_right != null)
-			w.writeLine(assignment_left.toJava() + " = "
-					+ assignment_right.toJava() + ";");
+		{
+			String leftPart = assignment_left.toJava();
+			String rightPart = assignment_right.toJava();
+			
+			if(assignment_left.getType() instanceof TupleType)
+			{
+				leftPart = "Object[] " + leftPart;
+				if(assignment_right instanceof TupleNode)
+					rightPart = "new Object[] {" + rightPart.substring(1).substring(0, rightPart.length() - 2) + "}";
+			}
+			else
+				leftPart = assignment_left.getType() + " " + leftPart;
+			
+			w.writeLine(leftPart + " = " + rightPart + ";");
+		}
 		else {
 			if (assignment_left.getType() instanceof TupleType) {
-				String result = "class " + assignment_left.toJava() + "{";
-
-				TupleNode tp = new TupleNode(assignment_left);
-				result += tp.leftTreatment();
-
-				w.writeLine(result);
+				w.writeLine("Object[] " + assignment_left.toJava() + assignment_left.getType().toString() + ";");
 
 			} else
 				w.writeLine(assignment_left.getType() + " "

@@ -6,7 +6,7 @@ FALSER = false;
 SHAKESPEARE = "To be or not to be ...";
 LIST_OF_INT = [1,2,3,4,5,6];
 TUPLE_OF_THREE = 34, SHAKESPEARE, PI;
-color = (enum (rouge, vert, bleu, cyan, magenta, jaune));
+color = enum (rouge, vert, bleu, cyan, magenta, jaune);
 
 fiche = struct {
 	age:int;

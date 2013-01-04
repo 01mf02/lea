@@ -45,7 +45,6 @@ public class EnumType extends Type {
 
 	@Override
 	public boolean equals(Constant c1) {
-		System.out.println("haaaaa");
 		return false;
 	}
 
@@ -54,6 +53,6 @@ public class EnumType extends Type {
 	}
 
 	public String toJava() {
-		return "enum";
+		return "(" + enumElems.toString() + ")";
 	}
 }

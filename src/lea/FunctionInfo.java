@@ -3,6 +3,7 @@ package lea;
 import java.util.LinkedList;
 
 import lea.syntax.Instruction;
+import lea.syntax.SyntaxTree;
 import lea.types.Type;
 
 public class FunctionInfo {
@@ -24,7 +25,7 @@ public class FunctionInfo {
 	public FunctionInfo(LinkedList<ArgumentInfo> lArgs, Type outputT) {
 		args = lArgs;
 		outputType = outputT;
-		sTree = null;
+		sTree = new Instruction(null, null);
 	}
 
 	public String toString() {

@@ -9,7 +9,8 @@ TUPLE = (THIS_IS_FALSE, MEANING, PI, FIRST_LETTER, SHAKESPEARE, FIBONACCI);
 simple_enum = enum(CAN, US, FR);
 other_enum = enum(JAP, CN, AUS);
 
-date = (int, int /*enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC)*/, int);
+toto = (simple_enum, other_enum);
+date = (int, enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC), int);
 
 person = struct
 {
@@ -52,11 +53,11 @@ function create_logicians() : person_list
 	turing : person_list;
 	
 	goedel.elem.name := "Kurt Goedel";
-	//goedel.elem.birthday := (28, APR, 1906);
+	goedel.elem.birthday := (28, APR, 1906);
 	goedel.next := turing;
 
 	turing.elem.name := "Alan Turing";
-	//turing.elem.birthday := (23, JUN, 1912);
+	turing.elem.birthday := (23, JUN, 1912);
 
 	return goedel;
 }
