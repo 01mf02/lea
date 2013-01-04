@@ -142,7 +142,7 @@ non terminal Expression expr;
 non terminal String boolExpr;
 non terminal ListNode listDecl;
 non terminal Expression variable,functCall;
-non terminal EnumExp enumCases;
+non terminal CaseNode caseNodes;
 
 precedence left COMMA;
 precedence right ELSE;
@@ -484,27 +484,27 @@ functDecl ::=  IDENTIFIER:id COLON type:t
 		;
 
 
-enumCases ::=
-		enumCases:e IDENTIFIER:id  COLON instr:s
+caseNodes ::=
+		caseNodes:e IDENTIFIER:id COLON instr:s
 		{:
 			if(!constTable.containsKey(id))
 				parser.printError("Enum not found : " + id, 1);
 				
-			RESULT = new EnumExp(id,s,e);
+			RESULT = new CaseNode(id,s,e);
 		:}
-		|IDENTIFIER:id  COLON instr:s
+		|IDENTIFIER:id COLON instr:s
 		{:
 			if(!constTable.containsKey(id))
 				parser.printError("Enum not found : " + id, 1);
 				
-			RESULT = new EnumExp(id,s,null);
+			RESULT = new CaseNode(id,s,null);
 		:}
 		;
 		
 instr ::= 
 		IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
 		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
-		| CASE variable:v LBRACE enumCases:d RBRACE
+		| CASE variable:v LBRACE caseNodes:d RBRACE
 		{:
 			if(v.getType() instanceof EnumType)
 			{

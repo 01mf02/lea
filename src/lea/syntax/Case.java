@@ -3,13 +3,13 @@ package lea.syntax;
 import lea.generator.CodeWriter;
 
 public class Case extends Instruction {
-	protected Expression left;
-	protected EnumExp right;
+	private Expression expression;
+	private CaseNode node;
 
-	public Case(Expression a1, EnumExp a2) {
+	public Case(Expression a1, CaseNode a2) {
 		super(a1, a2);
-		left = a1;
-		right = a2;
+		expression = a1;
+		node = a2;
 	}
 
 	public String toString() {
@@ -20,27 +20,14 @@ public class Case extends Instruction {
 		return "Case";
 	}
 
-	public void toJava(CodeWriter cw) {
-		cw.writeLine("switch (" + left.toJava() + ")");
-		cw.openBlock();
+	public void toJava(CodeWriter w) {
+		w.writeLine("switch (" + expression.toJava() + ")");
+		w.openBlock();
 
-		EnumExp inst1 = right;
+		node.toJava(w);
 
-		while (inst1 != null) {
-			cw.writeLine("case " + inst1.toJava());
-			cw.openBlock();
-			inst1.instTranslator(cw);
-			cw.writeLine("break;");
-			cw.closeBlock();
-
-			if (inst1.getRight() != null)
-				inst1 = (EnumExp) inst1.getRight();
-			else
-				break;
-		}
-
-		cw.closeBlock();
-		cw.writeLine("");
+		w.closeBlock();
+		w.writeLine("");
 
 	}
 }

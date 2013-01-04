@@ -102,14 +102,14 @@ EndComment = "*/"
 	"<="	{  return symbol(LeaSymbol.LE); }
 	">="	{  return symbol(LeaSymbol.GE); }
 	"!="	{  return symbol(LeaSymbol.DIFF); }
-	"="		{   return symbol(LeaSymbol.EQ); }
+	"="		{  return symbol(LeaSymbol.EQ); }
 	"+"		{  return symbol(LeaSymbol.PLUS); }
 	"-"		{  return symbol(LeaSymbol.MINUS); }
 	"*"		{  return symbol(LeaSymbol.MULT); }
 	"/"		{  return symbol(LeaSymbol.DIV); }
 	"%"		{  return symbol(LeaSymbol.MODULO); }
 	","		{  return symbol(LeaSymbol.COMMA); }
-	";"		{   return symbol(LeaSymbol.SEMIC); }
+	";"		{  return symbol(LeaSymbol.SEMIC); }
 	":"		{  return symbol(LeaSymbol.COLON); }
 	":="	{  return symbol(LeaSymbol.AFF); }
 	"."		{  return symbol(LeaSymbol.SLOT); }
@@ -135,18 +135,15 @@ EndComment = "*/"
 	"case"		{  return symbol(LeaSymbol.CASE); }
 	"while"		{  return symbol(LeaSymbol.WHILE); }
 	"repeat"	{  return symbol(LeaSymbol.REPEAT); }
-	//"for"		{  return symbol(LeaSymbol.FOR); }
 	
 	/* ----------------------- Constantes ------------------------------*/
 	{True}	{ return symbol(LeaSymbol.TRUEEXP);		 }
 	{False}	{  return symbol(LeaSymbol.FALSEEXP); }
-	//"null"  {  return symbol(LeaSymbol.FALSE); }
 	
 	/* ----------------------- Mots réservé ------------------------------*/
 	"function"	{  return symbol(LeaSymbol.FUNCTION); }
 	"procedure"	{  return symbol(LeaSymbol.PROCEDURE); }
 	"return" 	{  return symbol(LeaSymbol.RETURN); }
-	//"in"  		{  return symbol(LeaSymbol.IN); }
 	
 	/* -------------------------------------------------
 		Variables, Entiers
@@ -155,7 +152,6 @@ EndComment = "*/"
 	{Identifier}	{   return symbol(LeaSymbol.IDENTIFIER, yytext()); }
 	{Integer}	{   return symbol(LeaSymbol.INTEGER, yytext()); }
 	{Float}		{  return symbol(LeaSymbol.FLOATEXP, yytext()); }
-	/*{String}	{  return symbol(LeaSymbol.STRINGEXP, yytext().substring(1, yytext().length()-1)); }*/
 	{Char}			{  return symbol(LeaSymbol.CHAREXP, yytext().substring(1, yytext().length()-1)); }
 	
 	/* ---------- Commentaires & Strings ------------- */
