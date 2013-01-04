@@ -7,6 +7,9 @@ public class StructType extends Type {
 	public Environment env;
 	private String name;
 
+	public StructType() {
+	}
+	
 	public StructType(String s) {
 		name = s;
 	}
@@ -43,6 +46,6 @@ public class StructType extends Type {
 	}
 
 	public String toJava() {
-		return "struct (" + name + ")";
+		return "struct";
 	}
 }

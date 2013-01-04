@@ -28,8 +28,8 @@ public class Assignment extends Instruction {
 				if(assignment_right instanceof TupleNode)
 					rightPart = "new Object[] {" + rightPart.substring(1).substring(0, rightPart.length() - 2) + "}";
 			}
-			else
-				leftPart = assignment_left.getType() + " " + leftPart;
+			//else
+				//leftPart = assignment_left.getType() + " " + leftPart;
 			
 			w.writeLine(leftPart + " = " + rightPart + ";");
 		}
@@ -37,7 +37,12 @@ public class Assignment extends Instruction {
 			if (assignment_left.getType() instanceof TupleType) {
 				w.writeLine("Object[] " + assignment_left.toJava() + assignment_left.getType().toString() + ";");
 
-			} else
+			} 
+			if (assignment_left.getType() instanceof TupleType) {
+				w.writeLine("Object[] " + assignment_left.toJava() + assignment_left.getType().toString() + ";");
+
+			}
+			else
 				w.writeLine(assignment_left.getType() + " "
 						+ assignment_left.toJava() + ";");
 		}

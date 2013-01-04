@@ -15,4 +15,14 @@ public class Environment extends TreeMap<String, VariableInfo> {
 
 		return str;
 	}
+	
+    public String toJava() {
+        String str = "";
+
+        for (Map.Entry<String, VariableInfo> entry : entrySet()) {
+            str += "public "+ entry.getValue().toString() + " " + entry.getKey() + ";\n\t\t";
+        }
+
+        return str;
+    }
 }
