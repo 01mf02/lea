@@ -46,6 +46,6 @@ public class StructType extends Type {
 	}
 
 	public String toJava() {
-		return "struct";
+		return name;
 	}
 }

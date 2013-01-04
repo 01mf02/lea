@@ -16,8 +16,7 @@ public class TypeGenerator {
     public void generate(CodeWriter cw) {
         for (Map.Entry<String, Type> entry : typeTable.entrySet()) {
 
-            if (entry.getValue().getType().toJava()
-                    .equals(new StructType().toJava())) {
+            if (entry.getValue() instanceof StructType) {
                 StructType st = (StructType) entry.getValue();
                 ;
                 cw.writeLine("");
