@@ -1,7 +1,6 @@
 package lea.syntax;
 
 import lea.generator.CodeWriter;
-import lea.types.Type;
 
 public class CaseNode extends Instruction {
 	protected String enumValue;
@@ -13,14 +12,6 @@ public class CaseNode extends Instruction {
 		enumValue = value;
 		inst = a1;
 		next = a2;
-	}
-
-	public String getString() {
-		return enumValue;
-	}
-
-	public Type getType() {
-		return this.getLeft().getType();
 	}
 
 	public String toString() {
