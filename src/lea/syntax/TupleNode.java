@@ -61,7 +61,7 @@ public class TupleNode extends Expression {
 	}
 
 	public String toJava() {
-		return left.toJava() + ", " + right.toJava();
+		return "new Object[]{" + left.toJava() + ", " + right.toJava() + "}";
 	}
 
 }

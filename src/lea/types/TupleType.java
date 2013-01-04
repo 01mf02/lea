@@ -42,7 +42,7 @@ public class TupleType extends Type {
 	}
 
 	public String toJava() {
-		String result = "List<Object>";
-		return result;
+		//return "List<Object>";
+		return "Object[]";
 	}
 }

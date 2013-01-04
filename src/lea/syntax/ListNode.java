@@ -72,7 +72,7 @@ public class ListNode extends Expression {
 	public String toJava() {
 		LinkedList<Expression> value = getNodes();
 
-		String l = "{";
+		String l = "new " + getType().toJava() + "{";
 		for (int i = 0; i < value.size(); i++) {
 			l += value.get(i).toJava();
 			if (i < value.size() - 1)

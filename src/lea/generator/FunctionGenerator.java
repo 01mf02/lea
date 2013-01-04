@@ -35,7 +35,7 @@ public class FunctionGenerator {
 				if (entry.getValue().getOutputType() == null)
 					cw.writeLine("lea_main();");
 				else {
-					cw.writeLine("int return_code = lea_main();");
+					cw.writeLine("int return_code = lea_main(args);");
 					cw.writeLine("System.exit(return_code);");
 				}
 				cw.closeBlock();
