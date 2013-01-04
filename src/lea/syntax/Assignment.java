@@ -18,31 +18,24 @@ public class Assignment extends Instruction {
 	}
 
 	public void toJava(CodeWriter w) {
-		if (assignment_right != null)
-		{
+		if (assignment_right != null) {
 			String leftPart = assignment_left.toJava();
 			String rightPart = assignment_right.toJava();
-			
-			if(assignment_left.getType() instanceof TupleType)
-			{
-				leftPart = "Object[] " + leftPart;
-				if(assignment_right instanceof TupleNode)
-					rightPart = "new Object[] {" + rightPart.substring(1).substring(0, rightPart.length() - 2) + "}";
-			}
-			//else 
-				//leftPart = assignment_left.getType() + " " + leftPart;
-			
+
+			if (assignment_right instanceof TupleNode)
+				rightPart = "new Object[] {"
+						+ rightPart.substring(1).substring(0,
+								rightPart.length() - 2) + "}";
+
 			w.writeLine(leftPart + " = " + rightPart + ";");
-		}
-		else {
-			if (assignment_left.getType() instanceof TupleType) {
-				w.writeLine("Object[] " + assignment_left.toJava() + assignment_left.getType().toString() + ";");
-			} 
+		} else {
 			if (assignment_left.getType() instanceof StructType) {
-				w.writeLine(((StructType) assignment_left.getType()).toJava() + " " + assignment_left.toJava() + " = new " +  ((StructType) assignment_left.getType()).toJava() + "();");
-			}
-			else
-				w.writeLine(assignment_left.getType() + " "
+				w.writeLine(((StructType) assignment_left.getType()).toJava()
+						+ " " + assignment_left.toJava() + " = new "
+						+ ((StructType) assignment_left.getType()).toJava()
+						+ "();");
+			} else
+				w.writeLine(assignment_left.getType().toJava() + " "
 						+ assignment_left.toJava() + ";");
 		}
 
