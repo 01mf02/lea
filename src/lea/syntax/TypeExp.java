@@ -4,21 +4,25 @@ import lea.types.Type;
 import lea.types.UnknownType;
 
 public class TypeExp extends Expression {
-	private Type objectType;
+	private Type type;
 
 	public TypeExp(Type t) {
 		if (t != null)
-			objectType = t;
+			type = t;
 		else
-			objectType = new UnknownType();
+			type = new UnknownType();
 	}
 
 	public Type getType() {
-		return objectType.getType();
+		return type;
 	}
 
 	public String toString() {
-		return "TypeExp(" + objectType.toString() + ")";
+		return "TypeExp(" + type.toString() + ")";
+	}
+
+	public String toJava() {
+		return type.toJava();
 	}
 
 	public String toDotString() {

@@ -60,10 +60,6 @@ public abstract class Type {
 		this.right = right;
 	}
 
-	public Type getType() {
-		return this;
-	}
-
 	public abstract String toString();
 
 	public abstract String toJava();
