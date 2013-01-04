@@ -487,17 +487,19 @@ functDecl ::=  IDENTIFIER:id COLON type:t
 caseNodes ::=
 		caseNodes:e IDENTIFIER:id COLON instr:s
 		{:
-			if(!constTable.containsKey(id))
+			Constant c = constTable.get(id);
+			if (id == null)
 				parser.printError("Enum not found : " + id, 1);
 				
-			RESULT = new CaseNode(id,s,e);
+			RESULT = new CaseNode(c,s,e);
 		:}
 		|IDENTIFIER:id COLON instr:s
 		{:
-			if(!constTable.containsKey(id))
+			Constant c = constTable.get(id);
+			if (id == null)
 				parser.printError("Enum not found : " + id, 1);
 				
-			RESULT = new CaseNode(id,s,null);
+			RESULT = new CaseNode(c,s,null);
 		:}
 		;
 		

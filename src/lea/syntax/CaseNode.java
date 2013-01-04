@@ -1,15 +1,16 @@
 package lea.syntax;
 
+import lea.constants.Constant;
 import lea.generator.CodeWriter;
 
 public class CaseNode extends Instruction {
-	protected String enumValue;
+	protected Constant value;
 	protected Instruction inst;
 	protected CaseNode next;
 
-	public CaseNode(String value, Instruction a1, CaseNode a2) {
+	public CaseNode(Constant v, Instruction a1, CaseNode a2) {
 		super(a1, a2);
-		enumValue = value;
+		value = v;
 		inst = a1;
 		next = a2;
 	}
@@ -23,7 +24,7 @@ public class CaseNode extends Instruction {
 	}
 
 	public void toJava(CodeWriter w) {
-		w.writeLine("case " + enumValue + ":");
+		w.writeLine("case " + value.toJava() + ":");
 		w.openBlock();
 		inst.toJava(w);
 		w.writeLine("break;");
