@@ -53,6 +53,14 @@ public class FunctionGenerator {
 					+ generateArguments(entry.getValue()) + ")");
 
 			cw.openBlock();
+			if (!entry.getValue().getSyntaxTree().getFirstEnvironment().equals(null))
+			{
+				cw.writeLine("TTTTTTTTTEEEEEEEESSSSSSSTTTTTTTT");
+				entry.getValue().getSyntaxTree().getFirstEnvironment().toJava(cw);
+				cw.writeLine("TTTTTTTTTEEEEEEEESSSSSSSTTTTTTTT");
+			}
+
+			
 			// write function contents
 			Instruction function = entry.getValue().getSyntaxTree();
 			function.toJava(cw);
