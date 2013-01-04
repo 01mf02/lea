@@ -1,6 +1,5 @@
 package lea.syntax;
 
-import lea.generator.CodeWriter;
 
 public class FunctionCall extends Expression {
 	FunctionRef fRef;
@@ -19,14 +18,6 @@ public class FunctionCall extends Expression {
 
 	public String toDotString() {
 		return "Call";
-	}
-
-	public void toJava(CodeWriter w) {
-		if (exp != null)
-			w.writeLine(fRef.toJava() + exp.toJava() + ");");
-		else
-			w.writeLine(fRef.toJava() + ")");
-
 	}
 
 	public String toJava() {

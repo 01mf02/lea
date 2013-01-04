@@ -24,7 +24,9 @@ public class Instruction extends SyntaxTree {
 			// empty instruction, as in { /* here */ }
 			// don't print anything
 		} else if (left instanceof FunctionCall) {
-			((FunctionCall) left).toJava(w);
+			// a FunctionCall is normally an expression, but if it is used like
+			// an instruction, it is saved in the left leaf of an Instruction
+			w.writeLine(((FunctionCall) left).toJava() + ";");
 		} else {
 			w.writeLine("unhandled_instruction();");
 		}
