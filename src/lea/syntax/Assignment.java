@@ -2,7 +2,6 @@ package lea.syntax;
 
 import lea.generator.CodeWriter;
 import lea.types.StructType;
-import lea.types.TupleType;
 
 public class Assignment extends Instruction {
 	Expression assignment_left, assignment_right;
