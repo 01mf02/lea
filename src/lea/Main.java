@@ -24,7 +24,9 @@ public class Main {
 				ConstantTable constTable = parser.getConstantTable();
 				TypeTable typeTable = parser.getTypeTable();
 
-				System.out.println("\nConstant table:");
+				System.out.println("\n");
+
+				System.out.println("Constant table:");
 				System.out.println(constTable);
 
 				System.out.println("Type table:");

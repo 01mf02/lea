@@ -3,12 +3,13 @@ package lea.syntax;
 import lea.generator.CodeWriter;
 
 public class Repeat extends Instruction {
-	SyntaxTree left, right;
+	Expression condition;
+	Instruction instruction;
 
-	public Repeat(SyntaxTree a1, SyntaxTree a2) {
+	public Repeat(Expression a1, Instruction a2) {
 		super(a1, a2);
-		left = a1;
-		right = a2;
+		condition = a1;
+		instruction = a2;
 	}
 
 	public String toString() {
@@ -19,8 +20,11 @@ public class Repeat extends Instruction {
 		return "Repeat";
 	}
 
-	public void tiJava(CodeWriter cw) {
-
-		cw.writeLine(left + " repeat");
+	public void toJava(CodeWriter w) {
+		w.writeLine("repeat");
+		w.openBlock();
+		instruction.toJava(w);
+		w.closeBlock();
+		w.writeLine("while (" + condition.toJava() + ");");
 	}
 }
