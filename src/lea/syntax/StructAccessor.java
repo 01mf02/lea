@@ -93,9 +93,6 @@ public class StructAccessor extends Expression {
 	
 	public String toJava()
 	{
-		String result = "";
-		result += left.toJava();
-		result += "." + right.toJava();
-		return result;
+		return left.toJava() + "." + right.toJava();
 	}
 }

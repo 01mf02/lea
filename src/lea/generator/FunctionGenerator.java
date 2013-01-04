@@ -70,7 +70,7 @@ public class FunctionGenerator {
 			else
 				arguments += ", ";
 
-			arguments += argI.getType().toJava() + " " + argI.getName();
+			arguments += argI.getType().toJava() + " " + Generator.generateName(argI.getName());
 		}
 
 		return arguments;

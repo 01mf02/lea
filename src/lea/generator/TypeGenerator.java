@@ -20,9 +20,9 @@ public class TypeGenerator {
                 StructType st = (StructType) entry.getValue();
                 ;
                 cw.writeLine("");
-                cw.writeLine("public static class " + entry.getKey());
+                cw.writeLine("public static class " + Generator.generateName(entry.getKey()));
                 cw.openBlock();
-                cw.writeLine(st.getEnvironment().toJava());
+                st.getEnvironment().toJava(cw);
                 cw.closeBlock();
 
             }

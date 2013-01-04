@@ -3,6 +3,8 @@ package lea;
 import java.util.Map;
 import java.util.TreeMap;
 
+import lea.generator.CodeWriter;
+import lea.generator.Generator;
 import lea.types.StructType;
 
 public class Environment extends TreeMap<String, VariableInfo> {
@@ -18,16 +20,12 @@ public class Environment extends TreeMap<String, VariableInfo> {
 		return str;
 	}
 	
-    public String toJava() {
-        String str = "";
-
+    public void toJava(CodeWriter cw) {
         for (Map.Entry<String, VariableInfo> entry : entrySet()) {
         	if (entry.getValue().getType() instanceof StructType)
-        		str += "public "+ entry.getValue().toJava() + " " + entry.getKey() + " = new " + entry.getValue().toJava() +"();\n\t\t";
+        		cw.writeLine("public "+ entry.getValue().toJava() + " " + Generator.generateName(entry.getKey()) + " = new " + entry.getValue().toJava() +"();");
         	else
-        		str += entry.getValue().toJava() + " " + entry.getKey() + ";\n\t\t";
+        		cw.writeLine(entry.getValue().toJava() + " " + Generator.generateName(entry.getKey()) + ";");
         }
-
-        return str;
     }
 }

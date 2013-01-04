@@ -2,6 +2,7 @@ package lea.types;
 
 import lea.Environment;
 import lea.constants.Constant;
+import lea.generator.Generator;
 
 public class StructType extends Type {
 	public Environment env;
@@ -46,6 +47,6 @@ public class StructType extends Type {
 	}
 
 	public String toJava() {
-		return name;
+		return Generator.generateName(name);
 	}
 }
