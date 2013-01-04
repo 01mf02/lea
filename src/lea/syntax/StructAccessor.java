@@ -4,8 +4,12 @@ import lea.VariableInfo;
 import lea.types.Type;
 
 public class StructAccessor extends Expression {
+	Expression left, right;
+	
 	public StructAccessor(Expression a1, Expression a2) {
 		super(a1, a2);
+		left = a1;  // StructAcessor
+		right = a2; //VariableLeaf
 	}
 
 	public String toString() {
@@ -85,5 +89,13 @@ public class StructAccessor extends Expression {
 		}
 
 		return false;
+	}
+	
+	public String toJava()
+	{
+		String result = "";
+		result += left.toJava();
+		result += "." + right.toJava();
+		return result;
 	}
 }

@@ -26,4 +26,9 @@ public class VariableInfo {
 	public String toString() {
 		return type.toString();
 	}
+	
+	public String toJava(){
+		
+		return type.toJava();
+	}
 }
