@@ -17,7 +17,7 @@ public class Assignment extends Instruction {
 
 	public void toJava(CodeWriter w) {
 		if (assignment_right != null)
-			w.writeLine(assignment_left.getType().toJava() + " = "
+			w.writeLine(assignment_left.toJava() + " = "
 					+ assignment_right.toJava() + ";");
 		else
 			w.writeLine(assignment_left.getType().toJava() + " "
