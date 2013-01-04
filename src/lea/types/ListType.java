@@ -28,6 +28,5 @@ public class ListType extends Type {
 
 	public String toJava() {
 		return this.left.toJava() + "[]";
-
 	}
 }

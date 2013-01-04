@@ -64,10 +64,9 @@ public class FunctionRef extends Expression {
 
 			if (result != null)
 				return result + "(";
-		} else if (info != null) {
-			if (info.getArgs().size() == 0)
-				return result + Generator.generateName(name) + "(";
-			else
+			
+		} 
+		else if (info != null) {
 				return result + Generator.generateName(name) + "(";
 		}
 
