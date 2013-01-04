@@ -31,7 +31,7 @@ public class TupleNode extends Expression {
 			l = l.getLeft();
 			this.typeTreatment(l);
 		}
-		res += l.getType() + ", ";
+		res += l + ", ";
 
 		return res;
 	}

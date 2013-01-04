@@ -6,15 +6,15 @@ import lea.types.UnknownType;
 
 public class VariableLeaf extends Expression {
 	private String name;
-	private Type objectType;
+	private Type type;
 
 	public VariableLeaf(String s, Type t) {
 		name = s;
 
 		if (t != null)
-			objectType = t;
+			type = t;
 		else
-			objectType = new UnknownType();
+			type = new UnknownType();
 	}
 
 	public String getName() {
@@ -22,11 +22,11 @@ public class VariableLeaf extends Expression {
 	}
 
 	public Type getType() {
-		return objectType.getType();
+		return type;
 	}
 
 	public String toString() {
-		return "Variable(" + name + ":" + objectType.toString() + ")";
+		return "Variable(" + name + ":" + type.toString() + ")";
 	}
 
 	public String toDotString() {

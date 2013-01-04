@@ -23,16 +23,6 @@ public class EnumType extends Type {
 		return enumElems.contains(e);
 	}
 
-	// Not used now
-	public String enumListToString() {
-		String str = "";
-
-		for (int i = 0; i < enumElems.size(); i++)
-			str += enumElems.get(i);
-
-		return str;
-	}
-
 	@Override
 	public boolean equals(Type t1) {
 		if (t1 instanceof EnumType) {
@@ -53,6 +43,6 @@ public class EnumType extends Type {
 	}
 
 	public String toJava() {
-		return "(" + enumElems.toString() + ")";
+		return "int";
 	}
 }

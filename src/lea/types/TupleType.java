@@ -30,9 +30,9 @@ public class TupleType extends Type {
 	public String getAllType() {
 		String str = "tuple(";
 		if (this.getLeft() != null)
-			str += this.getLeft().getType().toString();
+			str += this.getLeft().toString();
 		if (this.getRight() != null)
-			str += ", " + this.getRight().getType().toString();
+			str += ", " + this.getRight().toString();
 
 		return str + ")";
 	}

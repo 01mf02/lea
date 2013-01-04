@@ -97,8 +97,7 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 
 				if (args.size() == funcArgs.size()) {
 					for (int i = 0; i < args.size(); i++) {
-						if (!args.get(i).getType()
-								.equals(funcArgs.get(i).getType())) {
+						if (!args.get(i).equals(funcArgs.get(i).getType())) {
 							argumentsFit = false;
 							break;
 						}
