@@ -19,6 +19,6 @@ public class FloatType extends Type {
 	}
 
 	public String toJava() {
-		return "float";
+		return "Float";
 	}
 }

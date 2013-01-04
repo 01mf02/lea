@@ -19,6 +19,6 @@ public class IntType extends Type {
 	}
 
 	public String toJava() {
-		return "int";
+		return "Integer";
 	}
 }

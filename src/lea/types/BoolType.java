@@ -19,6 +19,6 @@ public class BoolType extends Type {
 	}
 
 	public String toJava() {
-		return "boolean";
+		return "Boolean";
 	}
 }

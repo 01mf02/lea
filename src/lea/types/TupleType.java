@@ -38,15 +38,11 @@ public class TupleType extends Type {
 	}
 
 	public String toString() {
-		return " = new Object[10]";
-	}
-
-	public String nameGen() {
-		return "";
+		return "Tuple";
 	}
 
 	public String toJava() {
-		String result = "Object[]";
+		String result = "List<Object>";
 		return result;
 	}
 }

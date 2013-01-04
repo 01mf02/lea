@@ -19,6 +19,6 @@ public class CharType extends Type {
 	}
 
 	public String toJava() {
-		return "char";
+		return "Character";
 	}
 }

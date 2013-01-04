@@ -43,6 +43,6 @@ public class EnumType extends Type {
 	}
 
 	public String toJava() {
-		return "int";
+		return "Integer";
 	}
 }

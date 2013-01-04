@@ -44,6 +44,10 @@ public abstract class Type {
 		return equals;
 	}
 
+	public boolean requiresInitialisation() {
+		return false;
+	}
+
 	public Type getLeft() {
 		return left;
 	}

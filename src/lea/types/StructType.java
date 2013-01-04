@@ -10,7 +10,7 @@ public class StructType extends Type {
 
 	public StructType() {
 	}
-	
+
 	public StructType(String s) {
 		name = s;
 	}
@@ -35,6 +35,10 @@ public class StructType extends Type {
 		}
 
 		return false;
+	}
+
+	public boolean requiresInitialisation() {
+		return true;
 	}
 
 	@Override
