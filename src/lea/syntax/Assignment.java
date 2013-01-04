@@ -1,6 +1,7 @@
 package lea.syntax;
 
 import lea.generator.CodeWriter;
+import lea.generator.Generator;
 
 public class Assignment extends Instruction {
 	Expression left, right;
@@ -20,13 +21,10 @@ public class Assignment extends Instruction {
 		if (right != null)
 			w.writeLine(left.toJava() + " = " + right.toJava() + ";");
 		// variable declaration
-		else {
-			String decl = left.getType().toJava() + " " + left.toJava();
-			if (left.getType().requiresInitialisation())
-				decl += " = new " + left.getType().toJava() + "()";
+		else
+			w.writeLine(Generator.generateDeclaration(left.toJava(),
+					left.getType()));
 
-			w.writeLine(decl + ";");
-		}
 	}
 
 	public String toDotString() {

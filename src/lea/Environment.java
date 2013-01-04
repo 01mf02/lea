@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import lea.generator.CodeWriter;
 import lea.generator.Generator;
-import lea.types.StructType;
+import lea.types.Type;
 
 public class Environment extends TreeMap<String, VariableInfo> {
 	private static final long serialVersionUID = 1446503626999797042L;
@@ -19,13 +19,12 @@ public class Environment extends TreeMap<String, VariableInfo> {
 
 		return str;
 	}
-	
-    public void toJava(CodeWriter cw) {
-        for (Map.Entry<String, VariableInfo> entry : entrySet()) {
-        	if (entry.getValue().getType() instanceof StructType)
-        		cw.writeLine("public "+ entry.getValue().toJava() + " " + Generator.generateName(entry.getKey()) + " = new " + entry.getValue().toJava() +"();");
-        	else
-        		cw.writeLine(entry.getValue().toJava() + " " + Generator.generateName(entry.getKey()) + ";");
-        }
-    }
+
+	public void toJava(CodeWriter cw) {
+		for (Map.Entry<String, VariableInfo> entry : entrySet()) {
+			String name = Generator.generateName(entry.getKey());
+			Type type = entry.getValue().getType();
+			cw.writeLine("public " + Generator.generateDeclaration(name, type));
+		}
+	}
 }

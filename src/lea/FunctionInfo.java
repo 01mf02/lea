@@ -3,7 +3,6 @@ package lea;
 import java.util.LinkedList;
 
 import lea.syntax.Instruction;
-import lea.syntax.SyntaxTree;
 import lea.types.Type;
 
 public class FunctionInfo {

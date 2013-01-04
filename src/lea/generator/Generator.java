@@ -6,6 +6,7 @@ import java.io.IOException;
 import lea.ConstantTable;
 import lea.FunctionTable;
 import lea.TypeTable;
+import lea.types.Type;
 
 public class Generator {
 
@@ -41,8 +42,13 @@ public class Generator {
 	}
 
 	static public String generateName(String id) {
-		String str = "";
-		str += "lea_" + id;
-		return str;
+		return "lea_" + id;
+	}
+
+	static public String generateDeclaration(String name, Type type) {
+		String decl = type.toJava() + " " + name;
+		if (type.requiresInitialisation())
+			decl += " = new " + type.toJava() + "()";
+		return decl + ";";
 	}
 }
