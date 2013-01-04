@@ -16,7 +16,7 @@ public class ListNode extends Expression {
 
 	public Type getType() {
 		SyntaxTree st = this.getLeft();
-		Type type = getNodes().get(0);
+		Type type = getNodes().get(0).getType();
 
 		while (st != null) {
 			if (st instanceof ListNode)
@@ -28,9 +28,9 @@ public class ListNode extends Expression {
 		return new ListType(type);
 	}
 
-	private LinkedList<Type> getNodes() {
+	private LinkedList<Expression> getNodes() {
 		Expression tmp = (Expression) this.getLeft();
-		LinkedList<Type> nodes = new LinkedList<Type>();
+		LinkedList<Expression> nodes = new LinkedList<Expression>();
 
 		// Obtient tous les noeuds
 		if (tmp.getLeft() != null || tmp.getRight() != null) {
@@ -38,23 +38,23 @@ public class ListNode extends Expression {
 				if (tmp.getRight() != null) {
 					if (tmp.getRight().getLeft() == null
 							&& tmp.getRight().getRight() == null)
-						nodes.add(tmp.getRight().getType());
+						nodes.add((Expression) tmp.getRight());
 				}
 				if (tmp.getLeft() != null) {
 					if (tmp.getLeft().getLeft() == null
 							&& tmp.getLeft().getRight() == null)
-						nodes.add(tmp.getLeft().getType());
+						nodes.add((Expression) tmp.getLeft());
 				}
 				tmp = (Expression) tmp.getLeft();
 			}
 		} else
-			nodes.add(tmp.getType());
+			nodes.add(tmp);
 
 		return nodes;
 	}
 
 	public boolean isListHasAllSameType() {
-		LinkedList<Type> nodes = getNodes();
+		LinkedList<Expression> nodes = getNodes();
 
 		for (int i = 0; i < nodes.size() - 1; i++) {
 			if (!nodes.get(i).getType().equals(nodes.get(i + 1).getType())) {
@@ -67,5 +67,19 @@ public class ListNode extends Expression {
 
 	public String toDotString() {
 		return "ListNode";
+	}
+
+	public String toJava() {
+		LinkedList<Expression> value = getNodes();
+
+		String l = "{";
+		for (int i = 0; i < value.size(); i++) {
+			l += value.get(i).toJava();
+			if (i < value.size() - 1)
+				l += ", ";
+		}
+		l += "}";
+
+		return l;
 	}
 }
