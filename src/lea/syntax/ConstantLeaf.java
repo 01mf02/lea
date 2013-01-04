@@ -10,16 +10,12 @@ public class ConstantLeaf extends Expression {
 		constValue = c;
 	}
 
-	public String getValue() {
-		return constValue.toString();
+	public Constant getValue() {
+		return constValue;
 	}
 
 	public Type getType() {
 		return constValue.getType();
-	}
-
-	public Constant getConstant() {
-		return constValue;
 	}
 
 	public String toString() {

@@ -239,7 +239,7 @@ constDecl ::=
 			{
 				if(i instanceof ConstantLeaf)
 				{				
-					Constant c = ((ConstantLeaf)i).getConstant();
+					Constant c = ((ConstantLeaf)i).getValue();
 					constTable.put(id, c);
 				}
 				else if(i instanceof ListNode)
@@ -517,7 +517,7 @@ instr ::=
 				{
 					EnumType et = (EnumType)v.getType();
 					ConstantLeaf cl = (ConstantLeaf)e;
-					Constant cons = cl.getConstant();
+					Constant cons = cl.getValue();
 					
 					EnumConstant c = null;
 					

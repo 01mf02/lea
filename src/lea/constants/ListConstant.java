@@ -9,13 +9,12 @@ import lea.types.ListType;
 import lea.types.Type;
 
 public class ListConstant implements Constant {
-	// TODO changer list pour constant list
-	LinkedList<String> value = null;
+	LinkedList<Constant> value = null;
 	ListType listType;
 
 	public ListConstant(ListNode ln, ListType t) {
 		Expression tmp = (Expression) ln.getLeft();
-		LinkedList<String> nodesValues = new LinkedList<String>();
+		LinkedList<Constant> nodesValues = new LinkedList<Constant>();
 
 		// Obtient tous les noeuds
 		if (tmp.getLeft() != null || tmp.getRight() != null) {
@@ -51,9 +50,13 @@ public class ListConstant implements Constant {
 
 	public String toJava() {
 		String l = "{";
-		for (int i = 0; i < value.size() - 1; i++)
-			l += value.get(i) + ", ";
-		l += value.get(value.size() - 1) + "}";
+		for (int i = 0; i < value.size(); i++) {
+			l += value.get(i).toJava();
+			if (i < value.size() - 1)
+				l += ", ";
+		}
+		l += "}";
+
 		return l;
 	}
 }
