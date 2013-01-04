@@ -26,20 +26,18 @@ public class Case extends Instruction {
 
 		EnumExp inst1 = right;
 
-		while (inst1.getRight() != null) {
+		while (inst1 != null) {
 			cw.writeLine("case " + inst1.toJava());
 			cw.openBlock();
 			inst1.instTranslator(cw);
 			cw.writeLine("break;");
 			cw.closeBlock();
-			inst1 = (EnumExp) inst1.getRight();
-		}
 
-		cw.writeLine("case " + inst1.toJava());
-		cw.openBlock();
-		inst1.instTranslator(cw);
-		cw.writeLine("break;");
-		cw.closeBlock();
+			if (inst1.getRight() != null)
+				inst1 = (EnumExp) inst1.getRight();
+			else
+				break;
+		}
 
 		cw.closeBlock();
 		cw.writeLine("");
