@@ -27,7 +27,7 @@ public class FunctionCall extends Expression {
 				return fRef.toJava() + "new " + exp.getType().toJava() + " "
 						+ exp.toJava() + ")";
 			else {
-				if (exp.toJava() != null)
+				if (exp.toJava().equalsIgnoreCase("null()"))
 					return fRef.toJava() + ")";
 				else
 					return fRef.toJava() + exp.toJava() + ")";
