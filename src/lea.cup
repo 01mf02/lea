@@ -131,7 +131,7 @@ terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALS
 
 non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl, erreur;
 non terminal Instruction decl;
-non terminal Type type, tupleType, enumDecl, basicType, basicTupleType;
+non terminal Type type, pairType, enumDecl, basicType, basicTupleType;
 non terminal LinkedList<String> enumElems;
 non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -193,14 +193,14 @@ basicTupleType ::=
 		|basicType:t1 {: RESULT = t1; :}
 		;
 		
-tupleType ::= 
-		tupleType:t1 COMMA type:t2 {: RESULT = new TupleType(t1, t2); :}
-		|type:t1 {: RESULT = t1; :}
+pairType ::=
+		  pairType:t1 COMMA type:t2 {: RESULT = new PairType(t1, t2); :}
+		| type:t {: RESULT = t; :}
 		;
 
 basicType ::=		
-		INT {: RESULT = new IntType();  :}
-		| FLOAT {: RESULT = new FloatType();  :}
+		  INT {: RESULT = new IntType(); :}
+		| FLOAT {: RESULT = new FloatType(); :}
 		| CHAR   {: RESULT = new CharType(); :}
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
@@ -208,20 +208,18 @@ basicType ::=
 		| enumDecl:e {:  RESULT = e; :};
 		
 type ::=
-		LPAR tupleType:t RPAR {: RESULT = t;  :}
+		  LPAR pairType:t RPAR {: RESULT = new TupleType(t, null); :}
 		| IDENTIFIER:t 
 		{:
 			Type type = typeTable.get(t);
 			
-			if(type == null)
-			{
+			if (type == null)
 				parser.printError("Type not found : " + t, 1);
-			}			
 			
 			RESULT = type;
 		:}
-		|INT {: RESULT = new IntType();  :}
-		| FLOAT {: RESULT = new FloatType();  :}
+		| INT {: RESULT = new IntType(); :}
+		| FLOAT {: RESULT = new FloatType(); :}
 		| CHAR   {: RESULT = new CharType(); :}
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
@@ -654,7 +652,7 @@ instr ::=
 		;
 
 instrs ::= 
-		instrs:i1 instr:i2   {: RESULT = new Succ(i1, i2); :}
+		  instrs:i1 instr:i2 {: RESULT = new Succ(i1, i2); :}
 		| instr:i  {: RESULT = i; :}
 		;
 
@@ -665,6 +663,10 @@ pair ::=
 
 list ::=
 		  LBRACKET pair:p RBRACKET {: RESULT = new List(p); :}
+		;
+
+tuple ::=
+		  LPAR pair:p RPAR {: RESULT = new Tuple(p); :}
 		;
 
 expr ::=
@@ -690,6 +692,7 @@ expr ::=
 		
 			RESULT = l;
 		:}
+		| tuple:t {: RESULT = t; :}
 		|LPAR expr:e RPAR {: RESULT = e; :}
 		|INTEGER:it {: 
 			RESULT = new ConstantLeaf(new IntConstant(it)); 

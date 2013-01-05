@@ -10,6 +10,7 @@ public class PairType extends Type {
 
 	@Override
 	public boolean equals(Type t1) {
+		// TODO: use aux_equals!
 		return left.equals(t1.left) && right.equals(t1.right);
 	}
 

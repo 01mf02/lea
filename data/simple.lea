@@ -15,6 +15,9 @@ function main(args : list of string) : int
 	list_test : list of list of int;
 	list_test := [[1, 2, 3], [4, 5, 6]];
 
+	tuple_test : (int, (char, string));
+	tuple_test := (1, ('b', "cd"));
+	
 	abc :string;
 	abc := CH + " Hey !" + "Oulala !";
 	
