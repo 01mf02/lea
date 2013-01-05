@@ -2,6 +2,7 @@ package lea.syntax;
 
 public class StringExp extends Expression {
 	Expression left, right;
+	private EnumTagExp expTag;
 
 	protected StringExp() {
 
