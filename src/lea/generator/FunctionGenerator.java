@@ -31,7 +31,9 @@ public class FunctionGenerator {
 				cw.writeLine("public static void main(String[] args)");
 				cw.openBlock();
 
-				// TODO: verify input and output arguments properly!
+				// TODO: Laetitia, verify input and output arguments properly!
+				// For example, if the output type is null, also the input
+				// arguments must be empty etc.!
 				if (entry.getValue().getOutputType() == null)
 					cw.writeLine("lea_main();");
 				else {
@@ -53,14 +55,7 @@ public class FunctionGenerator {
 					+ generateArguments(entry.getValue()) + ")");
 
 			cw.openBlock();
-			if (!entry.getValue().getSyntaxTree().getFirstEnvironment().equals(null))
-			{
-				cw.writeLine("TTTTTTTTTEEEEEEEESSSSSSSTTTTTTTT");
-				entry.getValue().getSyntaxTree().getFirstEnvironment().toJava(cw);
-				cw.writeLine("TTTTTTTTTEEEEEEEESSSSSSSTTTTTTTT");
-			}
 
-			
 			// write function contents
 			Instruction function = entry.getValue().getSyntaxTree();
 			function.toJava(cw);
@@ -78,7 +73,8 @@ public class FunctionGenerator {
 			else
 				arguments += ", ";
 
-			arguments += argI.getType().toJava() + " " + Generator.generateName(argI.getName());
+			arguments += argI.getType().toJava() + " "
+					+ Generator.generateName(argI.getName());
 		}
 
 		return arguments;
