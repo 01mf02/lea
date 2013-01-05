@@ -124,7 +124,7 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 
 	public String toJava(String id) {
 		if (id.equals("length"))
-			return "length;";
+			return "length";
 		else if (id.equals("read"))
 			return "Scanner sc = new Scanner(System.in);\nString str = sc.nextLine();";
 		else if (id.equals("write"))
