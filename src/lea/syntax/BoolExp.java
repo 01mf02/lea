@@ -23,12 +23,11 @@ public class BoolExp extends Expression {
 	}
 
 	public String toJava() {
-		if (expTag == EnumTagExp.EQ || expTag == EnumTagExp.DIFF) {
-			String result = left.toJava() + ".equals(" + right.toJava() + ")";
-			if (expTag == EnumTagExp.DIFF)
-				result = "!(" + result + ")";
-			return result;
-		} else
+		if (expTag == EnumTagExp.EQ)
+			return left.toJavaEquals(right);
+		else if (expTag == EnumTagExp.DIFF)
+			return "!(" + left.toJavaEquals(right) + ")";
+		else
 			return left.toJava() + " " + expTag + " " + right.toJava();
 	}
 

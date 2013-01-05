@@ -23,6 +23,10 @@ public class Expression extends SyntaxTree {
 		return "unhandled_expression";
 	}
 
+	public String toJavaEquals(Expression right) {
+		return getType().toJavaEquals(this.toJava(), right.toJava());
+	}
+
 	public String toDotString() {
 		return "Expression";
 	}

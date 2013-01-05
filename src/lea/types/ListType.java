@@ -29,4 +29,12 @@ public class ListType extends Type {
 	public String toJava() {
 		return this.left.toJava() + "[]";
 	}
+
+	public String toJavaEquals(String e1, String e2) {
+		return "Arrays.equals(" + e1 + ", " + e2 + ")";
+	}
+
+	public String toJavaToString(String e) {
+		return "Arrays.toString(" + e + ")";
+	}
 }

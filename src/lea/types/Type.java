@@ -67,4 +67,12 @@ public abstract class Type {
 	public abstract String toString();
 
 	public abstract String toJava();
+
+	public String toJavaEquals(String e1, String e2) {
+		return e1 + ".equals(" + e2 + ")";
+	}
+
+	public String toJavaToString(String e) {
+		return e + ".toString()";
+	}
 }
