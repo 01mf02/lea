@@ -56,7 +56,7 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 		nfi.pushType(new FloatType());
 		nfi.pushType(new CharType());
 		nfi.pushType(new IntType());
-		nfi.pushType(new TupleType(null, null));
+		nfi.pushType(new TupleType(null));
 		nfi.pushType(new StructType(null));
 
 		this.put("toString", nfi);

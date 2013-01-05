@@ -13,8 +13,7 @@ public class Tuple extends Expression {
 	}
 
 	public Type getType() {
-		// TODO: redo TupleType and remove second null argument!
-		return new TupleType(pair.getType(), null);
+		return new TupleType(pair.getType());
 	}
 
 	public String toString() {

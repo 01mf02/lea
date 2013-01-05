@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 import lea.syntax.BoolExp;
 import lea.syntax.Expression;
-import lea.syntax.ListNode;
+import lea.syntax.List;
 import lea.syntax.NumberExp;
 import lea.syntax.StringConcatenation;
 import lea.syntax.SyntaxTree;
@@ -42,6 +42,9 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 	}
 
 	public boolean isCallPermitted(String id, Expression e) {
+
+		// TODO: This code is SO ugly --- redo it!
+
 		boolean isPermitted = false;
 
 		FunctionInfo nfi = this.get(id);
@@ -56,8 +59,9 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 					Expression ex = (Expression) tmp.getLeft();
 					Expression ex2 = (Expression) tmp.getRight();
 
-					if (ex instanceof ListNode || ex instanceof NumberExp
-							|| ex instanceof BoolExp || ex instanceof StringConcatenation) {
+					if (ex instanceof List || ex instanceof NumberExp
+							|| ex instanceof BoolExp
+							|| ex instanceof StringConcatenation) {
 						args.add(0, ex.getType());
 
 						tmp = tmp.getRight();
@@ -65,8 +69,7 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 							if (tmp.getLeft() == null && tmp.getRight() == null)
 								args.add(1, tmp.getType());
 						}
-					} else if (ex2 instanceof ListNode
-							|| ex2 instanceof NumberExp
+					} else if (ex2 instanceof List || ex2 instanceof NumberExp
 							|| ex2 instanceof BoolExp
 							|| ex2 instanceof StringConcatenation) {
 						args.add(0, ex2.getType());

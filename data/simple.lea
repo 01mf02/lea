@@ -1,6 +1,7 @@
 TEST = 1;
 CH = "Je suis la plus belle";
 LIST = [1, 2];
+TUPLE = ('a', 42.0, LIST);
 
 
 function ret(a : int) : int
