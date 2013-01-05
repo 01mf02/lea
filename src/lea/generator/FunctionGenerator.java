@@ -35,10 +35,16 @@ public class FunctionGenerator {
 				// For example, if the output type is null, also the input
 				// arguments must be empty etc.!
 				if (entry.getValue().getOutputType() == null)
-					cw.writeLine("lea_main();");
+					if (entry.getValue().getArgs().toString().equals("[]"))
+						cw.writeLine("lea_main();");
+					else
+						cw.writeLine("lea_main(args);");
 				else {
-					cw.writeLine("int return_code = lea_main(args);");
-					cw.writeLine("System.exit(return_code);");
+					if(entry.getValue().getArgs().toString().equals("[]"))
+						cw.writeLine(entry.getValue().getOutputType() + " return_code = lea_main();");
+					else
+						cw.writeLine(entry.getValue().getOutputType() + " return_code = lea_main(args);");
+					cw.writeLine("System.exit(return_code); ");
 				}
 				cw.closeBlock();
 			}

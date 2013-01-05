@@ -39,9 +39,12 @@ public class TupleNode extends Expression {
 	public String toDotString() {
 		return "Tuple";
 	}
-
+	
 	public String toJava() {
-		return "new Object[]{" + left.toJava() + ", " + right.toJava() + "}";
+		String result = "";
+		result += left.toJava() + ", ";
+		result += right.toJava();
+		return result;
 	}
 
 }
