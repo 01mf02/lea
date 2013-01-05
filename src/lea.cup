@@ -1,8 +1,7 @@
 package generated;
  
 import java_cup.runtime.*;
-import java.io.*;
-import java.lang.*;
+import java.util.Arrays;
 import java.util.LinkedList;
 import generated.*;
 import lea.*;
@@ -129,9 +128,9 @@ terminal PLUS, MINUS, MINUS_U, MULT, DIV, MODULO;
 
 terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALSEEXP;
 
-non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl, erreur;
+non terminal axiom, definition, funct, procedure, struct, structDecls, structDecl, erreur;
 non terminal Instruction decl;
-non terminal Type type, pairType, enumDecl, basicType;
+non terminal Type basicType, type, pairType, enumDecl;
 non terminal LinkedList<String> enumElems;
 non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -145,6 +144,8 @@ non terminal List list;
 non terminal Tuple tuple;
 non terminal Expression variable,functCall;
 non terminal CaseNode caseNodes;
+non terminal Constant constant;
+non terminal Object definitionValue, definitionPair;
 
 precedence left COMMA;
 precedence right ELSE;
@@ -163,47 +164,52 @@ axiom ::=
 		| funct axiom
 		| procedure
 		| procedure axiom
-		| constDecl axiom
-		| constDecl	
-		| struct axiom
+		| definition
+		| definition axiom
 		| struct
-		| erreur axiom
+		| struct axiom
 		| erreur
+		| erreur axiom
 		;
 		
 		
 erreur ::= 
-		error SEMIC
-		{:
-			parser.printError("\";\" is missing \n", 1);
-		:}
-		| error RBRACE
-		{:
-			parser.printError("\"}\" is missing \n", 1);
-		:}
-		| error LPAR
-		{:
-			parser.printError("\"(\" is missing \n", 1);
-		:}
-		;		
-		
-		
+		  error SEMIC {: parser.printError("\";\" is missing \n", 1); :}
+		| error RBRACE {: parser.printError("\"}\" is missing \n", 1); :}
+		| error LPAR {: parser.printError("\"(\" is missing \n", 1); :}
+		;
+
 pairType ::=
 		  pairType:t1 COMMA type:t2 {: RESULT = new PairType(t1, t2); :}
 		| type:t {: RESULT = t; :}
 		;
 
-basicType ::=		
+definitionPair ::=
+		  definitionPair:p COMMA definitionValue:v
+		{:
+			if (p instanceof Type && v instanceof Type)
+				RESULT = new PairType((Type) p, (Type) v);
+			else if (p instanceof Expression && v instanceof Expression)
+				RESULT = new Pair((Expression) p, (Expression) v);
+			else
+				parser.printError("Expected two types or two expressions", 1);
+		:}
+		| definitionValue:t	{: RESULT = t; :}
+		;
+
+basicType ::=
 		  INT {: RESULT = new IntType(); :}
 		| FLOAT {: RESULT = new FloatType(); :}
 		| CHAR   {: RESULT = new CharType(); :}
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
-		| LIST OF basicType:t {: RESULT = new ListType(t); :}
-		| enumDecl:e {:  RESULT = e; :};
-		
+		| enumDecl:e {: RESULT = e; :}
+		;
+
 type ::=
-		  LPAR pairType:t RPAR {: RESULT = new TupleType(t); :}
+		  basicType:t {: RESULT = t; :}
+		| LPAR pairType:t RPAR {: RESULT = new TupleType(t); :}
+		| LIST OF type:t {: RESULT = new ListType(t); :}
 		| IDENTIFIER:t 
 		{:
 			Type type = typeTable.get(t);
@@ -213,18 +219,45 @@ type ::=
 			
 			RESULT = type;
 		:}
-		| INT {: RESULT = new IntType(); :}
-		| FLOAT {: RESULT = new FloatType(); :}
-		| CHAR   {: RESULT = new CharType(); :}
-		| STRING  {: RESULT = new StringType(); :}
-		| BOOL {: RESULT = new BoolType(); :}
-		| LIST OF type:t {: RESULT = new ListType(t); :}
-		| enumDecl:e {: RESULT = e; :}
 		;
-		
 
-constDecl ::= 
-		IDENTIFIER:id EQ expr:i SEMIC
+definitionValue ::=
+		  basicType:t {: RESULT = t; :}
+		| LPAR definitionPair:p RPAR
+		{:
+			if (p instanceof Type)
+				RESULT = new TupleType((Type) p);
+			else if (p instanceof Pair) 
+				RESULT = new Tuple((Pair) p);
+			else
+				parser.printError("Type or pair expected", 1);
+		:}
+		| LIST OF definitionValue:t
+		{:
+			if (t instanceof Type)
+				RESULT = new ListType((Type) t);
+			else
+				parser.printError("Type expected", 1);
+		:}
+
+		| constant:c {: RESULT = new ConstantLeaf(c); :}
+		;
+
+definition ::=
+		IDENTIFIER:id EQ definitionValue:v SEMIC
+		{:
+			if (constTable.containsKey(id) || typeTable.containsKey(id))
+				parser.printError("Type/Constant already declared: " + id, 1);
+			else {
+				if (v instanceof ConstantLeaf)
+					constTable.put(id, ((ConstantLeaf) v).getValue());
+				else
+					parser.printError("Constant cannot be set: " + id, 1);
+			}
+
+
+		:}
+		/*IDENTIFIER:id EQ expr:i SEMIC
 		{:
 			if(constTable.containsKey(id))
 			{
@@ -260,13 +293,13 @@ constDecl ::=
 				}				
 			}
 		:}
-		| IDENTIFIER:id EQ  basicType:t  SEMIC
+		| IDENTIFIER:id EQ basicType:t SEMIC
 		{:
 			if(typeTable.containsKey(id) || constTable.containsKey(id))
 				parser.printError("Type/constant already declared : " + id, 1);
 			else
 				typeTable.put(id, t);
-		:}
+		:}*/
 		;	
 
 enumDecl ::= ENUM LPAR enumElems:e RPAR 
@@ -286,14 +319,11 @@ enumElems ::= enumElems:l COMMA enumElem:e
 		:}
 		| enumElem:e
 		{: 
-			LinkedList<String> l = new LinkedList<String>();
-							
-			l.add(e);
-			RESULT = l;  
+			RESULT = new LinkedList<String>(Arrays.asList(e));  
 		:};
 
 enumElem ::= IDENTIFIER:id
-		{:		
+		{:
 			if(constTable.containsKey(id))
 				parser.printError("Enum element can't be set because of an already existing constant/enum : " + id, 1);
 			else
@@ -309,10 +339,10 @@ block ::=
 		LBRACE
 		{:
 			callerType = null;
-		    SyntaxTree sTree = new SyntaxTree(null, null);
-		    
-		    sTree.setEnvironmentStack(currentNode.getEnvironmentStack());
-	    	sTree.pushEnvironment(new Environment());
+			SyntaxTree sTree = new SyntaxTree(null, null);
+
+			sTree.setEnvironmentStack(currentNode.getEnvironmentStack());
+			sTree.pushEnvironment(new Environment());
 
 		    currentNode = sTree;
 		:}  instrs:i RBRACE {: RESULT = i; currentNode.popEnvironment(); :}
@@ -449,7 +479,7 @@ procedure ::=
 		:}
 		;
 
-		
+
 functDecls ::=
 		functDecls:l COMMA functDecl:f
 		{:
@@ -491,7 +521,8 @@ caseNodes ::=
 			RESULT = new CaseNode(c,s,null);
 		:}
 		;
-		
+
+
 instr ::= 
 		IF LPAR expr:e RPAR block:i1 ELSE block:i2  {: RESULT = new Condition(e, new ElseCondition(i1, i2)); :}
 		| IF LPAR expr:e RPAR block:i   {: RESULT = new Condition(e, i); :}
@@ -575,7 +606,7 @@ instr ::=
 				parser.printError("Loop test expression must be a boolean", 1);
 			}
 		:}
-		| decl:d {: RESULT = d;	:}
+		| decl:d {: RESULT = d; :}
 		| variable:v SEMIC 
 		{: 
 			if(v instanceof FunctionCall)
@@ -651,8 +682,17 @@ tuple ::=
 		  LPAR pair:p RPAR {: RESULT = new Tuple(p); :}
 		;
 
+constant ::=
+		 INTEGER:i {: RESULT = new IntConstant(i); :}
+		|FLOATEXP:d {: RESULT = new FloatConstant(d); :}
+		|STRINGEXP:s {: RESULT = new StringConstant(s); :}
+		|CHAREXP:c {: RESULT = new CharConstant(c); :}
+		|boolExpr:b {: RESULT = new BoolConstant(b); :}
+		;
+		  
+
 expr ::=
-		expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.AND ); :} 
+		 expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.AND ); :} 
 		|expr:e1 OR   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.OR  ); :} 
 		|expr:e1 LT   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.LT  ); :} 
 		|expr:e1 GT   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.GT  ); :} 
@@ -668,29 +708,16 @@ expr ::=
 		|expr:e1 MODULO expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.MOD  ); :}
 		|MINUS expr:e {: RESULT = constructNumberExp(e, null, NumberOperator.MINUS_U); :} %prec MINUS_U
 
-		| list:l {:
+		|constant:c {: RESULT = new ConstantLeaf(c); :}
+
+		|list:l {:
 			if(!l.isValid())
 				parser.printError("All list elements need to be of the same type", 1);
 		
 			RESULT = l;
 		:}
-		| tuple:t {: RESULT = t; :}
+		|tuple:t {: RESULT = t; :}
 		|LPAR expr:e RPAR {: RESULT = e; :}
-		|INTEGER:it {: 
-			RESULT = new ConstantLeaf(new IntConstant(it)); 
-			:}
-		|FLOATEXP:d {: 
-			RESULT = new ConstantLeaf(new FloatConstant(d)); 
-			:}
-		|STRINGEXP:st {: 
-			RESULT = new ConstantLeaf(new StringConstant(st));  
-			:}
-		|CHAREXP:c {: 
-			RESULT = new ConstantLeaf(new CharConstant(c));  
-			:}
-		|boolExpr:b {: 
-			RESULT = new ConstantLeaf(new BoolConstant(b)); 
-			:}
 		|variable:v 
 		{: 
 			if(v instanceof VariableLeaf)
