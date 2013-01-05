@@ -5,7 +5,7 @@ TRUER = true;
 FALSER = false;
 SHAKESPEARE = "To be or not to be ...";
 LIST_OF_INT = [1,2,3,4,5,6];
-TUPLE_OF_THREE = 34, SHAKESPEARE, PI;
+TUPLE_OF_THREE = (34, SHAKESPEARE, PI);
 color = enum (rouge, vert, bleu, cyan, magenta, jaune);
 
 fiche = struct {
@@ -34,7 +34,7 @@ procedure types()
 	c := LETTER;
 	
 	tup:(int,char,string,float);
-	tup := i,c,s,f;
+	tup := (i,c,s,f);
 	types();
 }
 
@@ -102,15 +102,17 @@ function wooTooComplexFunction(arg:int,arg0:string) : int
 
 /*Je suis un commentaire
 qu'on met sur plusieurs lignes*/
-function main(arg:int,arg0:string) : int
+procedure main()
 {
 	li:list of int := LIST_OF_INT;
-	liSimple:list of int := [123];
+	//TODO!
+	//liSimple:list of int := [123];
 	liComplex:list of list of int := [[12,23],[12, 222, 333], [123, 7]];
 	
 	tp:(int, string, float) := TUPLE_OF_THREE;
 	tpComplex:(int, float) := (3 + 10 * 2, PI + PI);
 	
-	return wooTooComplexFunction(100,"GRELE");
+	//TODO!
+	//test : int := wooTooComplexFunction(100,"GRELE");
 }
 

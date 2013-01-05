@@ -1,7 +1,7 @@
 TEST = 1;
 CH = "Je suis la plus belle";
-//LIST = [1, 2];
-//TUPLE = ('a', 42.0, LIST);
+LIST = [1, 2];
+TUPLE = ('a', 42.0, LIST);
 
 
 function ret(a : int) : int
@@ -18,6 +18,9 @@ function main(args : list of string) : int
 
 	tuple_test : (int, (char, string));
 	tuple_test := (1, ('b', "cd"));
+	
+	tuple_test2 : (char, float, list of int);
+	tuple_test2 := TUPLE;
 	
 	abc :string;
 	abc := CH + " Hey !" + "Oulala !";

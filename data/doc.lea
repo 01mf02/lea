@@ -6,11 +6,8 @@ SHAKESPEARE = "To be or \"not\" to be ...";
 FIBONACCI = [1, 2, 3, 5, 8];
 TUPLE = (THIS_IS_FALSE, MEANING, PI, FIRST_LETTER, SHAKESPEARE, FIBONACCI);
 
-simple_enum = enum(CAN, US, FR);
-other_enum = enum(JAP, CN, AUS);
-
-toto = (simple_enum, other_enum);
-date = (int, enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC), int);
+month = enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC);
+date = (int, month, int);
 
 person = struct
 {
@@ -34,7 +31,8 @@ procedure print_fibonacci(n1 : int, n2 : int, iter : int, count : int)
 
 	writeln(n1.toString());
 	n3 : int := n1 + n2;
-	print_fibonacci(n2, n3, iter+1, count);
+	//TODO!
+	//print_fibonacci(n2, n3, iter+1, count);
 }
 
 procedure print_int_list(l : list of int)
@@ -70,15 +68,10 @@ function main(l : list of string) : int
 	print_int_list(FIBONACCI);
 
 	writeln("Fibonacci numbers as function:");
-	print_fibonacci(1, 1, 0, 10);
+	//TODO!
+	//print_fibonacci(1, 1, 0, 10);
 
-	ta:(simple_enum, other_enum) := (FR, AUS);
-	
-	t:simple_enum := FR;
-	if(t = FR)
-	{
-		logicians : person_list := create_logicians();
-	}
+	logicians : person_list := create_logicians();
 	
 	return 0;
 }

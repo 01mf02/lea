@@ -130,7 +130,7 @@ terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALS
 
 non terminal axiom, definition, funct, procedure, struct, structDecls, structDecl, erreur;
 non terminal Instruction decl;
-non terminal Type basicType, type, pairType, enumDecl;
+non terminal Type basicType, type, pairType;
 non terminal LinkedList<String> enumElems;
 non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -203,14 +203,14 @@ basicType ::=
 		| CHAR   {: RESULT = new CharType(); :}
 		| STRING  {: RESULT = new StringType(); :}
 		| BOOL {: RESULT = new BoolType(); :}
-		| enumDecl:e {: RESULT = e; :}
+		| ENUM LPAR enumElems:e RPAR {: RESULT = new EnumType(e); :}
 		;
 
 type ::=
 		  basicType:t {: RESULT = t; :}
 		| LPAR pairType:t RPAR {: RESULT = new TupleType(t); :}
 		| LIST OF type:t {: RESULT = new ListType(t); :}
-		| IDENTIFIER:t 
+		| IDENTIFIER:t
 		{:
 			Type type = typeTable.get(t);
 			
@@ -241,6 +241,25 @@ definitionValue ::=
 		:}
 
 		| constant:c {: RESULT = new ConstantLeaf(c); :}
+		| LBRACKET definitionPair:p RBRACKET
+		{:
+			if (p instanceof Pair)
+				RESULT = new List((Pair) p);
+			else
+				parser.printError("Pair expected", 1);
+		:}
+		| IDENTIFIER:id
+		{:
+			Type t = typeTable.get(id);
+			Constant c = constTable.get(id);
+			
+			if (t != null)
+				RESULT = t;
+			else if (c != null)
+				RESULT = new ConstantLeaf(c);
+			else
+				parser.printError("Type/Constant not found: " + id, 1);
+		:}
 		;
 
 definition ::=
@@ -249,8 +268,14 @@ definition ::=
 			if (constTable.containsKey(id) || typeTable.containsKey(id))
 				parser.printError("Type/Constant already declared: " + id, 1);
 			else {
-				if (v instanceof ConstantLeaf)
+				if (v instanceof Type)
+					typeTable.put(id, (Type) v);
+				else if (v instanceof ConstantLeaf)
 					constTable.put(id, ((ConstantLeaf) v).getValue());
+				else if (v instanceof List)
+					constTable.put(id, new ListConstant((List) v));
+				else if (v instanceof Tuple)
+					constTable.put(id, new TupleConstant((Tuple) v));
 				else
 					parser.printError("Constant cannot be set: " + id, 1);
 			}
@@ -302,16 +327,6 @@ definition ::=
 		:}*/
 		;	
 
-enumDecl ::= ENUM LPAR enumElems:e RPAR 
-		{:
-			EnumType t = new EnumType(e); 
-			// TODO: do we really need to put into type table?
-			typeTable.put("__ENUM_"+enumID, t);
-			
-			RESULT = t;
-		:}
-		;
-		
 enumElems ::= enumElems:l COMMA enumElem:e
 		{:			
 			l.add(e);
