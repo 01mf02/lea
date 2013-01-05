@@ -21,7 +21,7 @@ public class Repeat extends Instruction {
 	}
 
 	public void toJava(CodeWriter w) {
-		w.writeLine("repeat");
+		w.writeLine("do");
 		w.openBlock();
 		instruction.toJava(w);
 		w.closeBlock();
