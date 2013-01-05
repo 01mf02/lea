@@ -2,7 +2,6 @@ package lea.syntax;
 
 import lea.types.ListType;
 
-
 public class FunctionCall extends Expression {
 	FunctionRef fRef;
 	Expression exp;
@@ -23,14 +22,18 @@ public class FunctionCall extends Expression {
 	}
 
 	public String toJava() {
-		if (exp != null)
-		{
-			if(exp.getType() instanceof ListType)
-				return fRef.toJava() + "new " +  exp.getType().toJava() + " " + exp.toJava() + ")";
-			else
-				return fRef.toJava() + exp.toJava() + ")";
+		if (exp != null) {
+			if (exp.getType() instanceof ListType)
+				return fRef.toJava() + "new " + exp.getType().toJava() + " "
+						+ exp.toJava() + ")";
+			else {
+				if (exp.toJava() != null)
+					return fRef.toJava() + ")";
+				else
+					return fRef.toJava() + exp.toJava() + ")";
+			}
 		}
-			
+
 		else
 			return fRef.toJava() + ")";
 

@@ -63,6 +63,8 @@ public class FunctionRef extends Expression {
 			result += nft.toJava(name);
 
 			if (result != null)
+				if(result.equals("length("))
+						return name + " " + result + "(";
 				return result + "(";
 			
 		} 
