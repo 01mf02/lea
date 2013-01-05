@@ -27,6 +27,10 @@ public class Expression extends SyntaxTree {
 		return getType().toJavaEquals(this.toJava(), right.toJava());
 	}
 
+	public String toJavaToString() {
+		return getType().toJavaToString(this.toJava());
+	}
+
 	public String toDotString() {
 		return "Expression";
 	}
