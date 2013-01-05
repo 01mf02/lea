@@ -3,7 +3,7 @@ package generated;
 import java_cup.runtime.*;
 import java.io.*;
 import java.lang.*;
-import java.util.*;
+import java.util.LinkedList;
 import generated.*;
 import lea.*;
 import lea.types.*;
@@ -131,7 +131,7 @@ terminal String IDENTIFIER, INTEGER, FLOATEXP, STRINGEXP, CHAREXP, TRUEEXP, FALS
 
 non terminal axiom,constDecl,funct,procedure,struct,structDecls, structDecl, erreur;
 non terminal Instruction decl;
-non terminal Type type,tupleType, enumDecl, basicType, basicTupleType;
+non terminal Type type, tupleType, enumDecl, basicType, basicTupleType;
 non terminal LinkedList<String> enumElems;
 non terminal String enumElem;
 non terminal LinkedList<ArgumentInfo> functDecls;
@@ -140,7 +140,9 @@ non terminal Instruction block;
 non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal String boolExpr;
-non terminal ListNode listDecl;
+non terminal Pair pair;
+non terminal List list;
+non terminal Tuple tuple;
 non terminal Expression variable,functCall;
 non terminal CaseNode caseNodes;
 
@@ -242,11 +244,13 @@ constDecl ::=
 					Constant c = ((ConstantLeaf)i).getValue();
 					constTable.put(id, c);
 				}
+				// TODO: change that!
 				else if(i instanceof ListNode)
 				{
 					ListConstant c = new ListConstant((ListNode)i, (ListType)i.getType());
 					constTable.put(id, c);
 				}
+				// TODO: change that!
 				else if(i instanceof TupleNode)
 				{
 					if(!(i.getLeft() instanceof TypeExp))
@@ -654,15 +658,16 @@ instrs ::=
 		instrs:i1 instr:i2   {: RESULT = new Succ(i1, i2); :}
 		| instr:i  {: RESULT = i; :}
 		;
-		
-		
-listDecl ::=
-		 LBRACKET expr:e RBRACKET
-		 {:
-			 RESULT = new ListNode(e, null);
-		 :}
-		 ;
-		 
+
+pair ::=
+		  expr:e1 COMMA expr:e2 {: RESULT = new Pair(e1, e2); :}
+		| pair:p  COMMA expr:e  {: RESULT = new Pair(p,  e ); :}
+		;
+
+list ::=
+		  LBRACKET pair:p RBRACKET {: RESULT = new List(p); :}
+		;
+
 expr ::=
 		expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.AND ); :} 
 		|expr:e1 OR   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.OR  ); :} 
@@ -680,17 +685,11 @@ expr ::=
 		|expr:e1 MODULO expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.MOD  ); :}
 		|MINUS expr:e {: RESULT = constructNumberExp(e, null, NumberOperator.MINUS_U); :} %prec MINUS_U
 
-		| expr:e1 COMMA expr:e2 
-		{: 	
-			RESULT = new TupleNode(e1, e2);
-		:}
-		| listDecl:dl {:
-			if(!dl.isListHasAllSameType())
-			{
-				parser.printError("The list expression needs to contain the same type everywhere", 1);
-			}
+		| list:l {:
+			if(!l.isValid())
+				parser.printError("All list elements need to be of the same type", 1);
 		
-			RESULT = dl;
+			RESULT = l;
 		:}
 		|LPAR expr:e RPAR {: RESULT = e; :}
 		|INTEGER:it {: 

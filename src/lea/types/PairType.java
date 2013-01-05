@@ -4,6 +4,10 @@ import lea.constants.Constant;
 
 public class PairType extends Type {
 
+	public PairType(Type t1, Type t2) {
+		super(t1, t2);
+	}
+
 	@Override
 	public boolean equals(Type t1) {
 		return left.equals(t1.left) && right.equals(t1.right);

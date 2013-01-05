@@ -1,6 +1,6 @@
 package lea.syntax;
 
-import lea.types.TupleType;
+import lea.types.PairType;
 import lea.types.Type;
 
 public class Pair extends Expression {
@@ -16,20 +16,15 @@ public class Pair extends Expression {
 		return "Pair" + super.toString();
 	}
 
+	public Type getFirstElementType() {
+		if (left instanceof Pair)
+			return ((Pair) left).getFirstElementType();
+		else
+			return left.getType();
+	}
+
 	public Type getType() {
-		SyntaxTree left = this.getLeft();
-		SyntaxTree right = this.getRight();
-
-		Type tLeft = null;
-		Type tRight = null;
-
-		if (left != null)
-			tLeft = left.getType();
-
-		if (right != null)
-			tRight = right.getType();
-
-		return new TupleType(tLeft, tRight);
+		return new PairType(left.getType(), right.getType());
 	}
 
 	public String toDotString() {
@@ -37,7 +32,7 @@ public class Pair extends Expression {
 	}
 
 	public String toJava() {
-		return left.toJava() + ", " + right.toJava() + "}";
+		return left.toJava() + ", " + right.toJava();
 	}
 
 }

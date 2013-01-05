@@ -1,7 +1,5 @@
 TEST = 1;
-LIST = [TEST, 2, 3];
 CH = "Je suis la plus belle";
-
 
 
 function ret(a : int) : int
@@ -12,6 +10,9 @@ function ret(a : int) : int
 function main(args : list of string) : int
 {
 	writeln("HAKUNA MATATA");
+
+	list_test : list of list of int;
+	list_test := [[1, 2, 3], [4, 5, 6]];
 
 	abc :string;
 	abc := CH + " Hey !" + "Oulala !";

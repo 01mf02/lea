@@ -13,8 +13,12 @@ public class List extends Expression {
 	}
 
 	public Type getType() {
+		return new ListType(pair.getFirstElementType());
+	}
+
+	public boolean isValid() {
 		// TODO: check if all elements have same type!
-		return new ListType(pair.getType());
+		return true;
 	}
 
 	public String toString() {
