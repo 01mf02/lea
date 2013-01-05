@@ -9,7 +9,7 @@ import lea.syntax.BoolExp;
 import lea.syntax.Expression;
 import lea.syntax.ListNode;
 import lea.syntax.NumberExp;
-import lea.syntax.StringExp;
+import lea.syntax.StringConcatenation;
 import lea.syntax.SyntaxTree;
 import lea.types.Type;
 
@@ -57,7 +57,7 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 					Expression ex2 = (Expression) tmp.getRight();
 
 					if (ex instanceof ListNode || ex instanceof NumberExp
-							|| ex instanceof BoolExp || ex instanceof StringExp) {
+							|| ex instanceof BoolExp || ex instanceof StringConcatenation) {
 						args.add(0, ex.getType());
 
 						tmp = tmp.getRight();
@@ -68,7 +68,7 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 					} else if (ex2 instanceof ListNode
 							|| ex2 instanceof NumberExp
 							|| ex2 instanceof BoolExp
-							|| ex2 instanceof StringExp) {
+							|| ex2 instanceof StringConcatenation) {
 						args.add(0, ex2.getType());
 
 						tmp = tmp.getLeft();

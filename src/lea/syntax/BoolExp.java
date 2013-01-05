@@ -5,30 +5,26 @@ import lea.types.Type;
 
 public class BoolExp extends Expression {
 	Expression left, right;
-	private EnumTagExp expTag;
+	private BoolOperator operator;
 
-	protected BoolExp() {
-
-	}
-
-	public BoolExp(Expression a1, Expression a2, EnumTagExp tag) {
+	public BoolExp(Expression a1, Expression a2, BoolOperator tag) {
 		super(a1, a2);
-		expTag = tag;
+		operator = tag;
 		left = a1;
 		right = a2;
 	}
 
 	public String toString() {
-		return "BooleanExp(" + expTag.toString() + ")" + super.toString();
+		return "BooleanExp(" + operator + ")" + super.toString();
 	}
 
 	public String toJava() {
-		if (expTag == EnumTagExp.EQ)
+		if (operator == BoolOperator.EQ)
 			return left.toJavaEquals(right);
-		else if (expTag == EnumTagExp.DIFF)
+		else if (operator == BoolOperator.DIFF)
 			return "!(" + left.toJavaEquals(right) + ")";
 		else
-			return left.toJava() + " " + expTag + " " + right.toJava();
+			return left.toJava() + " " + operator + " " + right.toJava();
 	}
 
 	public Type getType() {
@@ -36,6 +32,6 @@ public class BoolExp extends Expression {
 	}
 
 	public String toDotString() {
-		return "BooleanExp(" + expTag + ")";
+		return "BooleanExp(" + operator + ")";
 	}
 }

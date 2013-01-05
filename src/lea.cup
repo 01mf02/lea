@@ -52,7 +52,7 @@ action code
 	private Type callerType = null;
 
 
-	private BoolExp constructBoolExp(Expression e1, Expression e2, EnumTagExp op) {
+	private BoolExp constructBoolExp(Expression e1, Expression e2, BoolOperator op) {
 		switch (op) {
 			case AND:
 			case OR:
@@ -82,7 +82,7 @@ action code
 		return new BoolExp(e1, e2, op);
 	}
 
-	private Expression constructNumberExp(Expression e1, Expression e2, EnumTagExp op) {
+	private Expression constructNumberExp(Expression e1, Expression e2, NumberOperator op) {
 		switch (op) {
 			case PLUS:
 				if(!e1.getType().equals(e2.getType()) || (!(e1.getType().equals(new IntType())) && !(e1.getType().equals(new FloatType())) && !(e1.getType().equals(new StringType()))))
@@ -112,7 +112,7 @@ action code
 		}
 		
 		if(e1.getType().equals(new StringType()))
-			return new StringExp(e1, e2, op);
+			return new StringConcatenation(e1, e2);
 			
 		return new NumberExp(e1, e2, op);
 	}
@@ -664,21 +664,21 @@ listDecl ::=
 		 ;
 		 
 expr ::=
-		expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.AND ); :} 
-		|expr:e1 OR   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.OR  ); :} 
-		|expr:e1 LT   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.LT  ); :} 
-		|expr:e1 GT   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.GT  ); :} 
-		|expr:e1 LE   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.LE  ); :} 
-		|expr:e1 GE   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.GE  ); :} 
-		|expr:e1 EQ   expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.EQ  ); :} 
-		|expr:e1 DIFF expr:e2 {: RESULT = constructBoolExp(e1, e2, EnumTagExp.DIFF); :} 
+		expr:e1 AND  expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.AND ); :} 
+		|expr:e1 OR   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.OR  ); :} 
+		|expr:e1 LT   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.LT  ); :} 
+		|expr:e1 GT   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.GT  ); :} 
+		|expr:e1 LE   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.LE  ); :} 
+		|expr:e1 GE   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.GE  ); :} 
+		|expr:e1 EQ   expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.EQ  ); :} 
+		|expr:e1 DIFF expr:e2 {: RESULT = constructBoolExp(e1, e2, BoolOperator.DIFF); :} 
 
-		|expr:e1 PLUS   expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.PLUS ); :}
-		|expr:e1 MINUS  expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.MINUS); :}
-		|expr:e1 MULT   expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.MULT ); :}
-		|expr:e1 DIV    expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.DIV  ); :}
-		|expr:e1 MODULO expr:e2 {: RESULT = constructNumberExp(e1, e2, EnumTagExp.MOD  ); :}
-		|MINUS expr:e {: RESULT = constructNumberExp(e, null, EnumTagExp.MINUS_U); :} %prec MINUS_U
+		|expr:e1 PLUS   expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.PLUS ); :}
+		|expr:e1 MINUS  expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.MINUS); :}
+		|expr:e1 MULT   expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.MULT ); :}
+		|expr:e1 DIV    expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.DIV  ); :}
+		|expr:e1 MODULO expr:e2 {: RESULT = constructNumberExp(e1, e2, NumberOperator.MOD  ); :}
+		|MINUS expr:e {: RESULT = constructNumberExp(e, null, NumberOperator.MINUS_U); :} %prec MINUS_U
 
 		| expr:e1 COMMA expr:e2 
 		{: 	
