@@ -356,8 +356,14 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 			if(currentNode != null)
 			{
 				currentNode.getFirstEnvironment().put(id, new VariableInfo(t, true));
+
+				VariableLeaf vl = new VariableLeaf(id, t);
+
+				// divide into separate declaration and definition instructions
+				Assignment decl = new Assignment(vl, null);
+				Assignment defi = new Assignment(vl, e);
 				
-				RESULT = new Assignment(new VariableLeaf(id, t), e); 
+				RESULT = new Succ(decl, defi);
 			}
 			
 			if(!t.equals(e.getType()))
