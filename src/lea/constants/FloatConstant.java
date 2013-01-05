@@ -21,7 +21,6 @@ public class FloatConstant implements Constant {
 	}
 
 	public String toJava() {
-		// TODO: why do we need (float) here?
-		return toString()+"f";
+		return toString() + "f";
 	}
 }

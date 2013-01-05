@@ -9,10 +9,6 @@ public class TupleType extends Type {
 		right = t2;
 	}
 
-	public TupleType() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public boolean equals(Type t1) {
 		if (t1 instanceof TupleType) {
