@@ -62,7 +62,7 @@ function create_logicians() : person_list
 	return goedel;
 }
 
-function main(l : list of string) : string
+function main(l : list of string) : int
 {
 	writeln("Hello World!");
 
@@ -80,5 +80,5 @@ function main(l : list of string) : string
 		logicians : person_list := create_logicians();
 	}
 	
-	return "hello";
+	return 0;
 }

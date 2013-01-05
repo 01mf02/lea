@@ -44,7 +44,7 @@ public class TupleNode extends Expression {
 		String result = "";
 		result += left.toJava() + ", ";
 		result += right.toJava();
-		return result;
+		return "new Object[] {" + result +"}";
 	}
 
 }
