@@ -1,5 +1,6 @@
 TEST = 1;
 CH = "Je suis la plus belle";
+LIST = [1, 2];
 
 
 function ret(a : int) : int

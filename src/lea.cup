@@ -244,10 +244,9 @@ constDecl ::=
 					Constant c = ((ConstantLeaf)i).getValue();
 					constTable.put(id, c);
 				}
-				// TODO: change that!
-				else if(i instanceof ListNode)
+				else if(i instanceof List)
 				{
-					ListConstant c = new ListConstant((ListNode)i, (ListType)i.getType());
+					ListConstant c = new ListConstant((List)i);
 					constTable.put(id, c);
 				}
 				// TODO: change that!
