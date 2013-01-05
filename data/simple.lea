@@ -9,7 +9,7 @@ function ret(a : int) : int
 	return a;
 }
 
-procedure main() 
+function main(args : list of string) : int
 {
 	writeln("HAKUNA MATATA");
 
@@ -36,6 +36,5 @@ procedure main()
 		write("hohoho");
 	}
 
-
-
+	return 0;
 }
