@@ -69,14 +69,14 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 				return new FunctionInfo(null, null, null);
 		case "read":
 			if (givenArguments.isEmpty() && objectType == null)
-				return new FunctionInfo(null, null, null);
+				return new FunctionInfo(null, new StringType(), null);
 		case "length":
 			if (givenArguments.isEmpty()
 					&& (objectType instanceof ListType
 							|| objectType instanceof TupleType || objectType instanceof StringType))
 				return new FunctionInfo(null, new IntType(), null);
 		case "toString":
-			if (givenArguments.isEmpty() && objectType instanceof StructType)
+			if (givenArguments.isEmpty() && !(objectType instanceof StructType))
 				return new FunctionInfo(null, new StringType(), null);
 		}
 

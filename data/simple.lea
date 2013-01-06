@@ -16,8 +16,8 @@ procedure functions_test()
 	writeln("Hello World.");
 
 	input : string := read();
-	length : int := LIST.length();
-	toString : string := INTEGER.toString();
+	//length : int := LIST.length();
+	//toString : string := INTEGER.toString();
 }
 
 procedure types_test()

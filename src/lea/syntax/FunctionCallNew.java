@@ -7,14 +7,14 @@ public class FunctionCallNew extends Expression {
 
 	String functionName;
 	Type returnType;
-	Pair arguments;
+	Pair argumentsPair;
 	Expression object;
 
-	FunctionCallNew(String name, Type type, Pair args, Expression obj) {
+	public FunctionCallNew(String name, Type type, Pair args, Expression obj) {
 		super(obj, args);
 		functionName = name;
 		returnType = type;
-		arguments = args;
+		argumentsPair = args;
 		object = obj;
 	}
 
@@ -31,20 +31,24 @@ public class FunctionCallNew extends Expression {
 	}
 
 	public String toJava() {
+		// TODO: uncomment object.toJava() when lea.cup functions
 		switch (functionName) {
 		case "write":
-			return "System.out.print(" + arguments.toJava() + ")";
+			return "System.out.print(" + argumentsPair.toJava() + ")";
 		case "writeln":
-			return "System.out.println(" + arguments.toJava() + ")";
+			return "System.out.println(" + argumentsPair.toJava() + ")";
 		case "read":
 			return "scanner.nextLine()";
 		case "length":
-			return object.toJava() + ".length";
+			return /* object.toJava() + */".length";
 		case "toString":
-			return object.toJava() + ".toString()";
+			return /* object.toJava() + */".toString()";
 		}
 
-		return Generator.generateName(functionName) + "(" + arguments.toJava()
-				+ ")";
+		String arguments = "";
+		if (argumentsPair != null)
+			arguments = argumentsPair.toJava();
+
+		return Generator.generateName(functionName) + "(" + arguments + ")";
 	}
 }

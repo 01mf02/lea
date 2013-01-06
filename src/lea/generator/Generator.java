@@ -35,7 +35,8 @@ public class Generator {
 		cw.writeLine("public class " + this.nameOfClass);
 		cw.openBlock();
 
-		// TODO: initialise scanner here!
+		// scanner for command line input
+		cw.writeLine("static Scanner scanner = new Scanner(System.in);");
 
 		this.typeTable.generate(cw);
 		this.fctGen.generate(cw);

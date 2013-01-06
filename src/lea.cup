@@ -117,8 +117,9 @@ action code
 	}
 :}
 
-    
-terminal SEMIC,PROCEDURE, FUNCTION, LBRACKET, RBRACKET, LPAR, RPAR ,COLON, LBRACE, RBRACE, INT, FLOAT,LIST,OF,STRUCT, ENUM, STRING, CHAR, BOOL,COMMA;
+terminal PROCEDURE, FUNCTION;
+terminal LBRACKET, RBRACKET, LPAR, RPAR, COLON, LBRACE, RBRACE, COMMA, SEMIC;
+terminal INT, FLOAT, LIST, OF, STRUCT, ENUM, STRING, CHAR, BOOL;
 terminal IF, ELSE, CASE;
 terminal WHILE, REPEAT;
 terminal AFF, SLOT;
@@ -142,7 +143,7 @@ non terminal String boolExpr;
 non terminal Pair pair;
 non terminal List list;
 non terminal Tuple tuple;
-non terminal Expression variable,functCall;
+non terminal Expression variable, functCall;
 non terminal CaseNode caseNodes;
 non terminal Constant constant;
 non terminal Object definitionValue, definitionPair;
@@ -393,9 +394,9 @@ decl ::=  IDENTIFIER:id COLON type:t SEMIC
 				
 				RESULT = new Succ(decl, defi);
 			}
-			
+
 			if(!t.equals(e.getType()))
-				parser.printError("Type mismatch. Expecting : "  + t.toString() + ". Got : "  + e.getType().toString(), 1);
+				parser.printError("Type mismatch. Expected: "  + t + ". Got: "  + e.getType(), 1);
 		:} 
 		;
 
@@ -406,21 +407,20 @@ structDecls ::= structDecls structDecl | structDecl | erreur;
 structDecl ::=  IDENTIFIER:id COLON type:t SEMIC
 		{:
 			if(currentNode != null)
-			{
 				currentNode.getFirstEnvironment().put(id, new VariableInfo(t, false));
-			}
-				
+
 			RESULT = new Assignment(new VariableLeaf(id, t), null);
 		:};
 
 
-struct ::= IDENTIFIER:id EQ STRUCT 
-		 {:
-		    SyntaxTree sTree = new SyntaxTree(null, null);
-		    
-		    currentNode = sTree;
-		    typeTable.put(id,new StructType(id));
-		:}LBRACE structDecls RBRACE 
+struct ::=
+		  IDENTIFIER:id EQ STRUCT 
+		{:
+			SyntaxTree sTree = new SyntaxTree(null, null);
+			
+			currentNode = sTree;
+			typeTable.put(id,new StructType(id));
+		:} LBRACE structDecls RBRACE 
 		{:
 			StructType st = (StructType)typeTable.get(id);
 			st.setEnvironment(currentNode.getFirstEnvironment());
@@ -434,10 +434,7 @@ boolExpr ::=
 
 
 funct ::=
-		FUNCTION IDENTIFIER:id LPAR 
-		{: 
-			currentNode = new SyntaxTree(null, null); 
-		:} 
+		FUNCTION IDENTIFIER:id LPAR {: currentNode = new SyntaxTree(null, null); :} 
 		functDecls:f RPAR COLON type:t
 		{:
 			functInfo = new FunctionInfo(f, t);
@@ -468,19 +465,13 @@ funct ::=
 		
 		
 procedure ::= 
-		PROCEDURE IDENTIFIER:id LPAR 
-		{:
-			currentNode = new SyntaxTree(null, null); 
-		:} 
+		PROCEDURE IDENTIFIER:id LPAR {:	currentNode = new SyntaxTree(null, null); :} 
 		functDecls:f RPAR 
 		{:
 			functInfo = new FunctionInfo(f, null);
 			fctTable.put(id, functInfo);
 		:}
-		block:b
-		{:
-			functInfo.setSyntaxTree(b);
-		:}
+		block:b	{: functInfo.setSyntaxTree(b); :}
 		|PROCEDURE IDENTIFIER:id LPAR RPAR  
 		{: 
 			currentNode = new SyntaxTree(null, null); 
@@ -488,10 +479,7 @@ procedure ::=
 			functInfo = new FunctionInfo(l, null);
 			fctTable.put(id, functInfo);
 		:} 
-		block:b
-		{:
-			functInfo.setSyntaxTree(b);
-		:}
+		block:b {: functInfo.setSyntaxTree(b); :}
 		;
 
 
@@ -544,13 +532,9 @@ instr ::=
 		| CASE variable:v LBRACE caseNodes:d RBRACE
 		{:
 			if(v.getType() instanceof EnumType)
-			{
 				RESULT = new Case(v,d);
-			}
 			else
-			{
-				parser.printError("Type mismatch. Expecting type enum for CASE ", 1);
-			}
+				parser.printError("Type mismatch. Expecting type enum for CASE", 1);
 		:}
 		| variable:v AFF expr:e SEMIC 
 		{: 			
@@ -598,40 +582,25 @@ instr ::=
 		:}
 		| WHILE LPAR expr:e RPAR block:b
 		{:
-		//Distinguer while et repeat
 			if(e.getType() instanceof BoolType)
-			{
 				RESULT = new While(e, b); 
-				
-			} 
 			else
-			{
 				parser.printError("Loop test expression must be a boolean", 1);
-			}
 		:}
 		| REPEAT block:b WHILE LPAR expr:e RPAR SEMIC
 		{:
 			if(e.getType() instanceof BoolType)
-			{
 				RESULT = new Repeat(e, b); 
-			} 
-			
 			else
-			{
 				parser.printError("Loop test expression must be a boolean", 1);
-			}
 		:}
 		| decl:d {: RESULT = d; :}
 		| variable:v SEMIC 
 		{: 
-			if(v instanceof FunctionCall)
-			{
+			if(v instanceof FunctionCall || v instanceof FunctionCallNew)
 				RESULT = new Instruction(v, null);
-			}
 			else
-			{
 				parser.printError(v.toString() + " is not a function", 0); 
-			}
 			
 		:}
 		| RETURN expr:e SEMIC 
@@ -758,31 +727,17 @@ expr ::=
 functCall ::= 
  		IDENTIFIER:id LPAR RPAR
     	{:
-    		FunctionInfo info = fctTable.get(id);
-    		if(info != null)
-    		{
-    			if(!info.getArgs().isEmpty())
-    			{
-    				parser.printError("Function "+id+" wrong call", 1);
-    			}
-    			RESULT = new FunctionCall( new FunctionRef(id, info), null);
-    		}
-			else
-			{
-				NativeFunctionInfo nfi = nativeFctTable.get(id);
-				if(nfi == null)
-					parser.printError("Fonction "+id+" not found", 1);
-				else
-				{
-					if(!nativeFctTable.isCallPermitted(id, null, callerType))
-					{
-						parser.printError("Function "+id+" undefined or wrong call", 1);
-					}					
-				}
-
-				RESULT = new FunctionCall(new FunctionRef(id, nfi), null);
+			FunctionInfo fi = fctTable.getFunction(id, null, callerType);
+			if (fi == null)
+				// TODO: in error case, create a FunctionCall anyway, but with
+				// which output type?
+				parser.printError("Function " + id +
+								  " could not be found or needs different parameters", 1);
+			else {
+				// TODO: insert calling object here!
+				RESULT = new FunctionCallNew(id, fi.getOutputType(), null, null);
 			}
-    	:}
+		:}
 		// TODO: use pair:p instead of expr:e here!
 		| IDENTIFIER:id LPAR expr:e RPAR
     	{:
@@ -882,13 +837,11 @@ variable ::=
 				
 				RESULT = new StructAccessor(v, v1);
     		}
-    		
-    		if(v1 instanceof FunctionCall)
-			{
+
+    		if(v1 instanceof FunctionCall || v1 instanceof FunctionCallNew)
 				RESULT = v1;
-			}
     	:}
-    	| functCall:fc {: callerType = null; RESULT = fc;:}
+    	| functCall:fc {: callerType = null; RESULT = fc; :}
     	| variable:v LBRACKET expr:e RBRACKET
     	{:
     		boolean isOk = false;
