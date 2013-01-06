@@ -20,6 +20,7 @@ public class Environment extends TreeMap<String, VariableInfo> {
 		return str;
 	}
 
+	// TODO: move this to TypeGenerator!
 	public void toJava(CodeWriter cw) {
 		for (Map.Entry<String, VariableInfo> entry : entrySet()) {
 			String name = Generator.generateName(entry.getKey());

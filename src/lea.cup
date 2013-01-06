@@ -783,6 +783,7 @@ functCall ::=
 				RESULT = new FunctionCall(new FunctionRef(id, nfi), null);
 			}
     	:}
+		// TODO: use pair:p instead of expr:e here!
 		| IDENTIFIER:id LPAR expr:e RPAR
     	{:
     		FunctionInfo info = fctTable.get(id);

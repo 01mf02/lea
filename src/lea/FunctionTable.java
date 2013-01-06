@@ -9,8 +9,14 @@ import lea.syntax.BoolExp;
 import lea.syntax.Expression;
 import lea.syntax.List;
 import lea.syntax.NumberExp;
+import lea.syntax.Pair;
 import lea.syntax.StringConcatenation;
 import lea.syntax.SyntaxTree;
+import lea.types.IntType;
+import lea.types.ListType;
+import lea.types.StringType;
+import lea.types.StructType;
+import lea.types.TupleType;
 import lea.types.Type;
 
 public class FunctionTable extends TreeMap<String, FunctionInfo> {
@@ -41,7 +47,57 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 		}
 	}
 
-	public boolean isCallPermitted(String id, Expression e) {
+	public FunctionInfo getFunction(String id, Pair argumentsPair,
+			Type objectType) {
+
+		LinkedList<Expression> givenArguments;
+
+		if (argumentsPair == null)
+			givenArguments = new LinkedList<Expression>();
+		else
+			givenArguments = argumentsPair.toList();
+
+		switch (id) {
+		case "write":
+		case "writeln":
+			if (givenArguments.size() == 1
+					&& givenArguments.getFirst().getType() instanceof StringType
+					&& objectType == null)
+				return new FunctionInfo(null, null, null);
+		case "read":
+			if (givenArguments.isEmpty() && objectType == null)
+				return new FunctionInfo(null, null, null);
+		case "length":
+			if (givenArguments.isEmpty()
+					&& (objectType instanceof ListType
+							|| objectType instanceof TupleType || objectType instanceof StringType))
+				return new FunctionInfo(null, new IntType(), null);
+		case "toString":
+			if (givenArguments.isEmpty() && objectType instanceof StructType)
+				return new FunctionInfo(null, new StringType(), null);
+		}
+
+		FunctionInfo fi = this.get(id);
+		if (fi == null)
+			return null;
+
+		LinkedList<ArgumentInfo> functionArguments = fi.getArgs();
+
+		if (functionArguments.size() != givenArguments.size())
+			return null;
+
+		for (int i = 0; i < functionArguments.size(); i++) {
+			Type t1 = functionArguments.get(i).getType();
+			Type t2 = givenArguments.get(i).getType();
+
+			if (!(t1.equals(t2)))
+				return null;
+		}
+
+		return fi;
+	}
+
+	public boolean isCallPermitted(String id, Expression arguments) {
 
 		// TODO: This code is SO ugly --- redo it!
 
@@ -49,7 +105,7 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 
 		FunctionInfo nfi = this.get(id);
 		LinkedList<Type> args = new LinkedList<Type>();
-		SyntaxTree tmp = e;
+		SyntaxTree tmp = arguments;
 
 		if (tmp != null) {
 			if (tmp.getLeft() == null && tmp.getRight() == null)

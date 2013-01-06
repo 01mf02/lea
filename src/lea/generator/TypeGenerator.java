@@ -25,6 +25,9 @@ public class TypeGenerator {
 						+ Generator.generateName(entry.getKey()));
 				cw.openBlock();
 				st.getEnvironment().toJava(cw);
+
+				// TODO: write equals() function for new class!
+
 				cw.closeBlock();
 
 			}

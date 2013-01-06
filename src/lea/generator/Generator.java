@@ -34,6 +34,9 @@ public class Generator {
 		cw.writeLine("");
 		cw.writeLine("public class " + this.nameOfClass);
 		cw.openBlock();
+
+		// TODO: initialise scanner here!
+
 		this.typeTable.generate(cw);
 		this.fctGen.generate(cw);
 		cw.closeBlock();

@@ -62,13 +62,14 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 		this.put("toString", nfi);
 	}
 
-	public boolean isCallPermitted(String id, Expression e, Type from) {
+	// TODO: redo this!
+	public boolean isCallPermitted(String id, Expression inputArguments, Type objectType) {
 		boolean isPermitted = false;
 
 		NativeFunctionInfo nfi = this.get(id);
 		LinkedList<Type> args = new LinkedList<Type>();
 
-		SyntaxTree tmp = e;
+		SyntaxTree tmp = inputArguments;
 
 		if (tmp != null) {
 			if (tmp.getLeft() == null && tmp.getRight() == null)
@@ -91,7 +92,7 @@ public class NativeFunctionTable extends TreeMap<String, NativeFunctionInfo> {
 		}
 
 		if (nfi != null) {
-			if (nfi.containsAccessibleFrom(from)) {
+			if (nfi.containsAccessibleFrom(objectType)) {
 				boolean argumentsFit = true;
 				LinkedList<ArgumentInfo> funcArgs = nfi.getArgs();
 

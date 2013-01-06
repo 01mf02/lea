@@ -10,7 +10,6 @@ public class FunctionCall extends Expression {
 		super(a1, a2);
 		fRef = a1;
 		exp = a2;
-
 	}
 
 	public String toString() {
@@ -20,6 +19,8 @@ public class FunctionCall extends Expression {
 	public String toDotString() {
 		return "Call";
 	}
+
+	// TODO: getType()!
 
 	public String toJava() {
 		if (exp != null) {

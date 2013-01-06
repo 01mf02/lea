@@ -1,5 +1,5 @@
-TEST = 1;
-CH = "Je suis la plus belle";
+INTEGER = 1;
+STRING = "Je suis la plus belle";
 LIST = [1, 2];
 TUPLE = ('a', 42.0, LIST);
 
@@ -9,10 +9,19 @@ function ret(a : int) : int
 	return a;
 }
 
-function main(args : list of string) : int
-{
-	writeln("HAKUNA MATATA");
 
+procedure functions_test()
+{
+	write("Hello World.\n");
+	writeln("Hello World.");
+
+	input : string := read();
+	length : int := LIST.length();
+	toString : string := INTEGER.toString();
+}
+
+procedure types_test()
+{
 	list_test : list of list of int;
 	list_test := [[1, 2, 3], [4, 5, 6]];
 
@@ -21,11 +30,21 @@ function main(args : list of string) : int
 	
 	tuple_test2 : (char, float, list of int);
 	tuple_test2 := TUPLE;
-	
+
 	abc :string;
-	abc := CH + " Hey !" + "Oulala !";
-	
+	abc := STRING + " Hey !" + "Oulala !";
+
 	writeln(abc);
+}
+
+function main(args : list of string) : int
+{
+	functions_test();
+
+	types_test();
+
+	
+	
 	
 	i : int;
 	i:= ret(10);
