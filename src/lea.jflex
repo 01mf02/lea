@@ -70,8 +70,8 @@ WhiteSpace	= {LineTerminator} | [ \t\f]
 Integer		= [0-9]+
 Float		= [0-9]*"."[0-9]+
 Char		= \'[^\']\'
-True		= (TRUE)|(true)|(True)
-False		= (FALSE)|(false)|(False)
+True		= true
+False		= false
 
 SingleLineComment = "//".*
 

@@ -59,7 +59,7 @@ procedure deif()
 	
 	str : string;
 	str := "hello";
-	str.length();
+	//str.length();
 
 
 	types();
@@ -74,7 +74,7 @@ function ret() : int
 //This is way too complex
 function wooTooComplexFunction(arg:int,arg0:string) : int
 {	
-	if(ret() + arg > 2 || (True && False && false) || arg0 = "gre" || 6%5 != 1 || !True || 4 >= 2 || 4 <= 2 || 4 < 2)
+	if(ret() + arg > 2 || (true && false && false) || arg0 = "gre" || 6%5 != 1 || !true || 4 >= 2 || 4 <= 2 || 4 < 2)
 	{
 		it:int := 0;
 		while(arg - it > 0)
@@ -92,12 +92,6 @@ function wooTooComplexFunction(arg:int,arg0:string) : int
 	{
 		return 0;
 	}
-	
-	while(true)
-	{
-	
-	}
-	
 }
 
 /*Je suis un commentaire
@@ -112,7 +106,6 @@ procedure main()
 	tp:(int, string, float) := TUPLE_OF_THREE;
 	tpComplex:(int, float) := (3 + 10 * 2, PI + PI);
 	
-	//TODO!
-	//test : int := wooTooComplexFunction(100,"GRELE");
+	test : int := wooTooComplexFunction(100,"GRELE");
 }
 

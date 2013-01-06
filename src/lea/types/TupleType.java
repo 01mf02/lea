@@ -28,4 +28,12 @@ public class TupleType extends Type {
 	public String toJava() {
 		return "Object[]";
 	}
+
+	public String toJavaEquals(String e1, String e2) {
+		return "Arrays.equals(" + e1 + ", " + e2 + ")";
+	}
+
+	public String toJavaToString(String e) {
+		return "Arrays.toString(" + e + ")";
+	}
 }

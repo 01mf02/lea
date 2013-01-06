@@ -27,15 +27,10 @@ procedure types_test()
 	list_test := [[1, 2, 3], [4, 5, 6]];
 
 	tuple_test : (int, (char, string));
-	tuple_test := (1, ('b', "cd"));
+	tuple_test := (1, ('b', STRING));
 	
 	tuple_test2 : (char, float, list of int);
 	tuple_test2 := TUPLE;
-
-	abc :string;
-	abc := STRING + " Hey !" + "Oulala !";
-
-	writeln(abc);
 }
 
 function main(args : list of string) : int
@@ -54,9 +49,9 @@ function main(args : list of string) : int
 	}
 	while (i != 0);
 	
-	h:float := 3.14;
+	f:float := 3.14;
 	
-	if(h>3.0)
+	if (f > 3.0)
 	{
 		writeln("That is good.");
 	}

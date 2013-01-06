@@ -5,13 +5,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import lea.syntax.BoolExp;
 import lea.syntax.Expression;
-import lea.syntax.List;
-import lea.syntax.NumberExp;
 import lea.syntax.Pair;
-import lea.syntax.StringConcatenation;
-import lea.syntax.SyntaxTree;
 import lea.types.IntType;
 import lea.types.ListType;
 import lea.types.StringType;
@@ -99,81 +94,4 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 
 		return fi;
 	}
-
-	public boolean isCallPermitted(String id, Expression arguments) {
-
-		// TODO: This code is SO ugly --- redo it!
-
-		boolean isPermitted = false;
-
-		FunctionInfo nfi = this.get(id);
-		LinkedList<Type> args = new LinkedList<Type>();
-		SyntaxTree tmp = arguments;
-
-		if (tmp != null) {
-			if (tmp.getLeft() == null && tmp.getRight() == null)
-				args.add(tmp.getType());
-			else {
-				while ((tmp.getLeft() != null) || (tmp.getRight() != null)) {
-					Expression ex = (Expression) tmp.getLeft();
-					Expression ex2 = (Expression) tmp.getRight();
-
-					if (ex instanceof List || ex instanceof NumberExp
-							|| ex instanceof BoolExp
-							|| ex instanceof StringConcatenation) {
-						args.add(0, ex.getType());
-
-						tmp = tmp.getRight();
-						if (tmp != null) {
-							if (tmp.getLeft() == null && tmp.getRight() == null)
-								args.add(1, tmp.getType());
-						}
-					} else if (ex2 instanceof List || ex2 instanceof NumberExp
-							|| ex2 instanceof BoolExp
-							|| ex2 instanceof StringConcatenation) {
-						args.add(0, ex2.getType());
-
-						tmp = tmp.getLeft();
-						if (tmp != null) {
-							if (tmp.getLeft() == null && tmp.getRight() == null)
-								args.add(1, tmp.getType());
-						}
-					} else {
-						if (tmp.getRight() != null) {
-							if (tmp.getRight().getLeft() == null
-									&& tmp.getRight().getRight() == null)
-								args.add(0, tmp.getRight().getType());
-						}
-						if (tmp.getLeft() != null) {
-							if (tmp.getLeft().getLeft() == null
-									&& tmp.getLeft().getRight() == null)
-								args.add(0, tmp.getLeft().getType());
-						}
-						tmp = tmp.getLeft();
-					}
-				}
-			}
-		}
-
-		if (nfi != null) {
-			boolean argumentsFit = true;
-			LinkedList<ArgumentInfo> funcArgs = nfi.getArgs();
-
-			if (args.size() == funcArgs.size()) {
-				for (int i = 0; i < args.size(); i++) {
-					if (!args.get(i).equals(funcArgs.get(i).getType())) {
-						argumentsFit = false;
-						break;
-					}
-				}
-			} else
-				argumentsFit = false;
-
-			if (argumentsFit) {
-				isPermitted = true;
-			}
-		}
-		return isPermitted;
-	}
-
 }
