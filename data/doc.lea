@@ -64,7 +64,7 @@ function create_logicians() : person_list
 	return goedel;
 }
 
-function main(l : list of string) : int
+function main(l : list of int) : int
 {
 	writeln("Hello World!");
 

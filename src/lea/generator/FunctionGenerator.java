@@ -7,6 +7,9 @@ import lea.ArgumentInfo;
 import lea.FunctionInfo;
 import lea.FunctionTable;
 import lea.syntax.Instruction;
+import lea.types.IntType;
+import lea.types.ListType;
+import lea.types.StringType;
 
 public class FunctionGenerator {
 
@@ -34,16 +37,24 @@ public class FunctionGenerator {
 				// TODO: Laetitia, verify input and output arguments properly!
 				// For example, if the output type is null, also the input
 				// arguments must be empty etc.!
-				if (entry.getValue().getOutputType() == null)
-					if (entry.getValue().getArgs().toString().equals("[]"))
-						cw.writeLine("lea_main();");
-					else
-						cw.writeLine("lea_main(args);");
+
+				// Je vais faire en sorte que la traduction ne se fait que si la
+				// fonction main retourne un int et si elle a comme argument
+				// liste de caractères en entrée.
+				// Autrement, pas de compilation.
+
+				if ((entry.getValue().getOutputType()==null ) || (!entry.getValue().getOutputType().equals(new IntType()))) {
+					System.err.println("main function don't have good output Type; aborting build.");
+					return;
+				}
+				if ((entry.getValue().getArgs() == null) || (!entry.getValue().getArgs().getFirst().getType().equals(new ListType(new StringType())))) {
+					System.err.println("main function don't have good args Type; aborting build.");
+					return;
+				}
+
 				else {
-					if(entry.getValue().getArgs().toString().equals("[]"))
-						cw.writeLine(entry.getValue().getOutputType() + " return_code = lea_main();");
-					else
-						cw.writeLine(entry.getValue().getOutputType() + " return_code = lea_main(args);");
+
+					cw.writeLine("int return_code = lea_main(args);");
 					cw.writeLine("System.exit(return_code); ");
 				}
 				cw.closeBlock();
