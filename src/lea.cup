@@ -553,13 +553,9 @@ instr ::=
 						parser.printError("Enum mismatch. Expected: " + v.getType().toString(), 1);
 				}
 				else if(!v.getType().equals(e.getType()))
-				{
 					parser.printError("Type mismatch. Expected: "  + v.getType() + ". Got: "  + e.getType(), 1);
-				}					
 				else if(v instanceof TypeExp)
-				{
 					parser.printError("Impossible to define a type", 1);
-				}
 					
 				if(v instanceof VariableLeaf)
 				{
@@ -606,14 +602,11 @@ instr ::=
 			if(functInfo != null)
 			{
 				if(functInfo.getOutputType().equals( e.getType()) )
-				{
-					RESULT = new  ReturnNode(e);
-				}	 
+					RESULT = new ReturnNode(e);
 				else
-				{
 					parser.printError("The return must be of type " + functInfo.getOutputType() +". Got : "+ e.getType() , 1);
 					
-					RESULT = new  ReturnNode(null);
+					RESULT = new ReturnNode(null);
 				}
 			}
 			else
