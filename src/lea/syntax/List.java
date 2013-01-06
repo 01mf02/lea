@@ -1,5 +1,7 @@
 package lea.syntax;
 
+import java.util.LinkedList;
+
 import lea.types.ListType;
 import lea.types.Type;
 
@@ -17,7 +19,13 @@ public class List extends Expression {
 	}
 
 	public boolean isValid() {
-		// TODO: check if all elements have same type!
+		LinkedList<Expression> list = pair.toList();
+		Type type = getType().getLeft();
+
+		for (int i = 0; i < list.size(); i++)
+			if (!(list.get(i).getType().equals(type)))
+				return false;
+
 		return true;
 	}
 

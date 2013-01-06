@@ -604,39 +604,31 @@ instr ::=
 				if(functInfo.getOutputType().equals( e.getType()) )
 					RESULT = new ReturnNode(e);
 				else
+				{
 					parser.printError("The return must be of type " + functInfo.getOutputType() +". Got : "+ e.getType() , 1);
 					
 					RESULT = new ReturnNode(null);
 				}
 			}
 			else
-			{
-				parser.printError("Error  with a function", 1);
-			}
+				parser.printError("Error with a function", 1);
 		:}
 		| RETURN  SEMIC 
 		{:
 			if(functInfo != null)
 			{
 				if(functInfo.getOutputType() == null )
-				{
-					RESULT = new  ReturnNode(null);
-				}	 
+					RESULT = new ReturnNode(null);
 				else
 				{
-					RESULT = new  ReturnNode(null);
+					RESULT = new ReturnNode(null);
 					parser.printError("Procedure can't return value", 1);
 				}
 			}
 			else
-			{
-				parser.printError("Error  with a function", 1);
-			}
+				parser.printError("Error with a function", 1);
 		 :}
-		| erreur 
-		{:
-			RESULT = new Instruction(null,null);
-		:}
+		| erreur {:	RESULT = new Instruction(null,null); :}
 		;
 
 instrs ::= 
