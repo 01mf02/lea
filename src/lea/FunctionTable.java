@@ -37,6 +37,9 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 			if (entry.equals(id))
 				return true;
 		}
+
+		// TODO: find writeln etc. too!
+
 		return false;
 	}
 
