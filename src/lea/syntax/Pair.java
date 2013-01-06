@@ -44,7 +44,10 @@ public class Pair extends Expression {
 	}
 
 	public Type getType() {
-		return new PairType(left.getType(), right.getType());
+		if (right == null)
+			return new PairType(left.getType(), null);
+		else
+			return new PairType(left.getType(), right.getType());
 	}
 
 	public String toDotString() {
@@ -52,7 +55,10 @@ public class Pair extends Expression {
 	}
 
 	public String toJava() {
-		return left.toJava() + ", " + right.toJava();
+		if (right == null)
+			return left.toJava();
+		else
+			return left.toJava() + ", " + right.toJava();
 	}
 
 }

@@ -4,18 +4,19 @@ LIST = [1, 2];
 TUPLE = ('a', 42.0, LIST);
 
 
-function ret(a : int) : int
+function to_tuple(a : int, b : string) : (int, string)
 {
-	return a;
+	return (a, b);
 }
 
 
 procedure functions_test()
 {
-	write("Hello World.\n");
-	writeln("Hello World.");
+	write("Please type in your name: ");
+	name : string := read();
 
-	input : string := read();
+	writeln("Welcome to the wonderful world of Lea, " + name + ".");
+
 	//length : int := LIST.length();
 	//toString : string := INTEGER.toString();
 }
@@ -40,28 +41,28 @@ procedure types_test()
 function main(args : list of string) : int
 {
 	functions_test();
-
 	types_test();
+	
+	tuple : (int, string) := to_tuple(10, "Test");
+	i : int := 10;
 
-	
-	
-	
-	i : int;
-	i:= ret(10);
-
+	// TODO: Make a countdown here as soon as toString() works! :)
 	repeat
 	{
-		writeln("Hi !");
+		//writeln("Hi !");
 		i:=i-1;
 	}
-	while (i != 4);
+	while (i != 0);
 	
-	h:float;
-	h:=3.15;
+	h:float := 3.14;
 	
 	if(h>3.0)
 	{
-		write("hohoho");
+		writeln("That is good.");
+	}
+	else
+	{
+		writeln("That is bad.");
 	}
 
 	return 0;

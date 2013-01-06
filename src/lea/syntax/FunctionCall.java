@@ -1,15 +1,21 @@
 package lea.syntax;
 
-import lea.types.ListType;
+import lea.generator.Generator;
+import lea.types.Type;
 
 public class FunctionCall extends Expression {
-	FunctionRef fRef;
-	Expression exp;
 
-	public FunctionCall(FunctionRef a1, Expression a2) {
-		super(a1, a2);
-		fRef = a1;
-		exp = a2;
+	String functionName;
+	Type returnType;
+	Pair argumentsPair;
+	Expression object;
+
+	public FunctionCall(String name, Type type, Pair args, Expression obj) {
+		super(obj, args);
+		functionName = name;
+		returnType = type;
+		argumentsPair = args;
+		object = obj;
 	}
 
 	public String toString() {
@@ -17,26 +23,32 @@ public class FunctionCall extends Expression {
 	}
 
 	public String toDotString() {
-		return "Call";
+		return "FunctionCall";
 	}
 
-	// TODO: getType()!
+	public Type getType() {
+		return returnType;
+	}
 
 	public String toJava() {
-		if (exp != null) {
-			if (exp.getType() instanceof ListType)
-				return fRef.toJava() + "new " + exp.getType().toJava() + " "
-						+ exp.toJava() + ")";
-			else {
-				if (exp.toJava().equalsIgnoreCase("null()"))
-					return fRef.toJava() + ")";
-				else
-					return fRef.toJava() + exp.toJava() + ")";
-			}
+		// TODO: uncomment object.toJava() when lea.cup functions
+		switch (functionName) {
+		case "write":
+			return "System.out.print(" + argumentsPair.toJava() + ")";
+		case "writeln":
+			return "System.out.println(" + argumentsPair.toJava() + ")";
+		case "read":
+			return "scanner.nextLine()";
+		case "length":
+			return /* object.toJava() + */".length";
+		case "toString":
+			return /* object.toJava() + */".toString()";
 		}
 
-		else
-			return fRef.toJava() + ")";
+		String arguments = "";
+		if (argumentsPair != null)
+			arguments = argumentsPair.toJava();
 
+		return Generator.generateName(functionName) + "(" + arguments + ")";
 	}
 }

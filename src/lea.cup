@@ -14,7 +14,6 @@ parser code
 	public ConstantTable getConstantTable() { return action_obj.constTable; }
 	public TypeTable getTypeTable() { return action_obj.typeTable; }
 	public FunctionTable getFunctionTable() { return action_obj.fctTable; }
-	public NativeFunctionTable getNativeFunctionTable() { return action_obj.nativeFctTable; }
 
 	private LeaLexer lexer;
 
@@ -37,7 +36,6 @@ action code
 	public ConstantTable constTable = new ConstantTable();
 	public TypeTable typeTable = new TypeTable();
 	public FunctionTable fctTable = new FunctionTable();
-	public NativeFunctionTable nativeFctTable = new NativeFunctionTable();
 
 	private int enumID = 0;
 	
@@ -140,7 +138,7 @@ non terminal Instruction block;
 non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal String boolExpr;
-non terminal Pair pair;
+non terminal Pair pair, functArgs;
 non terminal List list;
 non terminal Tuple tuple;
 non terminal Expression variable, functCall;
@@ -552,11 +550,11 @@ instr ::=
 						c = (EnumConstant)cons;
 					
 					if(c == null || !et.containsEnum(c.getName()))
-						parser.printError("Enum mismatch. Expecting : " + v.getType().toString(), 1);
+						parser.printError("Enum mismatch. Expected: " + v.getType().toString(), 1);
 				}
 				else if(!v.getType().equals(e.getType()))
 				{
-					parser.printError("Type mismatch. Expecting : "  + v.getType().toString() + ". Got : "  + e.getType().toString(), 1);
+					parser.printError("Type mismatch. Expected: "  + v.getType() + ". Got: "  + e.getType(), 1);
 				}					
 				else if(v instanceof TypeExp)
 				{
@@ -597,7 +595,7 @@ instr ::=
 		| decl:d {: RESULT = d; :}
 		| variable:v SEMIC 
 		{: 
-			if(v instanceof FunctionCall || v instanceof FunctionCallNew)
+			if(v instanceof FunctionCall)
 				RESULT = new Instruction(v, null);
 			else
 				parser.printError(v.toString() + " is not a function", 0); 
@@ -723,54 +721,28 @@ expr ::=
 		:}
 		;
 
+functArgs ::=
+		  LPAR RPAR {: RESULT = null; :}
+		| LPAR expr:e RPAR {: RESULT = new Pair(e, null); :}
+		| LPAR pair:p RPAR {: RESULT = p; :}
+		;
 
 functCall ::= 
- 		IDENTIFIER:id LPAR RPAR
-    	{:
-			FunctionInfo fi = fctTable.getFunction(id, null, callerType);
+		IDENTIFIER:id functArgs:args
+		{:
+			FunctionInfo fi = fctTable.getFunction(id, args, callerType);
 			if (fi == null)
 				// TODO: in error case, create a FunctionCall anyway, but with
 				// which output type?
 				parser.printError("Function " + id +
 								  " could not be found or needs different parameters", 1);
-			else {
-				// TODO: insert calling object here!
-				RESULT = new FunctionCallNew(id, fi.getOutputType(), null, null);
-			}
-		:}
-		// TODO: use pair:p instead of expr:e here!
-		| IDENTIFIER:id LPAR expr:e RPAR
-    	{:
-    		FunctionInfo info = fctTable.get(id);
-    		if(info != null)
-    		{
-    			if(!fctTable.isCallPermitted(id, e))
-    			{
-    				parser.printError("Function "+id+" wrong call", 1);
-    			}
-    		
-    			RESULT = new FunctionCall( new FunctionRef(id, info), e);
-    		}
 			else
-			{
-				
-				NativeFunctionInfo nfi = nativeFctTable.get(id);
-				if(nfi == null)
-					parser.printError("Fonction "+id+" not found", 1);
-				else
-				{
-					if(!nativeFctTable.isCallPermitted(id, e, callerType))
-					{
-						parser.printError("Function "+id+" undefined or wrong call", 1);
-					}
+				// TODO: insert calling object here!
+				RESULT = new FunctionCall(id, fi.getOutputType(), args, null);
+		:}
+		;
 
-					RESULT = new FunctionCall(new FunctionRef(id, nfi), e);
-				}
-			}
-    	:}
-    	;
-		
-	
+
 variable ::=
     	IDENTIFIER:id 
     	{:    		
@@ -838,7 +810,7 @@ variable ::=
 				RESULT = new StructAccessor(v, v1);
     		}
 
-    		if(v1 instanceof FunctionCall || v1 instanceof FunctionCallNew)
+    		if(v1 instanceof FunctionCall)
 				RESULT = v1;
     	:}
     	| functCall:fc {: callerType = null; RESULT = fc; :}
