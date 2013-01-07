@@ -3,46 +3,53 @@ package lea.generator;
 import java.io.File;
 import java.io.IOException;
 
-import lea.ConstantTable;
 import lea.FunctionTable;
 import lea.TypeTable;
 import lea.types.Type;
 
 public class Generator {
 
-	FunctionGenerator fctGen;
-	String nameOfClass, nameOfFile = "";
-	TypeGenerator typeTable;
-	File nameDir;
+	final File directory;
+	final String className, fileName;
+	final TypeGenerator typeGen;
+	final FunctionGenerator fctGen;
 
-	public Generator(File nameDir, String nameOfClass, ConstantTable cstTable,
-			TypeTable typeTable, FunctionTable fctTable) throws IOException {
-		this.nameOfClass = nameOfClass;
-		/* Format name */
-		this.nameOfFile = this.nameOfClass + ".java";
-		this.nameDir = nameDir;
+	public Generator(File directory, String className, TypeTable typeTable,
+			FunctionTable fctTable) throws IOException {
+		this.directory = directory;
+		this.className = className;
+		this.fileName = this.className + ".java";
 
-		this.typeTable = new TypeGenerator(typeTable);
-
+		this.typeGen = new TypeGenerator(typeTable);
 		this.fctGen = new FunctionGenerator(fctTable);
 
 	}
 
-	public void generate() throws IOException {
+	public boolean generate() throws IOException {
 		CodeWriter cw = new CodeWriter();
 		cw.writeLine("import java.util.*;");
 		cw.writeLine("");
-		cw.writeLine("public class " + this.nameOfClass);
+		cw.writeLine("public class " + this.className);
 		cw.openBlock();
 
 		// scanner for command line input
 		cw.writeLine("static Scanner scanner = new Scanner(System.in);");
 
-		this.typeTable.generate(cw);
-		this.fctGen.generate(cw);
+		this.typeGen.generate(cw);
+
+		boolean success = this.fctGen.generate(cw);
+		if (!success)
+			return false;
+
 		cw.closeBlock();
 
-		cw.saveFile(this.nameDir + File.separator + this.nameOfFile);
+		cw.saveFile(this.directory + File.separator + this.fileName);
+
+		return true;
+	}
+
+	public String getFileName() {
+		return this.fileName;
 	}
 
 	static public String generateName(String id) {

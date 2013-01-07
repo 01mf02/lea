@@ -34,7 +34,8 @@ public class FunctionInfo {
 			str += " : " + outputType.toString();
 		}
 
-		str += " { " + sTree.toString() + " } ";
+		// uncomment this line to get a syntax tree preview
+		// str += " { " + sTree.toString() + " } ";
 
 		return str;
 	}

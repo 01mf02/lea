@@ -19,34 +19,44 @@ public class Main {
 
 			LeaParser parser = parseFile(args[i]);
 
-			if (parser != null) {
-				FunctionTable fctTable = parser.getFunctionTable();
-				ConstantTable constTable = parser.getConstantTable();
-				TypeTable typeTable = parser.getTypeTable();
+			if (parser == null)
+				continue;
 
-				System.out.println("\n");
+			FunctionTable fctTable = parser.getFunctionTable();
+			ConstantTable constTable = parser.getConstantTable();
+			TypeTable typeTable = parser.getTypeTable();
 
-				System.out.println("Constant table:");
-				System.out.println(constTable);
+			System.out.println("\n");
 
-				System.out.println("Type table:");
-				System.out.println(typeTable);
+			System.out.println("Constant table:");
+			System.out.println(constTable);
 
-				System.out.println("Function table:");
-				System.out.println(fctTable);
+			System.out.println("Type table:");
+			System.out.println(typeTable);
 
-				File output_dir = new File(args[i].replace(".lea", ""));
-				output_dir.mkdir();
+			System.out.println("Function table:");
+			System.out.println(fctTable);
 
-				fctTable.saveDotToDir(output_dir.getPath());
+			System.out.println("\n");
 
-				if (!parser.hasCompileErrors()) {
-					Generator generator = new Generator(output_dir,
-							output_dir.getName(), constTable, typeTable,
-							fctTable);
-					generator.generate();
-				}
-			}
+			File dotDir = new File(args[i].replace(".lea", ""));
+			dotDir.mkdir();
+
+			fctTable.saveDotToDir(dotDir.getPath());
+
+			if (parser.hasCompileErrors())
+				continue;
+
+			File javaDir = new File(args[i]).getParentFile();
+			String className = dotDir.getName();
+
+			Generator generator = new Generator(javaDir, className, typeTable,
+					fctTable);
+			boolean success = generator.generate();
+
+			if (success)
+				System.out.println("Java file " + generator.getFileName()
+						+ " successfully created!");
 		}
 
 		return 0;

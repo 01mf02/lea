@@ -21,7 +21,7 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 		String str = "";
 
 		for (Map.Entry<String, FunctionInfo> entry : entrySet()) {
-			str += entry.getKey() + " " + entry.getValue().toString() + "\n\n";
+			str += entry.getKey() + " " + entry.getValue().toString() + "\n";
 		}
 
 		return str;

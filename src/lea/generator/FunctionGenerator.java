@@ -1,6 +1,7 @@
 package lea.generator;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import lea.ArgumentInfo;
@@ -10,6 +11,7 @@ import lea.syntax.Instruction;
 import lea.types.IntType;
 import lea.types.ListType;
 import lea.types.StringType;
+import lea.types.Type;
 
 public class FunctionGenerator {
 
@@ -19,11 +21,11 @@ public class FunctionGenerator {
 		this.fctTable = fctTable;
 	}
 
-	public void generate(CodeWriter cw) throws IOException {
+	public boolean generate(CodeWriter cw) throws IOException {
 
 		if (!fctTable.containsKey("main")) {
 			System.err.println("main function not found; aborting build.");
-			return;
+			return false;
 		}
 
 		for (Entry<String, FunctionInfo> entry : fctTable.entrySet()) {
@@ -34,29 +36,25 @@ public class FunctionGenerator {
 				cw.writeLine("public static void main(String[] args)");
 				cw.openBlock();
 
-				// TODO: Laetitia, verify input and output arguments properly!
-				// For example, if the output type is null, also the input
-				// arguments must be empty etc.!
+				FunctionInfo fi = entry.getValue();
+				Type outputType = fi.getOutputType();
+				LinkedList<ArgumentInfo> args = fi.getArgs();
 
-				// Je vais faire en sorte que la traduction ne se fait que si la
-				// fonction main retourne un int et si elle a comme argument
-				// liste de caractères en entrée.
-				// Autrement, pas de compilation.
-
-				if ((entry.getValue().getOutputType()==null ) || (!entry.getValue().getOutputType().equals(new IntType()))) {
-					System.err.println("main function don't have good output Type; aborting build.");
-					return;
-				}
-				if ((entry.getValue().getArgs() == null) || (!entry.getValue().getArgs().getFirst().getType().equals(new ListType(new StringType())))) {
-					System.err.println("main function don't have good args Type; aborting build.");
-					return;
-				}
-
-				else {
-
+				if (outputType == null && args.isEmpty())
+					cw.writeLine("lea_main();");
+				else if (outputType != null
+						&& !args.isEmpty()
+						&& outputType.equals(new IntType())
+						&& args.getFirst().getType()
+								.equals(new ListType(new StringType()))) {
 					cw.writeLine("int return_code = lea_main(args);");
 					cw.writeLine("System.exit(return_code); ");
+				} else {
+					System.err
+							.println("main function does not have valid type; aborting build.");
+					return false;
 				}
+
 				cw.closeBlock();
 			}
 
@@ -78,6 +76,8 @@ public class FunctionGenerator {
 			function.toJava(cw);
 			cw.closeBlock();
 		}
+
+		return true;
 	}
 
 	public String generateArguments(FunctionInfo entry) {
