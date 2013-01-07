@@ -1,7 +1,6 @@
 package lea.types;
 
 import lea.Environment;
-import lea.constants.Constant;
 import lea.generator.Generator;
 
 public class StructType extends Type {
@@ -39,11 +38,6 @@ public class StructType extends Type {
 
 	public boolean requiresInitialisation() {
 		return true;
-	}
-
-	@Override
-	public boolean equals(Constant c1) {
-		return false;
 	}
 
 	public String toString() {

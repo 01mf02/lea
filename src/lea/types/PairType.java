@@ -1,6 +1,5 @@
 package lea.types;
 
-import lea.constants.Constant;
 
 public class PairType extends Type {
 
@@ -10,18 +9,15 @@ public class PairType extends Type {
 
 	@Override
 	public boolean equals(Type t1) {
-		// TODO: use aux_equals!
-		return left.equals(t1.left) && right.equals(t1.right);
-	}
+		if (t1 instanceof PairType)
+			return leftRightEquals(t1, this);
 
-	@Override
-	public boolean equals(Constant c1) {
-		return c1 instanceof PairType && equals(c1.getType());
+		return false;
 	}
 
 	@Override
 	public String toString() {
-		return "Pair";
+		return "pair(" + left + ", " + right + ")";
 	}
 
 	@Override

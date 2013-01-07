@@ -7,14 +7,14 @@ public class FunctionCall extends Expression {
 
 	String functionName;
 	Type returnType;
-	Pair argumentsPair;
+	Tuple argumentsTuple;
 	Expression object;
 
-	public FunctionCall(String name, Type type, Pair args, Expression obj) {
+	public FunctionCall(String name, Type type, Tuple args, Expression obj) {
 		super(obj, args);
 		functionName = name;
 		returnType = type;
-		argumentsPair = args;
+		argumentsTuple = args;
 		object = obj;
 	}
 
@@ -31,12 +31,14 @@ public class FunctionCall extends Expression {
 	}
 
 	public String toJava() {
+		String arguments = argumentsTuple.toJavaFunctionArguments();
+
 		// TODO: uncomment object.toJava() when lea.cup functions
 		switch (functionName) {
 		case "write":
-			return "System.out.print(" + argumentsPair.toJava() + ")";
+			return "System.out.print" + arguments;
 		case "writeln":
-			return "System.out.println(" + argumentsPair.toJava() + ")";
+			return "System.out.println" + arguments;
 		case "read":
 			return "scanner.nextLine()";
 		case "length":
@@ -45,10 +47,6 @@ public class FunctionCall extends Expression {
 			return /* object.toJava() + */".toString()";
 		}
 
-		String arguments = "";
-		if (argumentsPair != null)
-			arguments = argumentsPair.toJava();
-
-		return Generator.generateName(functionName) + "(" + arguments + ")";
+		return Generator.generateName(functionName) + arguments;
 	}
 }

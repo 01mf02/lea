@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import lea.syntax.Expression;
-import lea.syntax.Pair;
+import lea.syntax.Tuple;
 import lea.types.IntType;
 import lea.types.ListType;
 import lea.types.StringType;
@@ -45,15 +45,10 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 		}
 	}
 
-	public FunctionInfo getFunction(String id, Pair argumentsPair,
+	public FunctionInfo getFunction(String id, Tuple argumentsTuple,
 			Type objectType) {
 
-		LinkedList<Expression> givenArguments;
-
-		if (argumentsPair == null)
-			givenArguments = new LinkedList<Expression>();
-		else
-			givenArguments = argumentsPair.toList();
+		LinkedList<Expression> givenArguments = argumentsTuple.toList();
 
 		switch (id) {
 		case "write":

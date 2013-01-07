@@ -1,7 +1,5 @@
 package lea.types;
 
-import lea.constants.Constant;
-
 /* tree implementing a type*/
 
 public abstract class Type {
@@ -21,27 +19,19 @@ public abstract class Type {
 
 	public abstract boolean equals(Type t1);
 
-	public abstract boolean equals(Constant c1);
+	public abstract String toString();
 
-	protected boolean aux_equals(Type t1, Type t2) {
-		boolean equals = true;
+	public abstract String toJava();
 
-		// Comparaison a gauche
-		if (t1.left != null && t2.left != null)
-			equals = aux_equals(t1.left, t2.left);
-		else if (!(t1.left == null && t1.left == null))
-			equals = false;
+	protected boolean leftRightEquals(Type t1, Type t2) {
+		return equalsOrNull(t1.left, t2.left) && equalsOrNull(t1.right, t2.right);
+	}
 
-		// Comparaison a droite
-		if (t1.right != null && t2.right != null && equals)
-			equals = aux_equals(t1.right, t2.right);
-		else if (!(t1.right == null && t1.right == null))
-			equals = false;
-
-		if (t1.left == null && t1.right == null && equals)
-			equals = t1.equals(t2);
-
-		return equals;
+	private boolean equalsOrNull(Type t1, Type t2) {
+		if (t1 == null || t2 == null)
+			return true;
+		else
+			return t1.equals(t2);
 	}
 
 	public boolean requiresInitialisation() {
@@ -63,10 +53,6 @@ public abstract class Type {
 	public void setRight(Type right) {
 		this.right = right;
 	}
-
-	public abstract String toString();
-
-	public abstract String toJava();
 
 	public String toJavaEquals(String e1, String e2) {
 		return "new " + toJava() + "(" + e1 + ").equals(" + e2 + ")";

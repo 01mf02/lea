@@ -1,6 +1,5 @@
 package lea.types;
 
-import lea.constants.Constant;
 
 public class UnknownType extends Type {
 	public UnknownType() {
@@ -8,11 +7,6 @@ public class UnknownType extends Type {
 
 	@Override
 	public boolean equals(Type t1) {
-		return false;
-	}
-
-	@Override
-	public boolean equals(Constant c1) {
 		return false;
 	}
 

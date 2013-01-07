@@ -2,8 +2,6 @@ package lea.types;
 
 import java.util.LinkedList;
 
-import lea.constants.Constant;
-
 public class EnumType extends Type {
 	public LinkedList<String> enumElems;
 
@@ -33,16 +31,12 @@ public class EnumType extends Type {
 		return false;
 	}
 
-	@Override
-	public boolean equals(Constant c1) {
-		return false;
-	}
-
 	public String toString() {
 		return "enum (" + enumElems.toString() + ")";
 	}
 
 	public String toJava() {
+		// enums are represented as integers in the target Java code
 		return "Integer";
 	}
 }

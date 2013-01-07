@@ -1,7 +1,5 @@
 package lea.types;
 
-import lea.constants.Constant;
-import lea.constants.TupleConstant;
 
 public class TupleType extends Type {
 	public TupleType(Type t) {
@@ -16,13 +14,8 @@ public class TupleType extends Type {
 			return false;
 	}
 
-	@Override
-	public boolean equals(Constant c1) {
-		return c1 instanceof TupleConstant && equals(c1.getType());
-	}
-
 	public String toString() {
-		return "Tuple";
+		return "tuple(" + left + ")";
 	}
 
 	public String toJava() {

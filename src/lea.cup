@@ -138,9 +138,9 @@ non terminal Instruction block;
 non terminal Instruction instrs, instr;
 non terminal Expression expr;
 non terminal String boolExpr;
-non terminal Pair pair, functArgs;
-non terminal List list;
-non terminal Tuple tuple;
+non terminal Pair pair;
+non terminal List list, filledList;
+non terminal Tuple tuple, functArgs;
 non terminal Expression variable, functCall;
 non terminal CaseNode caseNodes;
 non terminal Constant constant;
@@ -193,7 +193,15 @@ definitionPair ::=
 			else
 				parser.printError("Expected two types or two expressions", 1);
 		:}
-		| definitionValue:t	{: RESULT = t; :}
+		| definitionValue:v1 COMMA definitionValue:v2
+		{:
+			if (v1 instanceof Type && v2 instanceof Type)
+				RESULT = new PairType((Type) v1, (Type) v2);
+			else if (v1 instanceof Expression && v2 instanceof Expression)
+				RESULT = new Pair((Expression) v1, (Expression) v2);
+			else
+				parser.printError("Expected two types or two expressions", 1);
+		:}
 		;
 
 basicType ::=
@@ -247,6 +255,13 @@ definitionValue ::=
 			else
 				parser.printError("Pair expected", 1);
 		:}
+		| LBRACKET definitionValue:v RBRACKET
+		{:
+			if (v instanceof Expression)
+				RESULT = new List((Expression) v);
+			else
+				parser.printError("Expression expected", 1);
+		:}
 		| IDENTIFIER:id
 		{:
 			Type t = typeTable.get(id);
@@ -278,63 +293,17 @@ definition ::=
 				else
 					parser.printError("Constant cannot be set: " + id, 1);
 			}
-
-
 		:}
-		/*IDENTIFIER:id EQ expr:i SEMIC
-		{:
-			if(constTable.containsKey(id))
-			{
-				parser.printError("Type/Constant already declared : " + id, 1);
-			}
-			else
-			{
-				if(i instanceof ConstantLeaf)
-				{				
-					Constant c = ((ConstantLeaf)i).getValue();
-					constTable.put(id, c);
-				}
-				else if(i instanceof List)
-				{
-					ListConstant c = new ListConstant((List)i);
-					constTable.put(id, c);
-				}
-				else if(i instanceof Tuple)
-				{
-					if(i.getLeft() instanceof TypeExp)
-						typeTable.put(id, (TupleType)i.getType());
-					else
-						constTable.put(id, new TupleConstant((Tuple)i));
-				}
-				else if(i instanceof TypeExp)
-				{
-					TypeExp exp = (TypeExp)i;
-					typeTable.put(id, exp.getType());
-				}
-				else
-				{
-					parser.printError("Constant can't be set: " + id, 1);
-				}				
-			}
-		:}
-		| IDENTIFIER:id EQ basicType:t SEMIC
-		{:
-			if(typeTable.containsKey(id) || constTable.containsKey(id))
-				parser.printError("Type/constant already declared : " + id, 1);
-			else
-				typeTable.put(id, t);
-		:}*/
 		;	
 
-enumElems ::= enumElems:l COMMA enumElem:e
+enumElems ::=
+		  enumElem:e {: RESULT = new LinkedList<String>(Arrays.asList(e)); :}
+		| enumElems:l COMMA enumElem:e
 		{:			
 			l.add(e);
 			RESULT = l;
 		:}
-		| enumElem:e
-		{: 
-			RESULT = new LinkedList<String>(Arrays.asList(e));  
-		:};
+		;
 
 enumElem ::= IDENTIFIER:id
 		{:
@@ -641,8 +610,14 @@ pair ::=
 		| pair:p  COMMA expr:e  {: RESULT = new Pair(p,  e ); :}
 		;
 
-list ::=
+filledList ::=
 		  LBRACKET pair:p RBRACKET {: RESULT = new List(p); :}
+		| LBRACKET expr:e RBRACKET {: RESULT = new List(e); :}
+		;
+
+list ::=
+		  filledList:l {: RESULT = l; :}
+		| LBRACKET RBRACKET {: RESULT = new List(null); :}
 		;
 
 tuple ::=
@@ -707,9 +682,9 @@ expr ::=
 		;
 
 functArgs ::=
-		  LPAR RPAR {: RESULT = null; :}
-		| LPAR expr:e RPAR {: RESULT = new Pair(e, null); :}
-		| LPAR pair:p RPAR {: RESULT = p; :}
+		  LPAR RPAR {: RESULT = new Tuple(null); :}
+		| LPAR expr:e RPAR {: RESULT = new Tuple(e); :}
+		| LPAR pair:p RPAR {: RESULT = new Tuple(p); :}
 		;
 
 functCall ::= 

@@ -99,8 +99,7 @@ qu'on met sur plusieurs lignes*/
 procedure main()
 {
 	li:list of int := LIST_OF_INT;
-	//TODO!
-	//liSimple:list of int := [123];
+	liSimple:list of int := [1];
 	liComplex:list of list of int := [[12,23],[12, 222, 333], [123, 7]];
 	
 	tp:(int, string, float) := TUPLE_OF_THREE;

@@ -1,31 +1,26 @@
 package lea.types;
 
-import lea.constants.Constant;
-import lea.constants.ListConstant;
 
 public class ListType extends Type {
+
 	public ListType(Type t) {
-		this.left = t;
+		super(t, null);
 	}
 
 	@Override
 	public boolean equals(Type t1) {
-		if (t1 instanceof ListType) {
-			return aux_equals(t1, this);
-		}
+		if (t1 instanceof ListType)
+			return leftRightEquals(t1, this);
 
 		return false;
 	}
 
 	@Override
-	public boolean equals(Constant c1) {
-		return c1 instanceof ListConstant && equals(c1.getType());
-	}
-
 	public String toString() {
-		return "List";
+		return "list of " + this.left;
 	}
 
+	@Override
 	public String toJava() {
 		return this.left.toJava() + "[]";
 	}

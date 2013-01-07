@@ -1,5 +1,6 @@
 package lea.syntax;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import lea.types.PairType;
@@ -16,6 +17,15 @@ public class Pair extends Expression {
 
 	public String toString() {
 		return "Pair" + super.toString();
+	}
+
+	public static LinkedList<Expression> dataToList(Expression data) {
+		if (data == null)
+			return new LinkedList<Expression>();
+		else if (data instanceof Pair)
+			return (((Pair) data).toList());
+		else
+			return new LinkedList<Expression>(Arrays.asList(data));
 	}
 
 	public LinkedList<Expression> toList() {
@@ -37,6 +47,8 @@ public class Pair extends Expression {
 	}
 
 	public Type getFirstElementType() {
+		if (left == null)
+			return null;
 		if (left instanceof Pair)
 			return ((Pair) left).getFirstElementType();
 		else
@@ -44,7 +56,11 @@ public class Pair extends Expression {
 	}
 
 	public Type getType() {
-		if (right == null)
+		if (left == null && right == null)
+			return new PairType(null, null);
+		else if (left == null && right != null)
+			return new PairType(null, right.getType());
+		else if (left != null && right == null)
 			return new PairType(left.getType(), null);
 		else
 			return new PairType(left.getType(), right.getType());
@@ -55,10 +71,6 @@ public class Pair extends Expression {
 	}
 
 	public String toJava() {
-		if (right == null)
-			return left.toJava();
-		else
-			return left.toJava() + ", " + right.toJava();
+		return left.toJava() + ", " + right.toJava();
 	}
-
 }

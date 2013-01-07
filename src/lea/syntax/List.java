@@ -7,23 +7,32 @@ import lea.types.Type;
 
 public class List extends Expression {
 
-	Pair pair;
+	Expression data;
 
-	public List(Pair a1) {
+	public List(Expression a1) {
 		super(a1, null);
-		pair = a1;
+		data = a1;
 	}
 
 	public Type getType() {
-		return new ListType(pair.getFirstElementType());
+		if (data == null)
+			return new ListType(null);
+		else if (data instanceof Pair)
+			return new ListType(((Pair) data).getFirstElementType());
+		else
+			return new ListType(data.getType());
+	}
+
+	public LinkedList<Expression> toList() {
+		return Pair.dataToList(data);
 	}
 
 	public boolean isValid() {
-		LinkedList<Expression> list = pair.toList();
+		LinkedList<Expression> list = toList();
 		Type type = getType().getLeft();
 
 		for (int i = 0; i < list.size(); i++)
-			if (!(list.get(i).getType().equals(type)))
+			if (list.get(i) != null && !(list.get(i).getType().equals(type)))
 				return false;
 
 		return true;
@@ -38,6 +47,10 @@ public class List extends Expression {
 	}
 
 	public String toJava() {
-		return "new " + getType().toJava() + " {" + pair.toJava() + "}";
+		if (data == null)
+			// this is no desired behaviour, but "{}" yields compilation errors
+			return "null";
+		else
+			return "new " + getType().toJava() + " {" + data.toJava() + "}";
 	}
 }

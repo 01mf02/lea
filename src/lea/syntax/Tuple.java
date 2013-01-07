@@ -1,19 +1,28 @@
 package lea.syntax;
 
+import java.util.LinkedList;
+
 import lea.types.TupleType;
 import lea.types.Type;
 
 public class Tuple extends Expression {
 
-	Pair pair;
+	Expression data;
 
-	public Tuple(Pair a1) {
+	public Tuple(Expression a1) {
 		super(a1, null);
-		pair = a1;
+		data = a1;
 	}
 
 	public Type getType() {
-		return new TupleType(pair.getType());
+		if (data == null)
+			return new TupleType(null);
+		else
+			return new TupleType(data.getType());
+	}
+
+	public LinkedList<Expression> toList() {
+		return Pair.dataToList(data);
 	}
 
 	public String toString() {
@@ -25,6 +34,16 @@ public class Tuple extends Expression {
 	}
 
 	public String toJava() {
-		return "new Object[] {" + pair.toJava() + "}";
+		if (data == null)
+			return "new Object[] {}";
+		else
+			return "new Object[] {" + data.toJava() + "}";
+	}
+
+	public String toJavaFunctionArguments() {
+		if (data == null)
+			return "()";
+		else
+			return "(" + data.toJava() + ")";
 	}
 }
