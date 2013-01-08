@@ -74,7 +74,7 @@ Michael Färber
 
 \begin_layout Abstract
 Nous avons créé un compilateur pour le langage Léa, qui crée du code Java
- à partir des fichiers Léa.
+ à partir des programmes écrits en langage Léa.
 \end_layout
 
 \begin_layout Section
@@ -100,8 +100,8 @@ Définition des fonctions.
 \end_layout
 
 \begin_layout Standard
-Partout dans le code Léa, on peut écrire des commentaires de façon suivante
- :
+Partout dans le code Léa, on peut écrire des commentaires de la manière
+ suivante :
 \end_layout
 
 \begin_layout Standard
@@ -150,7 +150,7 @@ Définition des constantes
 \end_layout
 
 \begin_layout Standard
-On peut définir des constantes sans donner leur types, de façon suivante
+On peut définir des constantes sans donner leur types, de la manière suivante
  :
 \end_layout
 
@@ -204,7 +204,7 @@ Définition des types
 \end_layout
 
 \begin_layout Standard
-On peut définir des nouveaux types de façon suivante :
+On peut définir des nouveaux types de la manière suivante :
 \end_layout
 
 \begin_layout Standard
@@ -214,7 +214,17 @@ status open
 
 \begin_layout Plain Layout
 
-date = (int, int, int);
+month = enum (JAN, FEB, MAR, APR, MAY, JUN,
+\end_layout
+
+\begin_layout Plain Layout
+
+              JUL, AUG, SEP, OCT, NOV, DEC);
+\end_layout
+
+\begin_layout Plain Layout
+
+date = (int, month, int);
 \end_layout
 
 \begin_layout Plain Layout
@@ -267,7 +277,7 @@ person_list = struct
 
 \begin_layout Plain Layout
 
-	next : int_list;
+	next : person_list;
 \end_layout
 
 \begin_layout Plain Layout
@@ -277,7 +287,7 @@ person_list = struct
 
 \end_inset
 
-Nous supportons l'utilisation des types suivants :
+Notre compilateur traite les types suivants :
 \end_layout
 
 \begin_layout Itemize
@@ -345,6 +355,21 @@ string
  : chaîne de caractères
 \end_layout
 
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+enum { ELEM_1, ..., ELEM_N }
+\end_layout
+
+\end_inset
+
+ : énumération
+\end_layout
+
 \end_deeper
 \begin_layout Itemize
 \begin_inset listings
@@ -358,7 +383,19 @@ list of TYPE
 
 \end_inset
 
- : liste d'éléments de TYPE
+ : liste d'éléments de 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+TYPE
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -404,7 +441,7 @@ status open
 
 \begin_layout Plain Layout
 
-procedure
+function
 \end_layout
 
 \end_inset
@@ -416,18 +453,18 @@ status open
 
 \begin_layout Plain Layout
 
-function
+procedure
 \end_layout
 
 \end_inset
 
 ).
  Les fonctions peuvent prendre plusieurs arguments, qui sont passés par
- valeur.
+ référence.
 \end_layout
 
 \begin_layout Standard
-Nous ne permettons pas d'avoir des fonctions surchargés.
+Nous ne permettons pas la surcharge de fonctions.
  Aussi, nous ne permettons pas des variables des types comme arguments pour
  les fonctions.
  Par contre, nous permettons des fonctions récurrentes.
@@ -440,7 +477,12 @@ status open
 
 \begin_layout Plain Layout
 
-procedure print_fibonacci(n1 : int, n2 : int, iter : int, count : int)
+procedure print_fibonacci(n1 : int, n2 : int, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                          iter : int, count : int)
 \end_layout
 
 \begin_layout Plain Layout
@@ -580,6 +622,20 @@ function main(args : list of string) : int
 
 \begin_layout Plain Layout
 
+	writeln("Fibonacci numbers as function:");
+\end_layout
+
+\begin_layout Plain Layout
+
+	print_fibonacci(1, 1, 0, 10);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
 	return 0;
 \end_layout
 
@@ -590,13 +646,60 @@ function main(args : list of string) : int
 
 \end_inset
 
-Tous les fichiers Léa doivent contenir une fonction main, qui prend une
- liste de chaînes de lettres et qui retourne un entier.
- Cette fonction est appelée au début du programme, avec des arguments donnés.
+Pour pouvoir être compilée, chaque fichier Léa doit contenir une fonction
+ 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+main
+\end_layout
+
+\end_inset
+
+ de la forme suivante:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+procedure main() { /* ...
+ */ }
+\end_layout
+
+\end_inset
+
+ ou
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+function main(args : list of string) : int { /* ...
+ */ }
+\end_layout
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
-Nous supportons les instructions suivantes :
+Cette fonction sera exécutée au début du programme, avec des arguments donnés.
+\end_layout
+
+\begin_layout Standard
+Nous traitons les instructions suivantes :
 \end_layout
 
 \begin_layout Itemize
@@ -681,6 +784,56 @@ status open
 
 \begin_layout Plain Layout
 
+case (ENUM_EXPRESSION)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+	ENUM_1:
+\end_layout
+
+\begin_layout Plain Layout
+
+		INSTRS
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+	ENUM_N:
+\end_layout
+
+\begin_layout Plain Layout
+
+		INSTRS
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 while (BOOL_EXPRESSION) INSTRS
 \end_layout
 
@@ -705,7 +858,7 @@ repeat INSTRS while (BOOL_EXPRESSION);
 \end_layout
 
 \begin_layout Standard
-Dans les instructions, on peut avoir des expressions suivantes :
+Dans les instructions, nous traitons les expressions suivantes :
 \end_layout
 
 \begin_layout Itemize
@@ -1016,7 +1169,7 @@ status open
 
 \begin_layout Plain Layout
 
-- NUMBER_EXPRESSION
+-NUMBER_EXPRESSION
 \end_layout
 
 \end_inset
@@ -1040,7 +1193,8 @@ STRING_EXPRESSION + STRING_EXPRESSION
 \end_layout
 
 \begin_layout Standard
-Il y a des fonctions predéfinis :
+Nous avons mis en place des fonctions par rapport à celles que l'on peut
+ trouver dans le langage Java :
 \end_layout
 
 \begin_layout Itemize
@@ -1091,7 +1245,22 @@ read
 \end_layout
 
 \begin_layout Standard
-Pour les types de base, la fonction 
+Aussi, nous traitons des fonctions membres de la syntaxe 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+object.function()
+\end_layout
+
+\end_inset
+
+ :
+\end_layout
+
+\begin_layout Itemize
 \begin_inset listings
 inline true
 status open
@@ -1103,8 +1272,11 @@ toString
 
 \end_inset
 
- retourne une chaîne de caractères représentant la valeur.
- Pour les listes, la fonction 
+: Retourne une chaîne de caractères représentant la valeur pour les types
+ de base.
+\end_layout
+
+\begin_layout Itemize
 \begin_inset listings
 inline true
 status open
@@ -1116,7 +1288,8 @@ length
 
 \end_inset
 
- retourne le nombre des objets dans la liste.
+: Retourne le nombre des objets contenus d'une liste, d'un uplet ou d'une
+ chaîne des caractères.
 \end_layout
 
 \begin_layout Section
@@ -1327,10 +1500,10 @@ Types
 \end_layout
 
 \begin_layout Standard
-Les types sont implémenté dans le paquet lea.types.
- Dedans, il y a une classe de base Type, sur laquelle tous les autres classes
- dans le paquet sont basés.
- Ils sont les suivantes :
+Les types sont implémentés dans le package lea.types.
+ Dedans il y a une classe mère Type, sur laquelle tous les autres classes
+ dans le paquet sont basées.
+ Voici les classes contenues dans le package lea.types :
 \end_layout
 
 \begin_layout Itemize
@@ -1430,6 +1603,21 @@ status open
 
 \begin_layout Plain Layout
 
+PairType
+\end_layout
+
+\end_inset
+
+ : pair, utilisé dans les listes et les uplets
+\end_layout
+
+\begin_layout Itemize
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
 StringType
 \end_layout
 
@@ -1450,7 +1638,7 @@ StructType
 
 \end_inset
 
- : structure, sauvegarde un ensemble de variables contenus
+ : structure, sauvegarde l'ensemble des variables d'une structure
 \end_layout
 
 \begin_layout Itemize
@@ -1465,7 +1653,7 @@ TupleType
 
 \end_inset
 
- : uplet, sauvegarde une liste de types contenus
+ : uplet, sauvegarde la liste des types d'uplet
 \end_layout
 
 \begin_layout Itemize
@@ -1489,10 +1677,10 @@ Constantes
 \end_layout
 
 \begin_layout Standard
-Similaire de notre implémentation de types, nous avons implémenté les constantes.
- Ils sont contenus dans un paquet lea.constants, et la classe de base s'appelle
- Constant.
- Les classes dérivés sont :
+Nous avons implémenté les constantes de la même façon que pour les types.
+ Nos constantes sont traitées dans le package lea.constants, et la classe
+ mère est nommée Constant.
+ Les classes filles sont :
 \end_layout
 
 \begin_layout Itemize
@@ -1616,8 +1804,9 @@ TupleConstant
 \end_layout
 
 \begin_layout Standard
-Les classes sont utilisés à la déclaration des constantes, mais il y a aussi
- des classes qui sont utilisés dans les fonctions ; ils sont 
+Ces classes sont utilisés à la déclaration des constantes, mais il y en
+ a certaines qui sont aussi utilisées dans les fonctions ; ils agit des
+ classes 
 \begin_inset listings
 inline true
 status open
@@ -1702,15 +1891,15 @@ TupleConstant
 
 \end_inset
 
- ne sont pas utilisés dans les fonctions --- au lieu de cela, on utilise
- 
+ ne sont pas utilisés dans les fonctions --- elles sont remplacées par des
+ classes 
 \begin_inset listings
 inline true
 status open
 
 \begin_layout Plain Layout
 
-ListNode
+List
 \end_layout
 
 \end_inset
@@ -1722,12 +1911,12 @@ status open
 
 \begin_layout Plain Layout
 
-TupleNode
+Tuple
 \end_layout
 
 \end_inset
 
- là.
+, qui se trouvent dans le package lea.syntax.
 \end_layout
 
 \begin_layout Subsection
@@ -1773,9 +1962,9 @@ SyntaxTree
 
 \end_inset
 
- contient l'environnement courant et des pointeurs à un fils gauche et un
- fils droite, qui permettent de traverser l'arbre de syntaxe d'une façon
- très simple.
+ contient l'environnement courant et des pointeurs vers un fils gauche et
+ vers un fils droite, qui permettent de parcourir l'arbre syntaxique de
+ façon très simple.
 \end_layout
 
 \begin_layout Standard
@@ -1819,15 +2008,23 @@ ConstantLeaf : constante
 \end_layout
 
 \begin_layout Itemize
-EnumExp : ???
-\end_layout
-
-\begin_layout Itemize
 FunctionCall : appel de fonction
 \end_layout
 
 \begin_layout Itemize
-FunctionRef : ???
+List : expression de genre 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+[1, 2, 3]
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -1892,7 +2089,7 @@ status open
 \end_layout
 
 \begin_layout Itemize
-StringExp : concaténation des chaînes de caractères, comme 
+StringConcatenation : concaténation des chaînes de caractères, comme 
 \begin_inset listings
 inline true
 status open
@@ -1924,7 +2121,7 @@ structure.element
 \end_layout
 
 \begin_layout Itemize
-TupleNode : expression de genre 
+Tuple : expression de genre 
 \begin_inset listings
 inline true
 status open
@@ -1940,7 +2137,7 @@ status open
 \end_layout
 
 \begin_layout Itemize
-TypeExp : ???
+TypeExp : type
 \end_layout
 
 \begin_layout Itemize
@@ -1961,7 +2158,7 @@ Instruction
 \end_inset
 
 .
- Les classes hérités sont :
+ Les classes qui héritent de cette classe sont :
 \end_layout
 
 \begin_layout Itemize
@@ -1969,27 +2166,84 @@ Assignment : affectation
 \end_layout
 
 \begin_layout Itemize
-Case
+Case : instruction de genre 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+case (enum_var) { ...
+ }
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
-Condition
+Condition : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+if
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
-ElseCondition
+ElseCondition : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+else
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
-Loop : 
+Repeat : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+repeat
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
-Repeat
+ReturnNode : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+return
 \end_layout
 
-\begin_layout Itemize
-ReturnNode
+\end_inset
+
+
 \end_layout
 
 \begin_layout Itemize
@@ -1997,7 +2251,19 @@ Succ : succession de deux instructions
 \end_layout
 
 \begin_layout Itemize
-While
+While : 
+\begin_inset listings
+inline true
+status open
+
+\begin_layout Plain Layout
+
+while
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -2030,23 +2296,8 @@ Generator
 
 \end_inset
 
-, qui est responsable pour commencer la traduction et utilise des autres
- classes :
-\end_layout
-
-\begin_layout Itemize
-\begin_inset listings
-inline true
-status open
-
-\begin_layout Plain Layout
-
-ConstantGenerator
-\end_layout
-
-\end_inset
-
- : génère des constantes
+, qui est responsable du déroulement de la traduction, en faisant appel
+ à d'autres classes pour faire le travail :
 \end_layout
 
 \begin_layout Itemize
@@ -2091,12 +2342,13 @@ CodeWriter
 
 \end_inset
 
- : classe auxiliaire qui est responsable pour écrire du code dans une façon
- bien-formaté
+ : classe auxiliaire qui nous permet de formater notre code et de l'écrire
+ dans un fichier
 \end_layout
 
 \begin_layout Standard
-Les classes utilisent souvent les fonctions 
+Pour la traduction en Java, les classes utilisent le plus souvent les fonctions
+ 
 \begin_inset listings
 inline true
 status open
@@ -2108,7 +2360,7 @@ toJava()
 
 \end_inset
 
-, implémentés par exemple dans les classes 
+, implémentés par ailleurs dans les classes 
 \begin_inset listings
 inline true
 status open
@@ -2144,7 +2396,7 @@ Type
 
 \end_inset
 
-.
+ (ainsi que dans leurs classes filles).
  Ces fonctions 
 \begin_inset listings
 inline true
@@ -2157,7 +2409,7 @@ toJava()
 
 \end_inset
 
- sont très souvent récursifs ; par exemple, la fonction 
+ sont très souvent récursives ; par exemple, la fonction 
 \begin_inset listings
 inline true
 status open
@@ -2181,8 +2433,8 @@ toJava()
 
 \end_inset
 
- de son fils gauche et son fils droit, après concaténe les deux sorties
- avec le signe '=' entre les deux pour générer une instruction Java.
+ de son fils gauche et de son fils droit, ensuite concaténe les deux sorties
+ avec un '=' entre les deux pour générer une instruction Java.
 \end_layout
 
 \begin_layout Section
@@ -2190,7 +2442,7 @@ Utilisation
 \end_layout
 
 \begin_layout Standard
-Appeler 
+Exécuter la commande 
 \begin_inset Quotes fld
 \end_inset
 
@@ -2198,7 +2450,7 @@ ant
 \begin_inset Quotes frd
 \end_inset
 
- exécute les tâches suivantes :
+ permet d'effectuer les tâches suivantes :
 \end_layout
 
 \begin_layout Itemize
@@ -2207,7 +2459,7 @@ lex).
 \end_layout
 
 \begin_layout Itemize
-Compiler tous les fichiers Java (dans src/).
+Compiler tous les fichiers Java (se trouvant dans src/).
 \end_layout
 
 \begin_layout Itemize
@@ -2220,21 +2472,33 @@ default
 \begin_inset Quotes frd
 \end_inset
 
-), écrivant les messages du compilateur dans data/output.txt.
+).
+ Les messages du compilateur sont stockés dans le fichier data/output.txt.
 \end_layout
 
 \begin_layout Standard
 A partir de tout fichier Léa, le compilateur crée un nouveau répertoire
- (portant le même nom comme le fichier Léa), où il place :
-\end_layout
+ (portant le même nom comme le fichier Léa), où il place les arbres de syntaxe
+ abstraites de chaque fonction se trouvant dans le fichier Léa, dans le
+ format DOT.
+ (Pour les traduire en format PDF, on peut exécuter le script 
+\begin_inset Quotes fld
+\end_inset
 
-\begin_layout Itemize
-Fichiers Java contenant le code cible pour le fichier Léa.
-\end_layout
+generate_pdf.sh
+\begin_inset Quotes frd
+\end_inset
 
-\begin_layout Itemize
-Arbres de syntaxe abstraites pour toute fonction dans le fichier Léa, dans
- le format DOT.
+.) Si la traduction en code Java avait du succès, un fichier Java est crée
+ dans le dossier data/ et peut être compilé ensuite avec 
+\begin_inset Quotes fld
+\end_inset
+
+javac
+\begin_inset Quotes frd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2246,7 +2510,7 @@ ant clean
 \begin_inset Quotes frd
 \end_inset
 
- efface tous fichiers qui sont créés par 
+ efface tous fichiers qui sont créés par la commande 
 \begin_inset Quotes fld
 \end_inset
 
@@ -2254,7 +2518,7 @@ ant
 \begin_inset Quotes frd
 \end_inset
 
-, sauf les fichiers dans data/.
+, sauf les fichiers se trouvant dans data/.
 \end_layout
 
 \end_body
