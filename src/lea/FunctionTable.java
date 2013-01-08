@@ -27,13 +27,11 @@ public class FunctionTable extends TreeMap<String, FunctionInfo> {
 		return str;
 	}
 
-	public boolean findFunction(String id) {
+	private boolean findFunction(String id) {
 		for (Map.Entry<String, FunctionInfo> entry : entrySet()) {
 			if (entry.equals(id))
 				return true;
 		}
-
-		// TODO: find writeln etc. too!
 
 		return false;
 	}

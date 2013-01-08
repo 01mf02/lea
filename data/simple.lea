@@ -17,8 +17,8 @@ procedure functions_test()
 
 	writeln("Welcome to the wonderful world of Lea, " + name + ".");
 
-	//length : int := LIST.length();
-	//toString : string := INTEGER.toString();
+	length : int := LIST.length();
+	toString : string := INTEGER.toString();
 }
 
 procedure types_test()
@@ -33,24 +33,27 @@ procedure types_test()
 	tuple_test2 := TUPLE;
 }
 
+procedure rocket(i : int)
+{
+	repeat
+	{
+		writeln("The crowd shouts: " + i.toString());
+		i:=i-1;
+	}
+	while (i != 0);
+
+	writeln("Rocket launch!");
+}
+
 function main(args : list of string) : int
 {
 	functions_test();
 	types_test();
+	rocket(10);
 	
 	tuple : (int, string) := to_tuple(10, "Test");
-	i : int := 10;
-
-	// TODO: Make a countdown here as soon as toString() works! :)
-	repeat
-	{
-		//writeln("Hi !");
-		i:=i-1;
-	}
-	while (i != 0);
-	
+		
 	f:float := 3.14;
-	
 	if (f > 3.0)
 	{
 		writeln("That is good.");

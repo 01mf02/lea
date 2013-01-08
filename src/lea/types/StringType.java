@@ -1,6 +1,5 @@
 package lea.types;
 
-
 public class StringType extends Type {
 	@Override
 	public boolean equals(Type t1) {
@@ -13,5 +12,9 @@ public class StringType extends Type {
 
 	public String toJava() {
 		return "String";
+	}
+
+	public String toJavaLength(String e) {
+		return "new " + toJava() + "(" + e + ")" + ".length()";
 	}
 }

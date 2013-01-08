@@ -45,8 +45,8 @@ action code
 	// Les informations de la fonction que l'on traite
 	private FunctionInfo functInfo = null;
 	
-	// Les informations pour connaitre le type de celui qui nous appelle
-	private Type callerType = null;
+	// Les informations pour connaitre l'expression de celui qui nous appelle
+	private Expression callerExpr = null;
 
 
 	private BoolExp constructBoolExp(Expression e1, Expression e2, BoolOperator op) {
@@ -321,7 +321,7 @@ enumElem ::= IDENTIFIER:id
 block ::=
 		LBRACE
 		{:
-			callerType = null;
+			callerExpr = null;
 			SyntaxTree sTree = new SyntaxTree(null, null);
 
 			sTree.setEnvironmentStack(currentNode.getEnvironmentStack());
@@ -690,15 +690,23 @@ functArgs ::=
 functCall ::= 
 		IDENTIFIER:id functArgs:args
 		{:
-			FunctionInfo fi = fctTable.getFunction(id, args, callerType);
-			if (fi == null)
-				// TODO: in error case, create a FunctionCall anyway, but with
-				// which output type?
+			Type callerType;
+			if (callerExpr == null)
+				callerType = null;
+			else
+				callerType = callerExpr.getType();
+
+			FunctionInfo fi =
+				fctTable.getFunction(id, args, callerType);
+
+			if (fi == null) {
 				parser.printError("Function " + id +
 								  " could not be found or needs different parameters", 1);
+				RESULT = new FunctionCall(id, null, args, callerExpr);
+			}
 			else
-				// TODO: insert calling object here!
-				RESULT = new FunctionCall(id, fi.getOutputType(), args, null);
+				RESULT =
+					new FunctionCall(id, fi.getOutputType(), args, callerExpr);
 		:}
 		;
 
@@ -750,9 +758,9 @@ variable ::=
     	:}
     	| variable:v SLOT 
     	{:
-    		callerType = v.getType();
+    		callerExpr = v;
     		
-    		if(callerType instanceof StructType)
+    		if(callerExpr.getType() instanceof StructType)
     		{     		
     			StructType st = (StructType)v.getType();    			 
 				currentNode.pushEnvironment(st.getEnvironment()); 
@@ -773,7 +781,7 @@ variable ::=
     		if(v1 instanceof FunctionCall)
 				RESULT = v1;
     	:}
-    	| functCall:fc {: callerType = null; RESULT = fc; :}
+    	| functCall:fc {: callerExpr = null; RESULT = fc; :}
     	| variable:v LBRACKET expr:e RBRACKET
     	{:
     		boolean isOk = false;

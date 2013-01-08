@@ -3,7 +3,7 @@ MEANING = 42;
 PI = 3.14;
 FIRST_LETTER = 'A';
 SHAKESPEARE = "To be or \"not\" to be ...";
-FIBONACCI = [1, 2, 3, 5, 8];
+FIBONACCI = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
 TUPLE = (THIS_IS_FALSE, MEANING, PI, FIRST_LETTER, SHAKESPEARE, FIBONACCI);
 
 month = enum (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC);
@@ -29,7 +29,7 @@ procedure print_fibonacci(n1 : int, n2 : int, iter : int, count : int)
 		return;
 	}
 
-	//writeln(n1.toString());
+	writeln(n1.toString());
 	n3 : int := n1 + n2;
 	print_fibonacci(n2, n3, iter+1, count);
 }
@@ -37,11 +37,11 @@ procedure print_fibonacci(n1 : int, n2 : int, iter : int, count : int)
 procedure print_int_list(l : list of int)
 {
 	i : int := 0;
-	/*while (i < l.length())
+	while (i < l.length())
 	{
 		writeln(l[i].toString());
 		i := i+1;
-	}*/
+	}
 }
 
 function create_logicians() : person_list

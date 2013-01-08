@@ -24,7 +24,8 @@ public abstract class Type {
 	public abstract String toJava();
 
 	protected boolean leftRightEquals(Type t1, Type t2) {
-		return equalsOrNull(t1.left, t2.left) && equalsOrNull(t1.right, t2.right);
+		return equalsOrNull(t1.left, t2.left)
+				&& equalsOrNull(t1.right, t2.right);
 	}
 
 	private boolean equalsOrNull(Type t1, Type t2) {
@@ -59,6 +60,10 @@ public abstract class Type {
 	}
 
 	public String toJavaToString(String e) {
-		return e + ".toString()";
+		return "new " + toJava() + "(" + e + ")" + ".toString()";
+	}
+
+	public String toJavaLength(String e) {
+		return e + ".length";
 	}
 }

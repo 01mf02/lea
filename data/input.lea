@@ -59,7 +59,7 @@ procedure deif()
 	
 	str : string;
 	str := "hello";
-	//str.length();
+	str.length();
 
 
 	types();

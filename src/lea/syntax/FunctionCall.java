@@ -33,7 +33,6 @@ public class FunctionCall extends Expression {
 	public String toJava() {
 		String arguments = argumentsTuple.toJavaFunctionArguments();
 
-		// TODO: uncomment object.toJava() when lea.cup functions
 		switch (functionName) {
 		case "write":
 			return "System.out.print" + arguments;
@@ -42,9 +41,9 @@ public class FunctionCall extends Expression {
 		case "read":
 			return "scanner.nextLine()";
 		case "length":
-			return /* object.toJava() + */".length";
+			return object.getType().toJavaLength(object.toJava());
 		case "toString":
-			return /* object.toJava() + */".toString()";
+			return object.getType().toJavaToString(object.toJava());
 		}
 
 		return Generator.generateName(functionName) + arguments;
